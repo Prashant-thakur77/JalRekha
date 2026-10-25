@@ -19,6 +19,8 @@ const Queue = lazy(() => import('./pages/Queue'));
 const Calibration = lazy(() => import('./pages/Calibration'));
 const SiteDetail = lazy(() => import('./pages/SiteDetail'));
 const Settings = lazy(() => import('./pages/Settings'));
+const Vision = lazy(() => import('./pages/Vision'));
+const Cloud = lazy(() => import('./pages/Cloud'));
 
 function Legacy({ children }: { children: ReactNode }) {
   return <Suspense fallback={<p className="ns-muted">…</p>}>{children}</Suspense>;
@@ -40,6 +42,8 @@ function App() {
           <Route path="live" element={<Live />} />
           <Route path="traces" element={<Traces />} />
           <Route path="traces/:traceId" element={<TraceDetail />} />
+          <Route path="vision" element={<Legacy><Vision /></Legacy>} />
+          <Route path="cloud" element={<Legacy><Cloud /></Legacy>} />
           <Route path="approvals" element={<Approvals />} />
           <Route path="rivers" element={<Rivers />} />
           <Route path="relief" element={<Relief />} />

@@ -46,7 +46,7 @@ What these numbers do not show, and the failures we found:
 
 ```
 camera burst ─► quality gate ─► registration ─► gauge strip ─► 3 waterline estimators ─► fusion ─► Kalman
- (5 frames)    blur/night/     ORB, rescue     warpAffine     E1 edge energy (Sobel)     robust    level +
+ (5 frames)    blur/night/     ORB, rescue     warpAffine     E1 edge energy (Scharr)     robust    level +
                glare/fog       with ALIKED+    along the      E2 temporal texture (DIS)  median,   rise rate
                                LightGlue       gauge axis     E3 colour step (Lab)       sigma     (m/h)
                                                                                                     │
@@ -82,9 +82,9 @@ Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.m
  phone / browser ─► API Gateway HTTPS ─► (VPC link) ─► EC2 c8g.xlarge Graviton4, Ubuntu 24.04 arm64
                                                        FastAPI + PWA, OpenCV 5 worker, agent loop
                                                        │      │        │         │          │
-                                         S3 (CAP files,    Claude    Polly     SNS        CloudWatch logs,
-                                         deploy bundles,   API (VLM  (Hindi/   (operator   metrics, dashboard,
-                                         bench results)    2nd op.)  English)  + SMS)      alarms
+                                         S3 (evidence per  Claude    Polly     SNS        CloudWatch: JSON event
+                                         cycle, CAP files, API (VLM  (Hindi/   (operator   per cycle, OpenCV stage
+                                         deploy bundles)   2nd op.)  English)  + SMS)      metrics, Insights, alarms
  EventBridge (5 min) ─► Lambda keep-warm ─► /api/health ─► alarm ─► SNS
  Step Functions: a drafted public alert starts a timer (wait 15 min ─► Lambda checks the approval ─► still pending? re-notify, up to 3×)
  SSM Parameter Store (operator PIN), least-privilege instance role, AWS Budgets
@@ -92,6 +92,12 @@ Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.m
 ```
 
 Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host ({{cloud_cycle_ms}} ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about {{cloud_cams_300s}} cameras at a 5-minute cadence, about {{cloud_usd_cam_month_300s}} of compute per camera per month (the benchmark upper bound is {{B_cams_300s}}; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. The second opinion, report structuring, photo descriptions and situation summaries run on Claude ({{vlm_model}}) through the Anthropic API with server-side refusal fallbacks; Amazon Bedrock is wired as an alternative (its account quota is zero today). Without either, every second opinion takes the labelled rule fallback.
+
+### What the deployment records
+
+Every agent cycle writes one JSON event to CloudWatch Logs (the river level, error bar, alignment method and inliers, each estimator's reading, the time of every OpenCV stage, the second opinion's model, latency and cost) and archives that event with its blurred overlay in S3 for 90 days. The OpenCV stage times also become CloudWatch metrics, with an alarm if the pipeline slows past 1 s. Over the last {{ops_days}} days the live stack logged {{ops_cycles}} cycles ({{ops_frames}} frames, {{ops_sites}} camera sites): OpenCV took {{ops_total_p50_ms}} ms per cycle at the median and {{ops_total_p95_ms}} ms at the 95th percentile on the Graviton4 host; ORB aligned {{ops_orb_cycles}} cycles ({{ops_orb_inliers}} inliers on average), ALIKED+LightGlue rescued {{ops_aliked_cycles}}, and {{ops_reg_failed}} cycles failed to align and were held (the camera-knock scenario); Claude gave {{ops_claude_calls}} live second opinions at {{ops_claude_p50_s}} s median for {{ops_claude_usd}} in total. Numbers from `scripts/cloud_ops_report.py` (CloudWatch Logs Insights), REAL deployment, replays of synthetic and archived camera frames.
+
+Two pages in the app show this: **Vision Lab** (`/vision`) rebuilds any recorded cycle and shows each OpenCV stage with its real images and numbers (quality metrics and Laplacian map, ORB or ALIKED matches, the rectified gauge strip, the three estimator profiles in metres, fusion and Kalman, per-stage timing and the OpenCV build on the host); **AWS cloud** (`/cloud`) streams the CloudWatch log, runs fixed Logs Insights queries, charts the stage metrics and shows the state of each service in the stack.
 
 ## Run it
 

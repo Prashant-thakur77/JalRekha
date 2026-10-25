@@ -23,7 +23,7 @@ import cv2
 import numpy as np
 from sqlmodel import Session, select
 
-from jalrekha.agent import cloud, guardrails, messages, policy
+from jalrekha.agent import cloud, cloudlog, guardrails, messages, policy
 from jalrekha.agent.models import AgentSiteState, AgentTrace, ApprovalRequest, StageReadingRow
 from jalrekha.models.domain import Site, SiteCalibration
 from jalrekha.regions import basin_for_site, region, region_for_point, role_label
@@ -791,6 +791,7 @@ def _finish(session: Session, tr: Trace, state: AgentSiteState, md: dict, filt: 
     pending = len(session.exec(select(ApprovalRequest.id).where(ApprovalRequest.status == "pending")).all())
     cloud.put_metrics({"AgentCycles": 1, "FramesMeasured": md.get("frames", 1),
                        "StageMs": float(md.get("timings_ms", {}).get("total", 0.0)), "ApprovalsPending": pending})
+    cloudlog.emit_cycle(cloudlog.cycle_event(row, md, tr.steps, state.cadence_s, state.mode))
     return trace_to_api(row)
 
 

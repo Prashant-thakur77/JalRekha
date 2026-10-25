@@ -372,6 +372,11 @@ export default function Live() {
                 <figcaption className="ns-camera__bar ns-camera__bar--bottom">
                   <span className="ns-eyebrow">{running ? t('live.updating') : t('live.idle')}</span>
                   <span className="ns-eyebrow">{latest?.at ? t('live.lastUpdate', { time: fmtTime(latest.at) }) : null}</span>
+                  {latest?.trace_id && (
+                    <Link to={`/vision?trace=${encodeURIComponent(latest.trace_id)}`} className="ns-link ns-lab-link">
+                      {t('trace.visionLab')} <ArrowRight className="w-4 h-4 ns-inline-icon" aria-hidden="true" />
+                    </Link>
+                  )}
                 </figcaption>
               </figure>
             ) : (

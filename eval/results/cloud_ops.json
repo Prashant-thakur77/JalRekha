@@ -1,0 +1,104 @@
+{
+ "meta": {
+  "label": "REAL AWS deployment: CloudWatch Logs Insights over agent-cycle events, S3 evidence archive",
+  "generated_by": "scripts/cloud_ops_report.py",
+  "generated_at": "2026-10-25T18:48:00.771674+00:00",
+  "window_days": 2,
+  "region": "us-east-1",
+  "log_group": "/nadisaathi/app"
+ },
+ "totals": [
+  {
+   "cycles": 241.0,
+   "sites": 4.0,
+   "runs": 9.0,
+   "frames_total": 865.0
+  }
+ ],
+ "stages": [
+  {
+   "total_avg": 211.9524,
+   "total_p50": 102.6869,
+   "total_p95": 1301.685,
+   "register": 126.5829,
+   "warp": 11.1234,
+   "quality": 0.9722,
+   "median": 0.9022,
+   "e1": 0.461,
+   "e2": 6.1922,
+   "e3": 1.6902,
+   "fuse": 0.2291,
+   "redact": 55.6127,
+   "overlay": 2.1606
+  }
+ ],
+ "registration": [
+  {
+   "registration": "orb",
+   "cycles": 227.0,
+   "avg_inliers": 660.3304
+  },
+  {
+   "registration": "failed",
+   "cycles": 11.0,
+   "avg_inliers": 58.0
+  },
+  {
+   "registration": "aliked_lightglue",
+   "cycles": 3.0,
+   "avg_inliers": 67.3333
+  }
+ ],
+ "second_opinion": [
+  {
+   "model": "claude:claude-opus-5-5",
+   "calls": 27.0,
+   "latency_p50": 4134.57,
+   "usd": 0.2148
+  },
+  {
+   "model": "scripted-adversarial-test",
+   "calls": 2.0,
+   "latency_p50": 0.0,
+   "usd": 0.0
+  }
+ ],
+ "branches": [
+  {
+   "branch": "D3",
+   "cycles": 26.0
+  },
+  {
+   "branch": "D7",
+   "cycles": 2.0
+  },
+  {
+   "branch": "D9",
+   "cycles": 1.0
+  },
+  {
+   "branch": "D2",
+   "cycles": 15.0
+  },
+  {
+   "branch": "D5",
+   "cycles": 3.0
+  },
+  {
+   "branch": "D4",
+   "cycles": 3.0
+  },
+  {
+   "branch": "D1",
+   "cycles": 7.0
+  }
+ ],
+ "s3_cycle_objects": 487,
+ "alarms": [
+  "health",
+  "instance-status-reboot",
+  "opencv-slow",
+  "system-status-recover"
+ ],
+ "stack_resources": 36
+}

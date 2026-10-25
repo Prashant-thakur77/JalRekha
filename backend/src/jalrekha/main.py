@@ -9,7 +9,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from jalrekha.api.routers import agent, node, alerts, cap, demo_inject, runtime, sites, sync, volunteer
+from jalrekha.api.routers import agent, cloud_ops, node, alerts, cap, demo_inject, runtime, sites, sync, volunteer
+from jalrekha.api.routers import vision_lab
 from jalrekha.db.database import init_db
 from jalrekha.services.storage import get_fixture_dir, get_upload_dir
 
@@ -70,8 +71,10 @@ for router in (
     sync.router,
     cap.router,
     agent.router,
+    cloud_ops.router,
 ):
     app.include_router(router, prefix="/api")
+app.include_router(vision_lab.router, prefix="/api")
 
 app.include_router(cap.router)
 

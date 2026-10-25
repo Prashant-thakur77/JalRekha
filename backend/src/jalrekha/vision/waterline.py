@@ -14,6 +14,7 @@ differ only in *which* evidence they use, so they fail in different ways:
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass
 
 import cv2
@@ -107,6 +108,11 @@ def _repair_rows(profile: np.ndarray, bad: np.ndarray) -> np.ndarray:
 
 
 def edge_energy(strip_bgr: np.ndarray) -> Estimate:
+    return edge_energy_profile(strip_bgr)[0]
+
+
+def edge_energy_profile(strip_bgr: np.ndarray) -> tuple[Estimate, np.ndarray]:
+    """E1 plus the per-row feature it fitted: smoothed log Scharr energy, shape (rows,)."""
     gray = cv2.cvtColor(strip_bgr, cv2.COLOR_BGR2GRAY) if strip_bgr.ndim == 3 else strip_bgr
     bad = _saturated_rows(gray)
     gray = cv2.GaussianBlur(gray, (3, 3), 0)
@@ -116,10 +122,16 @@ def edge_energy(strip_bgr: np.ndarray) -> Estimate:
     prof = _smooth(row_energy, win * 2 + 1).ravel()
     prof = np.log1p(prof)
     row, sep = step_fit(prof, expect_upper_higher=+1)
-    return Estimate("E1_edge", None if row is None else float(row), _confidence(sep, 1.5), sep, {"window": win, "glare_rows": int(bad.sum())})
+    est = Estimate("E1_edge", None if row is None else float(row), _confidence(sep, 1.5), sep, {"window": win, "glare_rows": int(bad.sum())})
+    return est, prof
 
 
 def colour_step(strip_bgr: np.ndarray) -> Estimate:
+    return colour_step_profile(strip_bgr)[0]
+
+
+def colour_step_profile(strip_bgr: np.ndarray) -> tuple[Estimate, np.ndarray]:
+    """E3 plus the per-row feature it fitted: smoothed mean L*, a*, b*, shape (rows, 3)."""
     lab = cv2.cvtColor(strip_bgr, cv2.COLOR_BGR2Lab).astype(np.float32)
     gray = cv2.cvtColor(strip_bgr, cv2.COLOR_BGR2GRAY)
     bad = _saturated_rows(gray)
@@ -129,22 +141,30 @@ def colour_step(strip_bgr: np.ndarray) -> Estimate:
     # Gauge paint is brighter than water in every scene we target: require
     # higher L above the split, which removes splits inside the water body.
     row, sep = step_fit(rows, expect_upper_higher=+1)
-    return Estimate("E3_colour", None if row is None else float(row), _confidence(sep, 2.0), sep, {"window": win, "glare_rows": int(bad.sum())})
+    est = Estimate("E3_colour", None if row is None else float(row), _confidence(sep, 2.0), sep, {"window": win, "glare_rows": int(bad.sum())})
+    return est, rows
 
 
-_DIS = None
+_DIS_LOCAL = threading.local()
 
 
 def _dis():
-    global _DIS
-    if _DIS is None:
-        _DIS = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_FAST)
-    return _DIS
+    """One DIS optical-flow object per thread: it keeps internal buffers between calls."""
+    dis = getattr(_DIS_LOCAL, "dis", None)
+    if dis is None:
+        dis = _DIS_LOCAL.dis = cv2.DISOpticalFlow_create(cv2.DISOPTICAL_FLOW_PRESET_FAST)
+    return dis
 
 
 def temporal_texture(strips_bgr: list[np.ndarray]) -> Estimate:
+    return temporal_texture_profile(strips_bgr)[0]
+
+
+def temporal_texture_profile(strips_bgr: list[np.ndarray]) -> tuple[Estimate, np.ndarray | None]:
+    """E2 plus the per-row feature it fitted: smoothed log temporal std and log DIS flow
+    magnitude, shape (rows, 2). The profile is None when the burst is too short."""
     if len(strips_bgr) < 3:
-        return Estimate("E2_temporal", None, 0.0, 0.0, {"reason": "needs_burst_of_3"})
+        return Estimate("E2_temporal", None, 0.0, 0.0, {"reason": "needs_burst_of_3"}), None
     grays = [cv2.cvtColor(s, cv2.COLOR_BGR2GRAY) if s.ndim == 3 else s for s in strips_bgr]
     stack = np.stack([g.astype(np.float32) for g in grays], axis=0)
     tstd = stack.std(axis=0).mean(axis=1)
@@ -159,13 +179,14 @@ def temporal_texture(strips_bgr: list[np.ndarray]) -> Estimate:
     row, sep = step_fit(feats, expect_upper_higher=-1)
     still = float(np.median(tstd)) < 0.6 and float(np.median(flow)) < 0.05
     conf = 0.0 if still else _confidence(sep, 1.5)
-    return Estimate(
+    est = Estimate(
         "E2_temporal",
         None if (row is None or still) else float(row),
         conf,
         sep,
         {"frames": len(strips_bgr), "still_water": still},
     )
+    return est, feats
 
 
 def naive_max_edge(strip_bgr: np.ndarray) -> Estimate:

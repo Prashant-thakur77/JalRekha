@@ -171,6 +171,9 @@ export default function TraceDetail() {
               <h2 id="trace-m-h" className="ns-h3">
                 <Camera className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('trace.measurement')}
               </h2>
+              <Link to={`/vision?trace=${encodeURIComponent(trace.trace_id)}`} className="ns-link ns-row ns-gap-sm">
+                {t('trace.visionLab')} <ArrowRight className="w-4 h-4" aria-hidden="true" />
+              </Link>
               <div className="ns-measure">
                 {overlay && (
                   <figure className="ns-frame">

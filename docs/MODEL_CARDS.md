@@ -4,7 +4,7 @@
 
 - Purpose: river stage in metres from a fixed camera that sees a staff gauge, with an uncertainty. Decision support for flood warning; not a replacement for official gauges.
 - Inputs: a burst of 1–9 frames, a staff-gauge calibration (two or more clicked gauge marks with their values), a reference frame.
-- Method: quality gate, ORB registration with ALIKED+LightGlue fallback, three estimators (Sobel edge energy, DIS-flow temporal texture, Lab colour step), weighted-median fusion, Kalman filter. Thresholds were set on synthetic training scenes (seeds 0–9) and frozen (`eval/config.frozen.json`).
+- Method: quality gate, ORB registration with ALIKED+LightGlue fallback, three estimators (Scharr edge energy, DIS-flow temporal texture, Lab colour step), weighted-median fusion, Kalman filter. Thresholds were set on synthetic training scenes (seeds 0–9) and frozen (`eval/config.frozen.json`).
 - Evaluation: real USGS cameras, 2 sites, physical calibration, MAE about 10 cm on held-out frames; synthetic held-out scenes about 8 cm (see `README.md` for the generated numbers).
 - Known failure modes: specular glare on the gauge; still water for the temporal estimator; a camera reframed after a flood (registration can make it worse); gauges whose datum differs from the official gauge; water outside the gauge's printed range (reported at the gauge end).
 - Not for: discharge estimation (the surface-speed output is a proxy), people counting or any identification.

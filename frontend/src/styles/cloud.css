@@ -1,0 +1,132 @@
+/* Cloud operations page: service wall, live log, stage bars, metric sparklines. */
+
+.ns-cloud-services {
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+}
+
+.ns-cloud-svc {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: var(--sp-4) var(--sp-5);
+  min-height: 7rem;
+}
+
+.ns-cloud-svc__name {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.25rem;
+  font-weight: 500;
+}
+
+.ns-cloud-svc__fact {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.ns-cloud-log__scroll {
+  max-height: 28rem;
+  overflow: auto;
+}
+
+.ns-cloud-log__summary {
+  font-size: 0.875rem;
+}
+
+.ns-cloud-log__key {
+  font-size: 0.6875rem;
+  color: var(--muted);
+}
+
+.ns-cloud-log__raw,
+.ns-cloud-query {
+  margin: 0;
+  padding: var(--sp-4);
+  max-height: 24rem;
+  overflow: auto;
+  border-radius: var(--r-md);
+  background: rgba(0, 0, 0, 0.35);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #d9d8d2;
+}
+
+.ns-cloud-query {
+  color: var(--accent);
+}
+
+.ns-cloud-two {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--sp-4);
+}
+
+@media (max-width: 860px) {
+  .ns-cloud-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.ns-cloud-bars {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ns-cloud-bars li {
+  display: grid;
+  grid-template-columns: 7.5rem minmax(0, 1fr) 3.5rem;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: 0.75rem;
+}
+
+.ns-cloud-bars__track {
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.ns-cloud-bars__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.ns-cloud-metric {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr) 4rem;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ns-spark {
+  width: 100%;
+  height: 2rem;
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ns-cloud-log .ns-live-dot {
+    animation: none;
+  }
+}
+
+.ns-cloud-log .ns-nowrap,
+.ns-cloud-log__key {
+  white-space: nowrap;
+}

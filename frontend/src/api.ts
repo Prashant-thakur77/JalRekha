@@ -405,6 +405,7 @@ export interface SiteLive {
     quality_ok?: boolean;
     quality_reasons?: string[];
     usable?: boolean;
+    trace_id?: string | null;
   } | null;
   series?: SeriesPoint[];
   agent?: { mode: AgentMode; cadence_s: number } | null;
@@ -572,3 +573,182 @@ export interface RedTeamResult {
 }
 
 export const redTeam = (reply: string) => request<RedTeamResult>('/agent/red-team', jsonInit('POST', { reply }));
+
+// ── Vision Lab (one agent cycle, stage by stage) ──────────────────────────
+
+export interface LabSite {
+  site_id: string;
+  kind: 'scenario' | 'real' | string;
+  name: string | null;
+  cycles: number;
+  latest_trace_id: string | null;
+  latest_at: string | null;
+}
+
+export interface LabQualityMetric {
+  key: string;
+  value: number;
+  threshold: number;
+  rule: 'min' | 'max' | string;
+  pass: boolean;
+  op: string;
+}
+
+export interface LabEstimator {
+  name: string;
+  row: number | null;
+  stage_m: number | null;
+  confidence: number;
+  separation: number;
+  used: boolean;
+  weight: number | null;
+  detail?: Record<string, unknown>;
+  op?: string | null;
+  signal: number[] | null;
+  channels?: number[][] | null;
+}
+
+export interface LabTimingStage {
+  name: string;
+  ms: number;
+  start_ms: number;
+}
+
+export interface LabHost {
+  machine: string;
+  system?: string;
+  opencv: string;
+  cpu_count?: number | null;
+  cpu_features: string[];
+  hal: string[];
+  kleidicv: boolean;
+  ipp?: string | null;
+  parallel?: string | null;
+}
+
+export interface VisionLab {
+  schema: string;
+  opencv_version: string;
+  summary: { stage_m: number | null; sigma_m: number | null; usable: boolean; frames: number; notes?: string[]; overlay_image: string | null };
+  quality: { ok: boolean; reasons: string[]; metrics: LabQualityMetric[]; heatmap_image: string };
+  registration: {
+    ok: boolean;
+    method: string;
+    inliers: number;
+    residual_px: number | null;
+    drift_px: number | null;
+    ms: number;
+    tried: string[];
+    reference: string | null;
+    matcher: string | null;
+    keypoints_current: number;
+    keypoints_reference: number;
+    matches: number;
+    inliers_drawn: number;
+    matches_image: string | null;
+    compare_image: string | null;
+  };
+  strip: { rows: number; width_px: number; frames: number; transform?: number[][]; last_image: string; median_image: string };
+  profiles: {
+    rows: number;
+    axis_m: number[];
+    warning_m: number | null;
+    danger_m: number | null;
+    metres_per_px: number;
+    estimators: LabEstimator[];
+  };
+  fusion: {
+    per_estimator_m: Record<string, number | null>;
+    fused_m: number | null;
+    sigma_m: number | null;
+    confidence: number;
+    spread_m: number | null;
+    used: string[];
+    agreeing: string[];
+    tolerance_m: number;
+    consensus?: { agreed: boolean; members: string[]; sigma_m: number | null; recorded?: { snapshot_temporal_vote?: boolean } | null };
+    kalman?: { filtered_stage_m: number | null; rate_m_per_h: number | null };
+  };
+  timing: { stages: LabTimingStage[]; total_ms: number; host: LabHost; cycle_ms?: Record<string, number> | null };
+  privacy: { faces: number | null; plates: number | null; face_detector: string | null; plate_detector: string | null; mode: string | null };
+  source?: { kind: 'scenario' | 'real' | string; title?: string; event?: string | null; frame?: string; t_min?: number };
+  check?: { recorded_stage_m: number | null; rebuilt_stage_m: number | null; match: boolean };
+  trace: { trace_id: string; site_id: string; site_name: string; cycle: number; started_at: string; summary?: string; truth_stage_m?: number | null };
+  neighbours?: { prev: string | null; next: string | null };
+}
+
+export const getLabSites = () => request<LabSite[]>('/vision/lab/sites');
+export const getLab = (traceId: string) => request<VisionLab>(`/vision/lab/${enc(traceId)}`);
+export const getLabLatest = (siteId?: string | null) => request<VisionLab>(`/vision/lab/latest${qs({ site_id: siteId ?? undefined })}`);
+
+// ── AWS operations (Cloud page) ──────────────────────────────────────────────
+
+export interface CycleEvent {
+  event: 'agent_cycle';
+  trace_id: string;
+  site: string;
+  cycle: number;
+  at: string;
+  branches: string[];
+  summary: string;
+  stage_m: number | null;
+  sigma_m: number | null;
+  usable: boolean | null;
+  quality_ok: boolean | null;
+  quality_reasons: string[];
+  registration: string | null;
+  inliers: number | null;
+  estimators_m: Record<string, number | null> | null;
+  frames: number | null;
+  ms: Record<string, number>;
+  second_opinion: { model: string | null; latency_ms: number | null; cost_usd: number | null } | null;
+  s3_key?: string;
+}
+
+export interface CloudLogEntry {
+  at: string;
+  stream: string;
+  event?: CycleEvent;
+  message?: string;
+}
+
+export interface CloudLogs {
+  source: 'cycles' | 'app';
+  log_group: string;
+  events: CloudLogEntry[];
+  console_url: string;
+}
+
+export interface InsightsResult {
+  id: string;
+  title: string;
+  query: string;
+  status: string;
+  rows: Array<Record<string, string>>;
+  scanned_bytes?: number | null;
+  records_matched?: number | null;
+  ran_at: string;
+  duration_s: number;
+}
+
+export interface CloudMetrics {
+  hours: number;
+  period_s: number;
+  series: Record<string, Array<{ t: string; v: number }>>;
+  console_url: string;
+}
+
+export type CloudService = { ok: boolean; error?: string } & Record<string, unknown>;
+
+export interface CloudServices {
+  region: string;
+  console_url: string;
+  [service: string]: CloudService | string;
+}
+
+export const getCloudLogs = (source: 'cycles' | 'app', minutes = 60) =>
+  request<CloudLogs>(`/cloud/logs${qs({ source, minutes, limit: 40 })}`);
+export const getCloudInsightsIndex = () => request<Array<{ id: string; title: string; query: string }>>('/cloud/insights');
+export const getCloudInsights = (id: string) => request<InsightsResult>(`/cloud/insights/${encodeURIComponent(id)}`);
+export const getCloudMetrics = (hours = 3) => request<CloudMetrics>(`/cloud/metrics${qs({ hours })}`);
+export const getCloudServices = () => request<CloudServices>('/cloud/services');

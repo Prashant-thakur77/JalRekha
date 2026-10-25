@@ -41,7 +41,7 @@
     <div class="chain">
       <div class="box"><b>Quality gate</b>blur, night, glare, fog</div><span class="arrow">→</span>
       <div class="box"><b>Registration</b>ORB → ALIKED+LightGlue (DNN), keyframe chain</div><span class="arrow">→</span>
-      <div class="box"><b>3 waterline estimators</b>Sobel edges · DIS flow · Lab colour</div><span class="arrow">→</span>
+      <div class="box"><b>3 waterline estimators</b>Scharr edges · DIS flow · Lab colour</div><span class="arrow">→</span>
       <div class="box"><b>Fusion + Kalman</b>stage m ± σ, rise m/h</div><span class="arrow">→</span>
       <div class="box"><b>YuNet blur</b>faces, plates</div>
     </div>
@@ -61,10 +61,10 @@
       <div class="box"><b>Polly</b>Hindi / English voice alerts</div>
       <div class="box"><b>SNS</b>operator topic, SMS to verified numbers</div>
       <div class="box"><b>Step Functions</b>re-notify while an approval waits (15 min × 3)</div>
-      <div class="box"><b>S3</b>CAP files, results, bundles</div>
-      <div class="box"><b>CloudWatch</b>logs, metrics, alarms, keep-warm Lambda</div>
+      <div class="box"><b>S3</b>evidence per cycle (event + blurred overlay, 90 days), CAP files, bundles</div>
+      <div class="box"><b>CloudWatch</b>JSON event per cycle, OpenCV stage metrics, Logs Insights, alarms, dashboard</div>
       <div class="box"><b>SSM · Budgets · CloudFormation</b>PIN, camera key, cost alarm, one-command deploy</div>
     </div>
   </div>
-  <div class="legend">Generated for the submission from docs/diagrams/architecture.html. Region us-east-1.</div>
+  <div class="legend">Region us-east-1. The app's Vision Lab page shows each OpenCV stage of a real cycle; its Cloud page reads these AWS services live.</div>
 </div></body></html>

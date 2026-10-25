@@ -12,7 +12,8 @@
   "eval/results/leadtime.json",
   "eval/results/agent_suite.json",
   "bench/results/B-stock-wheel-c8g.xlarge.json",
-  "bench/results/C-stock-wheel-c7i.xlarge.json"
+  "bench/results/C-stock-wheel-c7i.xlarge.json",
+  "eval/results/cloud_ops.json"
  ],
  "items": [
   {
@@ -400,6 +401,29 @@
   "cloud_usd_cam_month_10s": "$0.66",
   "cloud_cams_300s": "5,284",
   "cloud_usd_cam_month_300s": "$0.02",
-  "generated_at": "2026-10-25 16:42 UTC"
+  "ops_days": "2",
+  "ops_cycles": "241.0",
+  "ops_sites": "4.0",
+  "ops_frames": "865.0",
+  "ops_total_p50_ms": "103",
+  "ops_total_p95_ms": "1,302",
+  "ops_register_ms": "126.6",
+  "ops_e1_ms": "0.5",
+  "ops_e2_ms": "6.2",
+  "ops_e3_ms": "1.7",
+  "ops_redact_ms": "55.6",
+  "ops_quality_ms": "1.0",
+  "ops_fuse_ms": "0.2",
+  "ops_orb_inliers": "660",
+  "ops_aliked_cycles": "3.0",
+  "ops_reg_failed": "11.0",
+  "ops_orb_cycles": "227.0",
+  "ops_claude_usd": "$0.21",
+  "ops_claude_calls": "27.0",
+  "ops_claude_p50_s": "4.1",
+  "ops_s3_objects": "487",
+  "ops_alarms": "4",
+  "ops_stack_resources": "36",
+  "generated_at": "2026-10-25 18:48 UTC"
  }
 }

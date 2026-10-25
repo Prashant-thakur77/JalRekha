@@ -104,7 +104,14 @@ def measure(
     calib: GaugeCalibration,
     reference: np.ndarray | None = None,
     options: MeasureOptions | None = None,
+    capture: dict | None = None,
 ) -> Measurement:
+    """Measure the stage from a burst.
+
+    ``capture`` is opt-in (vision/explain.py): when a dict is passed, the
+    aligned frames, gauge strips, burst median and each estimator's per-row
+    profile are stored in it. Outputs are identical either way.
+    """
     if not frames:
         raise ValueError("measure() needs at least one frame")
     opts = options or MeasureOptions()
@@ -148,15 +155,19 @@ def measure(
         still = np.median(np.stack(strips), axis=0).astype(np.uint8) if len(strips) > 1 else strips[-1]
 
     estimates: list[waterline.Estimate] = []
+    profiles: dict[str, np.ndarray | None] = {}
     if "E1_edge" in opts.estimators:
         with tm("E1_edge"):
-            estimates.append(waterline.edge_energy(still))
+            est, profiles["E1_edge"] = waterline.edge_energy_profile(still)
+            estimates.append(est)
     if "E2_temporal" in opts.estimators:
         with tm("E2_temporal"):
-            estimates.append(waterline.temporal_texture(strips))
+            est, profiles["E2_temporal"] = waterline.temporal_texture_profile(strips)
+            estimates.append(est)
     if "E3_colour" in opts.estimators:
         with tm("E3_colour"):
-            estimates.append(waterline.colour_step(still))
+            est, profiles["E3_colour"] = waterline.colour_step_profile(still)
+            estimates.append(est)
     if "B1_naive" in opts.estimators:
         with tm("B1_naive"):
             estimates.append(waterline.naive_max_edge(strips[-1]))
@@ -183,6 +194,8 @@ def measure(
                 base, calib, reading.per_estimator_m, reading.stage_m, reading.sigma_m, q.reasons, reg.method
             )
     tm.ms["total"] = (time.perf_counter() - t_all) * 1000
+    if capture is not None:
+        capture.update(aligned=aligned, strips=strips, still=still, profiles=profiles)
     return Measurement(
         reading=reading,
         quality=q,

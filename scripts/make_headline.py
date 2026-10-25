@@ -357,6 +357,31 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
                 cams = int(cyc_per_s * cad)
                 k[f"cloud_cams_{cad}s"] = num(cams)
                 k[f"cloud_usd_cam_month_{cad}s"] = f"${month / max(cams, 1):,.2f}"
+    ops = _load(RES / "cloud_ops.json")
+    if ops and ops.get("totals"):
+        sources.append("eval/results/cloud_ops.json")
+        tot, st = ops["totals"][0], (ops.get("stages") or [{}])[0]
+        k["ops_days"] = num(ops["meta"]["window_days"])
+        k["ops_cycles"] = num(tot.get("cycles", 0))
+        k["ops_sites"] = num(tot.get("sites", 0))
+        k["ops_frames"] = num(tot.get("frames_total", 0))
+        k["ops_total_p50_ms"] = num(st.get("total_p50", 0), 0)
+        k["ops_total_p95_ms"] = num(st.get("total_p95", 0), 0)
+        for stage in ("register", "e1", "e2", "e3", "redact", "quality", "fuse"):
+            k[f"ops_{stage}_ms"] = num(st.get(stage, 0), 1)
+        reg = {r["registration"]: r for r in ops.get("registration", []) if isinstance(r.get("registration"), str)}
+        if "orb" in reg:
+            k["ops_orb_inliers"] = num(reg["orb"]["avg_inliers"], 0)
+        k["ops_aliked_cycles"] = num(reg.get("aliked_lightglue", {}).get("cycles", 0))
+        k["ops_reg_failed"] = num(reg.get("failed", {}).get("cycles", 0))
+        k["ops_orb_cycles"] = num(reg.get("orb", {}).get("cycles", 0))
+        so = [r for r in ops.get("second_opinion", []) if str(r.get("model", "")).startswith("claude")]
+        k["ops_claude_usd"] = f"${sum(r['usd'] for r in so):.2f}"
+        k["ops_claude_calls"] = num(sum(r["calls"] for r in so))
+        k["ops_claude_p50_s"] = num(so[0]["latency_p50"] / 1000, 1) if so else "n/a"
+        k["ops_s3_objects"] = num(ops.get("s3_cycle_objects", 0))
+        k["ops_alarms"] = num(len(ops.get("alarms", [])))
+        k["ops_stack_resources"] = num(ops.get("stack_resources", 0))
     k["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return k, items, sources
 

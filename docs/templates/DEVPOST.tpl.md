@@ -19,6 +19,7 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 - Real USGS staff-gauge cameras, physical calibration with nothing fitted: {{real_full_mae_cm}} cm mean error on {{real_n}} frames (median {{real_full_median_cm}} cm), against {{real_b0_mae_cm}} cm for the original method. On these hourly snapshots the colour estimator alone does as well as the fusion.
 - The same agent on a real USGS camera through a July 2026 flood: {{rr_used_mae_cm}} cm error on the readings it used, siren on the first frame above danger, no alert drafts on quiet days. It gained no warning lead there: the rise came overnight, when that camera records nothing.
 - Claude ({{vlm_model}}) reading the same real gauges: {{vlm_on_answered_cm}} cm on the {{vlm_coverage}} of frames it answered, against OpenCV's {{cv_on_vlm_answered_cm}} cm on those frames, at ~{{vlm_latency_s}} s and {{vlm_cost_1k}} per 1,000 frames. That is why the agent asks it only when the OpenCV estimators disagree.
+- On the live AWS stack: {{ops_cycles}} agent cycles logged to CloudWatch in {{ops_days}} days, OpenCV at {{ops_total_p50_ms}} ms per cycle median on Graviton4, every cycle archived to S3 as evidence.
 - Claude triaging {{pt_photos}} real flood photos from India and Nepal: {{pt_road_hit}}/{{pt_road_pos}} flooded roads flagged, plus {{pt_others_flagged}} of {{pt_others}} other scenes (small n, labels from the photo subject).
 - Real river gauge pairs ({{lt_pairs}}, held-out 2024–2026): with official NWS action stages, our pre-registered primary, watching upstream gains a median {{lt_nws_gain_median_min}} min (mean {{lt_nws_gain_mean_h}} h). With percentile warning levels it gains a median {{lt_p95_gain_median_h}} h. We report both.
 - Agent suite ({{ag_runs}} runs): alerts a median {{ag_lead_median_min}} min before the true warning crossing ({{rb_lead_median_min}} min for a threshold agent) with {{ag_false_alert_runs}} false alerts; the same projection rule without the vision gates raised {{pj_false_alert_runs}} false alerts when a knocked camera misread the river.
@@ -27,7 +28,7 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 
 ## How we built it
 
-OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Sobel, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Step Functions, CloudWatch, SSM, Budgets; Claude through the Anthropic API for the second opinion, report and relief parsing, photo descriptions and summaries. React PWA in English, Hindi and Nepali.
+OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Scharr, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Step Functions, CloudWatch, SSM, Budgets; Claude through the Anthropic API for the second opinion, report and relief parsing, photo descriptions and summaries. React PWA in English, Hindi and Nepali.
 
 ## Challenges
 
@@ -46,6 +47,8 @@ Real footage from a Koshi or Karnali gauge with a community early-warning progra
 1. Open the live URL (it opens on Live). Keep "Koshi: rise to the peak" selected and press Run replay (about a minute).
 2. Watch the overlay and the stage chart; open any trace to see which OpenCV number changed which action.
 3. Approvals: the drafts from that replay stay open. Edit and approve the Hindi alert for Supaul with the PIN from the private testing field; the dispatch result (SMS simulated to verified test numbers only, voice files, CAP to S3) appears on the card. The full-night replay ("Koshi: the river rises...") continues past the peak and ends with an all-clear proposal, which supersedes the unapproved rise drafts.
-4. Agent trace page: "Try to fool the guard". Type a lying or instruction-carrying model reply in any language and watch the agent keep the OpenCV value.
-5. Rivers: compute ETAs from Chatara. Relief: submit a request in Hindi or Nepali, try a photo check.
-6. Code, evaluation scripts and the report: the repository (`make test`, `make eval`, `make check-numbers`).
+4. Vision Lab: pick Chatara or the real Hancock camera and step through one cycle: quality metrics, ORB matches, the rectified gauge strip, the three estimator profiles in metres, fusion and per-stage timing on Graviton4 (with the OpenCV build info, KleidiCV included).
+5. AWS cloud: the live CloudWatch log of agent cycles, Logs Insights queries over them, OpenCV stage metrics and the state of every service in the stack.
+6. Agent trace page: "Try to fool the guard". Type a lying or instruction-carrying model reply in any language and watch the agent keep the OpenCV value.
+7. Rivers: compute ETAs from Chatara. Relief: submit a request in Hindi or Nepali, try a photo check.
+8. Code, evaluation scripts and the report: the repository (`make test`, `make eval`, `make check-numbers`).

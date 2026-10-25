@@ -1,6 +1,6 @@
 # NadiSaathi technical report
 
-OpenCV AI Competition 2026 entry. Numbers generated 2026-10-25 16:42 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
+OpenCV AI Competition 2026 entry. Numbers generated 2026-10-25 18:48 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
 
 One sentence: a camera on the Koshi at Chatara, Nepal, reads the river in metres with OpenCV 5 on AWS Graviton; when the water starts to climb, an agent looks more often, checks itself, works out when the wave reaches Birpur in Bihar, and drafts Hindi, Maithili and Nepali alerts that a named person approves with a PIN.
 
@@ -45,7 +45,7 @@ The measurement engine is `backend/src/jalrekha/vision/`, pure OpenCV 5 + NumPy.
 | Quality gate | `quality.py` | Laplacian variance, `calcHist` clipping, mean luma, glare fraction, `meanStdDev` contrast on the gauge strip | ok / reasons; a failed frame cannot change an alert |
 | Registration | `register.py` | ORB + `estimateAffinePartial2D` (USAC); escalation to **ALIKED + LightGlue** ONNX models through the OpenCV 5 DNN engine; burst alignment | 2×3 transform, inliers, residual; keyframe chaining when high water hides the reference features |
 | Gauge geometry | `gauge.py` | `warpAffine` strip along the gauge axis | piecewise-linear pixel→metre from clicked numerals |
-| Estimator E1 | `waterline.py` | Sobel edge energy profile + step fit | waterline row, confidence |
+| Estimator E1 | `waterline.py` | Scharr edge energy profile + step fit | waterline row, confidence |
 | Estimator E2 | `waterline.py` | **DIS optical flow** temporal texture over the burst | water moves, the gauge does not |
 | Estimator E3 | `waterline.py` | Lab colour step fit on the burst median | waterline row |
 | Fusion | `fuse.py` | weighted median, spread → sigma | stage m ± sigma, agreement |
@@ -54,6 +54,8 @@ The measurement engine is `backend/src/jalrekha/vision/`, pure OpenCV 5 + NumPy.
 | Privacy | `privacy.py` | **YuNet** face and licence-plate detectors (`FaceDetectorYN`, DNN), Gaussian blur | redacted frame, counts |
 | Relief photo | `relief.py` | GrabCut seeded by texture, morphology, connected components | water mask, depth at a reference object ± error |
 | Overlay | `overlay.py` | drawing for the UI and traces | annotated JPEG |
+
+**Vision Lab** (`/vision` in the app, `GET /api/vision/lab/{trace_id}`, `vision/explain.py`) shows what OpenCV did for one real agent cycle, stage by stage. It rebuilds the cycle's input frames (scenario frames are regenerated from their seed and cycle time; the Hancock replay reads the archived USGS frame), runs the same `measure()` with an opt-in capture of its intermediates, and returns: each quality metric against its threshold with a |Laplacian| heat map; the ORB (or ALIKED+LightGlue) RANSAC inliers drawn with `cv2.drawMatches` and a checkerboard of the reference against the warped frame; the `warpAffine` gauge strip and its burst median; the per-row signal each estimator fitted, on a gauge axis in metres, with its chosen waterline; the weighted-median fusion, the two-of-three consensus and the agent's Kalman value; and per-stage milliseconds with the host's `cv2.getBuildInformation()` CPU and HAL lines. Every image comes from the YuNet-redacted frame. The page also compares the rebuilt reading with the one stored in the trace; across a full Chatara scenario replay and the full Hancock replay they matched on every cycle checked.
 
 The base method of the original repository (a PIL edge-row heuristic, `services/deterministic_firewall.py`) is kept unchanged as fallback and as baseline B0. It used to report `opencv_used=True` while using PIL; the label is truthful now.
 

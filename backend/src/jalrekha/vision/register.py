@@ -11,6 +11,7 @@ two-tier, mirroring the agent's cheap-then-expensive pattern:
 
 from __future__ import annotations
 
+import threading
 import time
 from dataclasses import dataclass
 
@@ -47,9 +48,13 @@ class Registration:
         }
 
 
-_ORB = None
+# Detectors are stateful and not safe to share between threads. ORB is cheap, so each thread gets its own;
+# ALIKED + LightGlue are large ONNX networks (and LightGlue keeps the pair geometry between calls), so they
+# are loaded once and used under a lock. Concurrent use crashed the process with a native double free.
+_LOCAL = threading.local()
 _ALIKED = None
 _LG = None
+_DNN_LOCK = threading.Lock()
 
 
 def _gray_small(img: np.ndarray) -> tuple[np.ndarray, float]:
@@ -62,12 +67,16 @@ def _gray_small(img: np.ndarray) -> tuple[np.ndarray, float]:
     return g, s
 
 
+def _ransac(p_cur: np.ndarray, p_ref: np.ndarray):
+    return cv2.estimateAffinePartial2D(
+        p_cur, p_ref, method=cv2.RANSAC, ransacReprojThreshold=2.0, maxIters=2000, confidence=0.995
+    )
+
+
 def _fit(p_cur: np.ndarray, p_ref: np.ndarray, s_cur: float, s_ref: float) -> tuple[np.ndarray | None, int, float]:
     if len(p_cur) < 6:
         return None, 0, float("inf")
-    m, inl = cv2.estimateAffinePartial2D(
-        p_cur, p_ref, method=cv2.RANSAC, ransacReprojThreshold=2.0, maxIters=2000, confidence=0.995
-    )
+    m, inl = _ransac(p_cur, p_ref)
     if m is None or inl is None:
         return None, 0, float("inf")
     mask = inl.ravel().astype(bool)
@@ -80,50 +89,93 @@ def _fit(p_cur: np.ndarray, p_ref: np.ndarray, s_cur: float, s_ref: float) -> tu
     return full, int(mask.sum()), resid
 
 
-def _orb(cur: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, int, float]:
-    global _ORB
-    if _ORB is None:
-        _ORB = cv2.ORB_create(nfeatures=1500, fastThreshold=12)
+@dataclass
+class MatchSet:
+    """Keypoints and matches at the working scale, for display (vision/explain.py)."""
+
+    method: str
+    gray_cur: np.ndarray
+    gray_ref: np.ndarray
+    scale_cur: float
+    scale_ref: float
+    kp_cur: list
+    kp_ref: list
+    matches: list
+
+
+def _orb_matches(cur: np.ndarray, ref: np.ndarray) -> MatchSet | None:
+    orb = getattr(_LOCAL, "orb", None)
+    if orb is None:
+        orb = _LOCAL.orb = cv2.ORB_create(nfeatures=1500, fastThreshold=12)
     gc, sc = _gray_small(cur)
     gr, sr = _gray_small(ref)
-    kc, dc = _ORB.detectAndCompute(gc, None)
-    kr, dr = _ORB.detectAndCompute(gr, None)
+    kc, dc = orb.detectAndCompute(gc, None)
+    kr, dr = orb.detectAndCompute(gr, None)
     if dc is None or dr is None or len(kc) < 8 or len(kr) < 8:
-        return None, 0, float("inf")
+        return None
     matcher = cv2.BFMatcher(cv2.NORM_HAMMING)
     pairs = matcher.knnMatch(dc, dr, k=2)
     good = [p[0] for p in pairs if len(p) == 2 and p[0].distance < 0.8 * p[1].distance]
-    p_cur = np.float32([kc[m.queryIdx].pt for m in good])
-    p_ref = np.float32([kr[m.trainIdx].pt for m in good])
-    return _fit(p_cur, p_ref, sc, sr)
+    return MatchSet("orb", gc, gr, sc, sr, list(kc), list(kr), good)
+
+
+def _fit_matches(ms: MatchSet | None) -> tuple[np.ndarray | None, int, float]:
+    if ms is None:
+        return None, 0, float("inf")
+    p_cur = np.float32([ms.kp_cur[m.queryIdx].pt for m in ms.matches])
+    p_ref = np.float32([ms.kp_ref[m.trainIdx].pt for m in ms.matches])
+    return _fit(p_cur, p_ref, ms.scale_cur, ms.scale_ref)
+
+
+def _orb(cur: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, int, float]:
+    return _fit_matches(_orb_matches(cur, ref))
 
 
 def aliked_available() -> bool:
     return models.model_path("aliked") is not None and models.model_path("lightglue") is not None
 
 
-def _aliked(cur: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, int, float]:
+def _aliked_matches(cur: np.ndarray, ref: np.ndarray) -> MatchSet | None:
     global _ALIKED, _LG
     if not aliked_available():
-        return None, 0, float("inf")
-    if _ALIKED is None:
-        _ALIKED = cv2.ALIKED_create(str(models.model_path("aliked")))
-        _LG = cv2.LightGlueMatcher_create(str(models.model_path("lightglue")))
+        return None
     gc, sc = _gray_small(cur)
     gr, sr = _gray_small(ref)
     bc = cv2.cvtColor(gc, cv2.COLOR_GRAY2BGR)
     br = cv2.cvtColor(gr, cv2.COLOR_GRAY2BGR)
-    kc, dc = _ALIKED.detectAndCompute(bc, None)
-    kr, dr = _ALIKED.detectAndCompute(br, None)
-    if dc is None or dr is None or len(kc) < 8 or len(kr) < 8:
-        return None, 0, float("inf")
-    pc = np.float32([k.pt for k in kc])
-    pr = np.float32([k.pt for k in kr])
-    _LG.setPairInfo(pc, pr, (gc.shape[1], gc.shape[0]), (gr.shape[1], gr.shape[0]))
-    matches = _LG.match(dc, dr)
-    p_cur = np.float32([kc[m.queryIdx].pt for m in matches])
-    p_ref = np.float32([kr[m.trainIdx].pt for m in matches])
-    return _fit(p_cur, p_ref, sc, sr)
+    with _DNN_LOCK:
+        if _ALIKED is None:
+            _ALIKED = cv2.ALIKED_create(str(models.model_path("aliked")))
+            _LG = cv2.LightGlueMatcher_create(str(models.model_path("lightglue")))
+        kc, dc = _ALIKED.detectAndCompute(bc, None)
+        kr, dr = _ALIKED.detectAndCompute(br, None)
+        if dc is None or dr is None or len(kc) < 8 or len(kr) < 8:
+            return None
+        pc = np.float32([k.pt for k in kc])
+        pr = np.float32([k.pt for k in kr])
+        _LG.setPairInfo(pc, pr, (gc.shape[1], gc.shape[0]), (gr.shape[1], gr.shape[0]))
+        matches = _LG.match(dc, dr)
+    return MatchSet("aliked_lightglue", gc, gr, sc, sr, list(kc), list(kr), list(matches))
+
+
+def _aliked(cur: np.ndarray, ref: np.ndarray) -> tuple[np.ndarray | None, int, float]:
+    return _fit_matches(_aliked_matches(cur, ref))
+
+
+def inlier_matches(cur: np.ndarray, ref: np.ndarray, method: str) -> tuple[MatchSet | None, np.ndarray]:
+    """Re-run one matcher and its RANSAC fit for display: (matches, inlier mask).
+
+    Same detector, matcher and RANSAC settings as :func:`register`, so the
+    inliers are the ones the registration used.
+    """
+    ms = _aliked_matches(cur, ref) if method == "aliked_lightglue" else _orb_matches(cur, ref)
+    if ms is None or len(ms.matches) < 6:
+        return ms, np.zeros(0 if ms is None else len(ms.matches), bool)
+    p_cur = np.float32([ms.kp_cur[m.queryIdx].pt for m in ms.matches])
+    p_ref = np.float32([ms.kp_ref[m.trainIdx].pt for m in ms.matches])
+    _m, inl = _ransac(p_cur, p_ref)
+    mask = np.zeros(len(ms.matches), bool) if inl is None else inl.ravel().astype(bool)
+    return ms, mask
 
 
 def _drift(m: np.ndarray, probe: np.ndarray) -> float:

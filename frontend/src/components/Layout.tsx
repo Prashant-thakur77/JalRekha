@@ -16,7 +16,7 @@ interface NavItem {
 }
 
 /** Routes whose first section runs edge to edge under the floating nav. */
-const BLEED_ROUTES = new Set(['/', '/story', '/live']);
+const BLEED_ROUTES = new Set(['/', '/story', '/live', '/cloud']);
 
 function isActive(pathname: string, item: NavItem) {
 	return pathname === item.path || Boolean(item.prefix && pathname.startsWith(`${item.path}/`));
@@ -40,8 +40,8 @@ export default function Layout() {
 	const primary: NavItem[] = [
 		{ path: '/', label: t('nav.home') },
 		{ path: '/live', label: t('nav.live') },
+		{ path: '/vision', label: t('nav.vision') },
 		{ path: '/approvals', label: t('nav.approvals') },
-		{ path: '/traces', label: t('nav.traces'), prefix: true },
 		{ path: '/rivers', label: t('nav.rivers') },
 		{ path: '/relief', label: t('nav.relief') },
 		{ path: '/story', label: t('nav.story') },
@@ -52,7 +52,11 @@ export default function Layout() {
 		{ path: '/queue', label: t('nav.queue', { n: queueCount }) },
 		{ path: '/settings', label: t('nav.runtime') },
 	];
-	const about: NavItem[] = [{ path: '/credits', label: t('nav.credits') }];
+	const about: NavItem[] = [
+		{ path: '/traces', label: t('nav.traces'), prefix: true },
+		{ path: '/cloud', label: t('nav.cloud') },
+		{ path: '/credits', label: t('nav.credits') },
+	];
 
 	useEffect(() => {
 		if (!isOnline) {
@@ -229,7 +233,7 @@ export default function Layout() {
 											</li>
 										))}
 									</ul>
-									<p className="ns-menu__title">{t('footer.about')}</p>
+									<p className="ns-menu__title">{t('nav.inside')}</p>
 									<ul className="ns-menu__list">
 										{about.map((item) => (
 											<li key={item.path}>
@@ -285,7 +289,7 @@ export default function Layout() {
 							</ul>
 						</div>
 						<div>
-							<p className="ns-menu__title">{t('footer.about')}</p>
+							<p className="ns-menu__title">{t('nav.inside')}</p>
 							<ul className="ns-sheet__secondary">
 								{about.map((item) => (
 									<li key={item.path}>
@@ -352,7 +356,7 @@ export default function Layout() {
 							</ul>
 						</div>
 						<div>
-							<h2 className="ns-footer__title">{t('footer.about')}</h2>
+							<h2 className="ns-footer__title">{t('nav.inside')}</h2>
 							<ul className="ns-footer__list">
 								{about.map((item) => (
 									<li key={item.path}>

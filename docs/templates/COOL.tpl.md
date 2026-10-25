@@ -2,7 +2,7 @@
 
 Numbers generated {{generated_at}} from `bench/results/*.json`.
 
-The core workload is the JalRekha measurement on a 5-frame camera burst: quality gate, ORB registration, burst alignment, gauge strip, three waterline estimators (Sobel edges, DIS optical flow, Lab colour step), fusion, DIS surface motion, YuNet face/plate redaction and the overlay. It is what every agent cycle runs (`backend/src/jalrekha/vision/pipeline.py`).
+The core workload is the JalRekha measurement on a 5-frame camera burst: quality gate, ORB registration, burst alignment, gauge strip, three waterline estimators (Scharr edges, DIS optical flow, Lab colour step), fusion, DIS surface motion, YuNet face/plate redaction and the overlay. It is what every agent cycle runs (`backend/src/jalrekha/vision/pipeline.py`).
 
 ## Method
 

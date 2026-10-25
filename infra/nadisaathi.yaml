@@ -124,6 +124,11 @@ Resources:
             Status: Enabled
             Prefix: traces/
             ExpirationInDays: 30
+          # Per-cycle evidence (event JSON + redacted overlay): kept 90 days for review and audit.
+          - Id: expire-cycle-evidence
+            Status: Enabled
+            Prefix: cycles/
+            ExpirationInDays: 90
           - Id: abort-multipart
             Status: Enabled
             AbortIncompleteMultipartUpload: { DaysAfterInitiation: 3 }
@@ -236,6 +241,28 @@ Resources:
                 Resource: "*"
                 Condition:
                   StringEquals: { cloudwatch:namespace: [NadiSaathi, CWAgent] }
+              # Read-only views for the app's Cloud page: metrics, the instance, the stack, escalation
+              # runs, topic subscriptions and the cost budget. Nothing here can change a resource.
+              - Sid: ReadOpsViews
+                Effect: Allow
+                Action: [cloudwatch:GetMetricData, cloudwatch:ListMetrics, cloudwatch:DescribeAlarms, ec2:DescribeInstances, logs:DescribeLogGroups]
+                Resource: "*"
+              - Sid: ReadOwnStack
+                Effect: Allow
+                Action: [cloudformation:DescribeStacks, cloudformation:DescribeStackResources]
+                Resource: !Sub "arn:aws:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${AWS::StackName}/*"
+              - Sid: ReadEscalationRuns
+                Effect: Allow
+                Action: [states:ListExecutions, states:DescribeStateMachine]
+                Resource: !Sub "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${AWS::StackName}-approval-escalation"
+              - Sid: ReadTopicAttributes
+                Effect: Allow
+                Action: sns:GetTopicAttributes
+                Resource: !Ref Topic
+              - Sid: ReadOwnBudget
+                Effect: Allow
+                Action: budgets:ViewBudget
+                Resource: !Sub "arn:aws:budgets::${AWS::AccountId}:budget/${AWS::StackName}-monthly"
               # Covers the CloudWatch agent log shipping and SSM Run Command output.
               - Sid: StackLogGroup
                 Effect: Allow
@@ -555,11 +582,34 @@ Resources:
             {"type": "metric", "x": 12, "y": 12, "width": 12, "height": 6,
              "properties": {"title": "Escalations", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
                "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"Escalations\"', 'Sum', 300)", "id": "esc"}]]}},
-            {"type": "log", "x": 0, "y": 18, "width": 24, "height": 6,
+            {"type": "log", "x": 0, "y": 18, "width": 24, "height": 7,
+             "properties": {"title": "Agent cycles (latest): one JSON event per cycle", "region": "${AWS::Region}", "view": "table",
+               "query": "SOURCE '${LogGroup}' | filter event = \"agent_cycle\" | fields @timestamp, site, cycle, branches.0, stage_m, sigma_m, registration, inliers, ms.total, summary | sort @timestamp desc | limit 50"}},
+            {"type": "log", "x": 0, "y": 25, "width": 12, "height": 6,
+             "properties": {"title": "OpenCV stage timing per site (ms)", "region": "${AWS::Region}", "view": "table",
+               "query": "SOURCE '${LogGroup}' | filter event = \"agent_cycle\" | stats count(*) as cycles, avg(ms.total) as total, pct(ms.total, 95) as p95, avg(ms.register) as register, avg(ms.E2_temporal) as e2, avg(ms.redact) as redact by site"}},
+            {"type": "log", "x": 12, "y": 25, "width": 12, "height": 6,
              "properties": {"title": "App log (latest)", "region": "${AWS::Region}", "view": "table",
-               "query": "SOURCE '${LogGroup}' | fields @timestamp, @logStream, @message | sort @timestamp desc | limit 50"}}
+               "query": "SOURCE '${LogGroup}' | filter @logStream like /app/ | fields @timestamp, @message | sort @timestamp desc | limit 50"}}
           ]
         }
+
+  # A slow OpenCV pipeline means late readings: tell the operators before it becomes an outage.
+  OpenCvSlowAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-opencv-slow"
+      AlarmDescription: OpenCV pipeline average above 1 s per cycle for 15 minutes (normal is about 0.1 s on Graviton).
+      Namespace: NadiSaathi
+      MetricName: StageMs
+      Dimensions: [{ Name: Stage, Value: total }]
+      Statistic: Average
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 1000
+      ComparisonOperator: GreaterThanThreshold
+      TreatMissingData: notBreaching
+      AlarmActions: [!Ref Topic]
 
   # ------------------------------------------------------------------ budget
   Budget:
