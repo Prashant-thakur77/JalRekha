@@ -1,0 +1,1357 @@
+{
+  "generated": "2026-10-25",
+  "description": "Fact sheet for NadiSaathi. status: verified = official/primary page opened; secondary = news, paper, or third-party copy; unverified = could not confirm.",
+  "facts": [
+    {
+      "id": "np_sms_ntc_ncell",
+      "topic": "A. Alerting - Nepal",
+      "claim": "DHM's monsoon plan says the public in affected areas is alerted by SMS from Nepal Telecom and Ncell when a river reaches or is likely to reach the red (danger) mark.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://thehimalayantimes.com/kathmandu/dhm-develops-monsoon-response-plan/",
+      "source_title": "The Himalayan Times, 12 Jun 2019: DHM develops monsoon response plan",
+      "accessed": "2026-10-25",
+      "quote": "general public of the concerned areas will be alerted through SMS by Nepal Telecom and Ncell",
+      "note": "News report (2019) of DHM's plan; DHM site itself unreachable. Same article: 'If the water level of rivers reaches or is likely to reach the red mark'."
+    },
+    {
+      "id": "np_ntc_1155",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Nepal Telecom gives DHM the details of subscribers in disaster-prone areas; DHM sends them early-warning SMS via the 1155 access code, free of charge.",
+      "value": "1155",
+      "unit": "access code",
+      "status": "secondary",
+      "source_url": "https://nepalitelecom.com/?p=10194",
+      "source_title": "NepaliTelecom: Nepal Telecom sending early warning SMS for coming natural disaster",
+      "accessed": "2026-10-25",
+      "quote": "The department then sends the early warning message to those people through 1155 access code.",
+      "note": "Also: 'Nepal Telecom provides the details of the people living in those disaster-prone areas to DHM.' and 'Ntc has been providing all the SMS services at free of cost.' Rivers listed: Mahakali, West Seti, Kankai, Babai, Karnali, Narayani, Bagmati, Koshi."
+    },
+    {
+      "id": "np_sms_trigger",
+      "topic": "A. Alerting - Nepal",
+      "claim": "DHM sends SMS alerts to nearby settlements as soon as a river crosses its warning or danger level.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://myrepublica.nagariknetwork.com/index.php/amp/news/dhm-sending-early-sms-alerts-to-mitigate-risks-of-floods",
+      "source_title": "Republica: DHM sending early SMS alerts to mitigate risks of floods (dated July 25, year not shown)",
+      "accessed": "2026-10-25",
+      "quote": "As soon as the updates show any river crossing the warning or danger level, the alerts are sent to the nearby settlements."
+    },
+    {
+      "id": "np_ncell_since_2016",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Ncell has sent flood early-warning SMS to people in flood-prone areas since 2016, and sent over 9 million SMS alerts in 2023.",
+      "value": 9000000,
+      "unit": "SMS (2023)",
+      "status": "secondary",
+      "source_url": "https://thehimalayantimes.com/environment/ncell-dhm-sign-mou-strengthening-early-warning-systems-to-cover-13-hazards",
+      "source_title": "The Himalayan Times, 11 Jan 2024: Ncell, DHM sign MoU strengthening early warning systems to cover 13 hazards",
+      "accessed": "2026-10-25",
+      "quote": "Since 2016 Ncell has been disseminating flood early warning SMS alerts to people living in flood-prone areas.",
+      "note": "Also: 'Last year alone in 2023, the company disseminated over 9 million SMS alerts.' A different NepaliTelecom report gives 44 lakh for 2023 (not opened); treat the count as uncertain."
+    },
+    {
+      "id": "np_ncell_mou_2024",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Ncell and DHM signed an MoU on 10 January 2024 extending SMS early warning to 13 hydro-meteorological hazards.",
+      "value": 13,
+      "unit": "hazards",
+      "status": "secondary",
+      "source_url": "https://thehimalayantimes.com/environment/ncell-dhm-sign-mou-strengthening-early-warning-systems-to-cover-13-hazards",
+      "source_title": "The Himalayan Times, 11 Jan 2024: Ncell, DHM sign MoU strengthening early warning systems to cover 13 hazards",
+      "accessed": "2026-10-25",
+      "quote": "Flood, Flash Flood, Rainfall, Thunderstorm, Windgust, Landslide, Avalanche, Snowfall,"
+    },
+    {
+      "id": "np_telemetry_auto_sms",
+      "topic": "A. Alerting - Nepal",
+      "claim": "In Nepal's flood EWS, the telemetry network triggers automatic SMS to chief district officers, DHM basin offices and security forces; district offices run display boards with sirens.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "The second utilizes the telemetry system to trigger automatic SMS text messages, such that warnings are sent to chief district officers, DHM basin offices, along with security forces"
+    },
+    {
+      "id": "np_cbews_gauge_readers",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Community-based EWS (CBEWS) trained community gauge readers to watch river levels and warn downstream communities when levels pass warning and danger thresholds; gauge readers warn by mobile phone and SMS.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "Initially the CBEWSs trained community gauge readers to monitor river levels and disseminate warnings to downstream communities when river levels rose above the defined warning and danger thresholds"
+    },
+    {
+      "id": "np_warning_danger_def",
+      "topic": "A. Alerting - Nepal",
+      "claim": "In Karnali CBEWS, the warning level means water reaches the top of the riverbanks at the downstream site at risk; the danger level means water overflows the banks into communities.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "Warning Level – condition when water reaches the top of the riverbanks for the downstream site at risk",
+      "note": "Danger level: 'condition when water overflows the riverbanks and water enters the communities and floodplains downstream.' This is the paper's definition for Chisapani; DHM's own hydrology.gov.np legend could not be opened."
+    },
+    {
+      "id": "np_dhm_stations_2014",
+      "topic": "A. Alerting - Nepal",
+      "claim": "DHM had 286 meteorological and 170 hydrological stations (figure cited from Shrestha et al., 2014).",
+      "value": {
+        "meteorological": 286,
+        "hydrological": 170
+      },
+      "unit": "stations",
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "DHM now has 286 meteorological and 170 hydrological stations nationwide (Shrestha et al., 2014)",
+      "note": "Old figure (2014); current count not verified."
+    },
+    {
+      "id": "np_dhm_sms_2021_karnali",
+      "topic": "A. Alerting - Nepal",
+      "claim": "On 19 Oct 2021, DHM sent a mass SMS at 8 AM saying the Karnali had crossed the warning level, an hour after the gauge reader's 7 AM reading of 10.2 m at Chisapani.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://www.dpnet.org.np/public/uploads/files/Case%20Study-%20Implementing%20Anticipatory%20Action%20in%20Nepal%202022%202022-05-06%2007-28-34.pdf",
+      "source_title": "Nepal Red Cross Society et al.: Acting in anticipation against unseasonal floods in Nepal (case study, Oct 2021 Karnali floods)",
+      "accessed": "2026-10-25",
+      "quote": "8 AM: SMS alert from DHM informing that warning level has been crossed in Karnali"
+    },
+    {
+      "id": "np_2026_mass_sms",
+      "topic": "A. Alerting - Nepal",
+      "claim": "During the 26 Aug 2026 Bhotekoshi-Trishuli flood, more than 600,000 SMS warnings went to riverbank residents of Rasuwa, Nuwakot, Dhading and Chitwan between 9:15 and 9:16 am (Kathmandu Post attributes them to the Flood Forecasting Division).",
+      "value": 600000,
+      "unit": "messages",
+      "status": "secondary",
+      "source_url": "https://kathmandupost.com/national/2026/08/27/how-the-bhotekoshi-flood-unfolded-over-10-hours",
+      "source_title": "The Kathmandu Post, 27 Aug 2026: How the Bhotekoshi flood unfolded over 10 hours",
+      "accessed": "2026-10-25",
+      "quote": "More than 600,000 messages were sent.",
+      "note": "Mongabay reports DHM's count as 679,295 residents and says it could not verify the time; the Prime Minister told Parliament the first batch went out at 9:35 a.m."
+    },
+    {
+      "id": "np_2026_sms_criticism",
+      "topic": "A. Alerting - Nepal",
+      "claim": "After the Aug 2026 flood, critics said official SMS warnings were generic and lacked exact locations, severity and instructions; DHM describes its system as threshold-based river sensors.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://india.mongabay.com/2026/09/community-based-warning-saves-lives-during-nepal-floods/",
+      "source_title": "Mongabay India, Sep 2026: Community-based warning saves lives during Nepal floods",
+      "accessed": "2026-10-25",
+      "quote": "threshold-based river sensors: When water crosses a preset danger level, it triggers an alert."
+    },
+    {
+      "id": "np_ndrrma_act",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Nepal's DRRM Act 2074 (2017), Act No. 45, establishes the National Disaster Risk Reduction and Management Authority (NDRRMA) under the Ministry (of Home Affairs).",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://dpnet.org.np/uploads/files/DRRM_Act_and_Regulation_english%202022-04-13%2007-11-33.pdf",
+      "source_title": "Disaster Risk Reduction and Management Act, 2074 (2017), English text with Rules 2076 (copy hosted by DPNet Nepal)",
+      "accessed": "2026-10-25",
+      "quote": "There shall be established a National Disaster Risk Reduction and Management Authority under the Ministry to effectively carryout and manage disaster management activities.",
+      "note": "English translation hosted by DPNet; assented 2074/07/05 (22 Oct 2017), first amendment 23 Feb 2019."
+    },
+    {
+      "id": "np_ldmc",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Under the DRRM Act, every local level must set up a Local Disaster Management Committee (up to 15 members, chaired by the mayor or rural municipality chair) that develops and runs a local early-warning system and emergency operations centre.",
+      "value": 15,
+      "unit": "max members",
+      "status": "secondary",
+      "source_url": "https://dpnet.org.np/uploads/files/DRRM_Act_and_Regulation_english%202022-04-13%2007-11-33.pdf",
+      "source_title": "Disaster Risk Reduction and Management Act, 2074 (2017), English text with Rules 2076 (copy hosted by DPNet Nepal)",
+      "accessed": "2026-10-25",
+      "quote": "Every local level shall establish a Local Disaster Management Committee consisting of such members, not exceeding fifteen, chaired by the chairperson of village body or mayor of municipality.",
+      "note": "Function (j): 'Develop or cause to develop an information system on disaster management and early-warning system at local level, and make them operational;'"
+    },
+    {
+      "id": "np_focal_person_act",
+      "topic": "A. Alerting - Nepal",
+      "claim": "Ward or municipal 'disaster focal persons' are NOT named in the DRRM Act 2017 English text that was checked (no occurrence of 'focal').",
+      "value": null,
+      "unit": null,
+      "status": "unverified",
+      "source_url": "https://dpnet.org.np/uploads/files/DRRM_Act_and_Regulation_english%202022-04-13%2007-11-33.pdf",
+      "source_title": "Disaster Risk Reduction and Management Act, 2074 (2017), English text with Rules 2076 (copy hosted by DPNet Nepal)",
+      "accessed": "2026-10-25",
+      "quote": "",
+      "note": "The NRCS case study does mention 'DRR focal person at the municipalities' as a practice, but the Act text does not. Do not attribute focal persons to the Act."
+    },
+    {
+      "id": "np_hydrology_portal",
+      "topic": "A. Alerting - Nepal",
+      "claim": "hydrology.gov.np warning/danger level legend and DHM station pages could not be opened (connection refused) on the access date.",
+      "value": null,
+      "unit": null,
+      "status": "unverified",
+      "source_url": "https://www.hydrology.gov.np/",
+      "source_title": "DHM real-time hydrology portal (connection refused on access date)",
+      "accessed": "2026-10-25",
+      "quote": "",
+      "note": "Any claim quoting the portal's legend or per-station thresholds is unverified."
+    },
+    {
+      "id": "in_cwc_ff_stations",
+      "topic": "A. Alerting - India",
+      "claim": "CWC issues flood forecasts at 340 stations: 200 level-forecast and 140 inflow-forecast stations.",
+      "value": {
+        "total": 340,
+        "level": 200,
+        "inflow": 140
+      },
+      "unit": "stations",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "Presently, flood forecasts are issued by CWC at 340 stations (140 Inflow Forecast Stations + 200 Level Forecast Stations).",
+      "note": "Basin table: Ganga & tributaries 96 level + 43 inflow = 139."
+    },
+    {
+      "id": "in_cwc_warning_level",
+      "topic": "A. Alerting - India",
+      "claim": "CWC level forecasts start when the river touches or is expected to touch the Warning Level, usually 1 m below the Danger Level.",
+      "value": 1.0,
+      "unit": "m below Danger Level",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "pre-defined Warning Level (usually 1 meter below the Danger Level, but also dependent on the threat perception of the particular location)"
+    },
+    {
+      "id": "in_cwc_hfl_categories",
+      "topic": "A. Alerting - India",
+      "claim": "CWC alert categories: Above Normal (yellow) = between Warning and Danger Level; Severe (orange) = between Danger Level and HFL; Extreme (red) = above the HFL, the highest level ever recorded at the site.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "*Highest Flood level- The highest flood level of the river ever recorded at the place.",
+      "note": "Annex-3.2: 'Above Normal: Yellow', 'Severe: Orange', 'Extreme: Red'. Orange alerts updated 6-hourly, red 3-hourly."
+    },
+    {
+      "id": "in_cwc_forecasts_per_year",
+      "topic": "A. Alerting - India",
+      "claim": "CWC issues more than 8,000 flood forecasts every flood season and has run a 7-day rainfall-runoff advisory since 2023.",
+      "value": 8000,
+      "unit": "forecasts per season",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "Annually, more than 8,000 flood forecasts are being issued by CWC during flood season."
+    },
+    {
+      "id": "in_cwc_cap_sachet",
+      "topic": "A. Alerting - India",
+      "claim": "CWC's SOP requires CAP alerts on the SACHET platform for all level forecasts issued from divisional flood control rooms.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "CAP alerts should be issued for all level forecasts from DFCR in the Sachet platform"
+    },
+    {
+      "id": "in_imd_inputs",
+      "topic": "A. Alerting - India",
+      "claim": "IMD's automatic weather stations and rain gauges, and IMD Flood Meteorological Offices, feed rainfall data into CWC flood forecasts.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "Automatic Weather Stations/Automatic Rain Gauges of India Meteorological Department(IMD) shall provide necessary inputs in formulation of flood forecasts."
+    },
+    {
+      "id": "in_sachet_cap",
+      "topic": "A. Alerting - India",
+      "claim": "SACHET is NDMA's CAP-based Integrated Alert System, built by C-DOT, for geo-targeted alerts in local languages over SMS, Cell Broadcast, radio, TV, sirens, social media, web and apps.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=1855808",
+      "source_title": "PIB, 31 Aug 2022: C-DOT and NDMA organise All India Workshop on CAP based Integrated Alert System - SACHET",
+      "accessed": "2026-10-25",
+      "quote": "over all available communication media including SMS, Cell Broadcast, Radio, TV, Siren, Social Media, Web Portals and Mobile Applications",
+      "note": "As of 31 Aug 2022: 'The system is already operational in 34 States and UTs. More than 75 Crores SMSes have already been sent by the system'."
+    },
+    {
+      "id": "in_sachet_portal_header",
+      "topic": "A. Alerting - India",
+      "claim": "The SACHET portal describes itself as part of India's CAP project; SMS alerts come from the header XX-NDMAEW. Alert sources shown include IMD and CWC.",
+      "value": "XX-NDMAEW",
+      "unit": "SMS header",
+      "status": "verified",
+      "source_url": "https://sachet.ndma.gov.in/",
+      "source_title": "SACHET - National Disaster Alert Portal (NDMA)",
+      "accessed": "2026-10-25",
+      "quote": "User needs to be attentive when disaster alerts are received via SMS from the header XX-NDMAEW.",
+      "note": "Also: 'is part of CAP(Common Alerting Protocol) project implemented in India'."
+    },
+    {
+      "id": "in_cell_broadcast_2026",
+      "topic": "A. Alerting - India",
+      "claim": "NDMA ran a nationwide Cell Broadcast alert test on 2 May 2026 through the C-DOT-built SACHET system.",
+      "value": "2026-05-02",
+      "unit": "date",
+      "status": "secondary",
+      "source_url": "https://morungexpress.com/govt-tests-nationwide-mobile-emergency-alert-system-to-safeguard-citizens",
+      "source_title": "The Morung Express (IANS), 2 May 2026: Govt tests nationwide mobile emergency alert system",
+      "accessed": "2026-10-25",
+      "quote": "NDMA will test Cell Broadcast Alerts on 2 May 2026 in your area.",
+      "note": "News reports also cite 134 billion SMS sent through SACHET; another summary says 6,899 crore. Not verified at a primary source."
+    },
+    {
+      "id": "in_ddma_chair",
+      "topic": "A. Alerting - India",
+      "claim": "Under the Disaster Management Act 2005 (s.25), each state sets up a District Disaster Management Authority chaired by the Collector / District Magistrate / Deputy Commissioner.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://www.advocatekhoj.com/library/bareacts/disastermanagement/25.php",
+      "source_title": "Disaster Management Act, 2005, Section 25 (bare act text, AdvocateKhoj)",
+      "accessed": "2026-10-25",
+      "quote": "the Collector or District Magistrate or Deputy Commissioner, as the case may be, of the district who shall be Chairperson,",
+      "note": "Bare-act text on a third-party law site; the NDMA PDF copy is a scan that could not be text-searched."
+    },
+    {
+      "id": "in_ddma_early_warning",
+      "topic": "A. Alerting - India",
+      "claim": "DM Act 2005 s.30 makes the DDMA responsible for maintaining early-warning mechanisms and getting information to the public. Section 30 does not mention control rooms.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://www.advocatekhoj.com/library/bareacts/disastermanagement/30.php",
+      "source_title": "Disaster Management Act, 2005, Section 30 (bare act text, AdvocateKhoj)",
+      "accessed": "2026-10-25",
+      "quote": "set up, maintain, review and upgrade the mechanism for early warnings and dissemination of proper information to public;",
+      "note": "No source opened that ties DDMA control rooms to the Act; treat 'control rooms' as practice, not statute."
+    },
+    {
+      "id": "in_trai_dlt",
+      "topic": "A. Alerting - India",
+      "claim": "To send SMS over local routes in India, senders must register their use case and message templates with TRAI through a DLT portal and send with the Entity ID and Template ID.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/sms-voice/latest/userguide/registrations-sms-senderid-india.html",
+      "source_title": "AWS End User Messaging SMS: India sender ID registration process",
+      "accessed": "2026-10-25",
+      "quote": "To send messages using local routes, you must first register your use case and message templates with the Telecom Regulatory Authority of India (TRAI) through a Distributed Ledger Technology (DLT) portal.",
+      "note": "AWS documentation; TRAI's own site (cms.trai.gov.in) refused connections on the access date."
+    },
+    {
+      "id": "in_bihar_flood_prone",
+      "topic": "A. Alerting - India",
+      "claim": "Bihar's Water Resources Department calls Bihar India's most flood-prone state, with 76% of north Bihar's population under recurring flood threat; 68,800 of 94,163 sq km (73.06%) is flood-affected.",
+      "value": 76,
+      "unit": "% of north Bihar population",
+      "status": "verified",
+      "source_url": "https://fmiscwrdbihar.gov.in/fmis/history.html",
+      "source_title": "WRD Bihar, Flood Management Improvement Support Centre: Flood history",
+      "accessed": "2026-10-25",
+      "quote": "most flood-prone State, with 76 percent of the population, in the north Bihar living under the recurring threat of flood devastation"
+    },
+    {
+      "id": "in_bihar_share_india",
+      "topic": "A. Alerting - India",
+      "claim": "Bihar's flood-affected area (68.80 lakh ha) is about 17.20% of India's total flood-prone area.",
+      "value": 17.2,
+      "unit": "% of India's flood-prone area",
+      "status": "verified",
+      "source_url": "https://stc.bihar.gov.in/ShowDepartmentContentSubT.aspx?Id=MTI%3D",
+      "source_title": "Government of Bihar, State Transformation Cell: Flood / Water Resources page",
+      "accessed": "2026-10-25",
+      "quote": "about 17.20 percent of India’s total flood-prone area",
+      "note": "The often-quoted '22.1% of India's flood-affected population' was seen only in secondary sources and is not verified here."
+    },
+    {
+      "id": "st_basua",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Basua (Kosi, Supaul, Bihar/UP): Warning Level 46.75 m, Danger Level 47.75 m, HFL 49.24 m (08/02/2022 as printed).",
+      "value": {
+        "warning_level_m": 46.75,
+        "danger_level_m": 47.75,
+        "hfl_m": 49.24,
+        "hfl_date": "08/02/2022 as printed"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "72   Kosi            Basua                Bihar          Supaul            46.75    47.75    49.24   08/02/2022",
+      "note": "WRD Bihar Kosi bulletin gives Basua HFL as 49.24/2017 and distance 64.25 km downstream of Birpur. HFL date differs between sources."
+    },
+    {
+      "id": "st_baltara",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Baltara (Kosi, Khagaria, Bihar/UP): Warning Level 32.85 m, Danger Level 33.85 m, HFL 36.4 m (15/08/1987).",
+      "value": {
+        "warning_level_m": 32.85,
+        "danger_level_m": 33.85,
+        "hfl_m": 36.4,
+        "hfl_date": "15/08/1987"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "73   Kosi            Baltara              Bihar          Khagaria          32.85    33.85    36.40   15/08/1987"
+    },
+    {
+      "id": "st_kursela",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Kursela (Kosi, Katihar, Bihar/UP): Warning Level 29.0 m, Danger Level 30.0 m, HFL 32.1 m (07/09/1982).",
+      "value": {
+        "warning_level_m": 29.0,
+        "danger_level_m": 30.0,
+        "hfl_m": 32.1,
+        "hfl_date": "07/09/1982"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "74   Kosi            Kursela              Bihar          Katihar           29.00    30.00    32.10   07/09/1982"
+    },
+    {
+      "id": "st_birpur",
+      "topic": "B. Rivers and stations",
+      "claim": "Birpur (Kosi barrage site, Supaul) monitoring station: Warning Level 73.7 m, Danger Level 74.7 m, HFL 76.11 m on 29-09-2024 (CWC SOP). WRD Bihar's Oct 2026 bulletin lists WL 75, DL 76, HFL 76.14 (2025).",
+      "value": {
+        "cwc_sop": {
+          "warning_level_m": 73.7,
+          "danger_level_m": 74.7,
+          "hfl_m": 76.11,
+          "hfl_date": "2024-09-29"
+        },
+        "wrd_bihar_2026": {
+          "warning_level_m": 75,
+          "danger_level_m": 76,
+          "hfl_m": 76.14,
+          "hfl_year": 2025
+        }
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "202   Koshi          Birpur             Bihar          SUPAUL               73.7     74.7     76.11    29-09-2024",
+      "note": "The two official sources disagree on Birpur's warning/danger levels; cite whichever you use with its date."
+    },
+    {
+      "id": "st_barahkshetra_levels",
+      "topic": "B. Rivers and stations",
+      "claim": "Barahkshetra (Nepal, Saptakoshi) in WRD Bihar's Kosi bulletin: HFL 132.18 m, Danger Level 120.3 m, Warning Level 119.3 m. Chatra Bazar is 47 km upstream of Birpur (HFL 117, DL 113.45, WL 112.25).",
+      "value": {
+        "barahkshetra": {
+          "hfl_m": 132.18,
+          "danger_level_m": 120.3,
+          "warning_level_m": 119.3
+        },
+        "chatra_bazar": {
+          "km_upstream_of_birpur": 47,
+          "hfl_m": 117,
+          "danger_level_m": 113.45,
+          "warning_level_m": 112.25
+        }
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://www.fmiscwrdbihar.gov.in/bulletin/Kosi_Model_Result.pdf",
+      "source_title": "WRD Bihar (FMISC): Birpur discharge forecast / Kosi flood bulletin, forecast issued 24-10-2026 12:30",
+      "accessed": "2026-10-25",
+      "quote": "Chatra Bazar (47 km u/s)                            117                 113.45              112.25",
+      "note": "These are WRD Bihar's values for Nepal-side sites, not DHM's. Bulletin notes observed WL as 'NA*' for these sites."
+    },
+    {
+      "id": "st_chatia",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Chatia (Gandak, East Champaran, Bihar/UP): Warning Level 68.15 m, Danger Level 69.15 m, HFL 70.04 m (26/07/2002).",
+      "value": {
+        "warning_level_m": 68.15,
+        "danger_level_m": 69.15,
+        "hfl_m": 70.04,
+        "hfl_date": "26/07/2002"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "54   Gandak         Chatia                  Bihar   East Champaran    68.15    69.15    70.04   26/07/2002"
+    },
+    {
+      "id": "st_dumariaghat",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Dumariaghat (Gandak, Gopalganj, Bihar/UP): Warning Level 61.22 m, Danger Level 62.22 m, HFL 64.36 m (24/07/2020).",
+      "value": {
+        "warning_level_m": 61.22,
+        "danger_level_m": 62.22,
+        "hfl_m": 64.36,
+        "hfl_date": "24/07/2020"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "78   Gandak          Dumariaghat          Bihar          Gopalganj         61.22    62.22    64.36   24/07/2020",
+      "note": "WRD Bihar's Oct 2026 bulletin notes a 2026 maximum of 64.64 m at Dumariaghat on 29 Sep 2026, above the listed HFL."
+    },
+    {
+      "id": "st_triveni",
+      "topic": "B. Rivers and stations",
+      "claim": "Triveni (Gandak, West Champaran) monitoring station: Warning Level 108.67 m, Danger Level 109.67 m, HFL 112.79 m.",
+      "value": {
+        "warning_level_m": 108.67,
+        "danger_level_m": 109.67,
+        "hfl_m": 112.79
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "200   Gandak         Triveni            Bihar          PASHCHIM CHAMPARAN   108.67   109.67   112.79   NA"
+    },
+    {
+      "id": "st_dheng",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Dheng Bridge (Bagmati, Sitamarhi, Bihar/UP): Warning Level 70.0 m, Danger Level 71.0 m, HFL 73.0 m (13/08/2017).",
+      "value": {
+        "warning_level_m": 70.0,
+        "danger_level_m": 71.0,
+        "hfl_m": 73.0,
+        "hfl_date": "13/08/2017"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "64   Bagmati         Dheng Bridge         Bihar          Sitamarhi         70.00    71.00    73.00   13/08/2017",
+      "note": "WRD Bihar's Oct 2026 Bagmati bulletin lists Dheng Bridge HFL as 73.47 (2024)."
+    },
+    {
+      "id": "st_benibad",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Benibad (Bagmati, Muzaffarpur, Bihar/UP): Warning Level 47.68 m, Danger Level 48.68 m, HFL 50.01 m (12/07/2004).",
+      "value": {
+        "warning_level_m": 47.68,
+        "danger_level_m": 48.68,
+        "hfl_m": 50.01,
+        "hfl_date": "12/07/2004"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "62   Bagmati         Benibad              Bihar          Muzzafarpur       47.68    48.68    50.01   12/07/2004",
+      "note": "WRD Bihar's Oct 2026 bulletin lists Benibad HFL as 50.12 (2025)."
+    },
+    {
+      "id": "st_elgin",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC level-forecast station Elgin Bridge (Ghaghra, Barabanki (UP), Bihar/UP): Warning Level 105.07 m, Danger Level 106.07 m, HFL 107.62 m (18/08/2014).",
+      "value": {
+        "warning_level_m": 105.07,
+        "danger_level_m": 106.07,
+        "hfl_m": 107.62,
+        "hfl_date": "18/08/2014"
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "172   Ghaghra     Elgin Bridge          Uttar Pradesh   Barabanki       105.07   106.07   107.62   18/08/2014"
+    },
+    {
+      "id": "st_paliakalan",
+      "topic": "B. Rivers and stations",
+      "claim": "Paliakalan (Sarda/Sharda, Kheri, UP) monitoring station: Warning Level 153.59 m, Danger Level 154.59 m, HFL 155.82 m (20-10-2021).",
+      "value": {
+        "warning_level_m": 153.59,
+        "danger_level_m": 154.59,
+        "hfl_m": 155.82
+      },
+      "unit": "m",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "1105   Sarda            Paliakalan           Uttar Pradesh   KHERI              153.59   154.59   155.82    20-10-2021"
+    },
+    {
+      "id": "st_inflow_barrages",
+      "topic": "B. Rivers and stations",
+      "claim": "CWC inflow-forecast barrages on these rivers: Kosi Barrage (Supaul), Gandak Barrage (West Champaran), Katerniaghat Barrage (Ghaghra, Bahraich; threshold 3500 cumec), Banbasa Barrage (Sharda, Champawat; threshold 3500 cumec).",
+      "value": {
+        "katerniaghat_threshold_cumec": 3500,
+        "banbasa_threshold_cumec": 3500
+      },
+      "unit": "cumec",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "131    Ghaghra         Katerniaghat Barrage             Uttar Pradesh   Bahraich            136.8     138     3500",
+      "note": "Girijapur barrage was not found in the CWC list."
+    },
+    {
+      "id": "st_coords_wikipedia",
+      "topic": "B. Rivers and stations",
+      "claim": "Approximate coordinates from Wikipedia (place, not gauge): Koshi Barrage 26.5263 N, 86.9269 E; Birpur 26.5156 N, 87.0086 E; Baraha Kshetra 26.83 N, 87.18 E; Karnali Bridge (Chisapani) 28.6415 N, 81.2831 E; Devghat 27.8 N, 84.41 E; Benibad 26.1462 N, 85.6911 E.",
+      "value": {
+        "koshi_barrage": [
+          26.5263,
+          86.9269
+        ],
+        "birpur": [
+          26.51555556,
+          87.00861111
+        ],
+        "baraha_kshetra": [
+          26.83,
+          87.18
+        ],
+        "karnali_bridge_chisapani": [
+          28.6415,
+          81.2831
+        ],
+        "devghat": [
+          27.8,
+          84.41
+        ],
+        "benibad": [
+          26.14622222,
+          85.69108333
+        ]
+      },
+      "unit": "decimal degrees",
+      "status": "secondary",
+      "source_url": "https://en.wikipedia.org/w/api.php?action=query&prop=coordinates&titles=Koshi_Barrage|Birpur,_Supaul|Benibad|Karnali_Bridge|Baraha_Kshetra|Devghat",
+      "source_title": "Wikipedia article coordinates (via MediaWiki API)",
+      "accessed": "2026-10-25",
+      "quote": "26°31′35″N 86°55′37″E (Koshi Barrage infobox)",
+      "note": "Place coordinates from Wikipedia, not surveyed gauge positions. Label them 'approximate' in the site graph."
+    },
+    {
+      "id": "st_dhm_coords",
+      "topic": "B. Rivers and stations",
+      "claim": "DHM station numbers and coordinates (e.g., Chatara 695, Chisapani 280, Devghat 450) appeared only in search-result snippets of dhm.gov.np; the pages could not be opened.",
+      "value": null,
+      "unit": null,
+      "status": "unverified",
+      "source_url": "https://www.dhm.gov.np/",
+      "source_title": "Department of Hydrology and Meteorology, Nepal (unreachable on access date)",
+      "accessed": "2026-10-25",
+      "quote": "",
+      "note": "Do not use DHM station numbers or coordinates as verified."
+    },
+    {
+      "id": "st_chisapani_levels",
+      "topic": "B. Rivers and stations",
+      "claim": "Chisapani (Karnali) gauge: anticipatory warning at 10 m, danger warning at 10.8 m; about 45,000 km2 drains above the gauge.",
+      "value": {
+        "warning_m": 10.0,
+        "danger_m": 10.8,
+        "catchment_km2": 45000
+      },
+      "unit": "m",
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "an anticipatory warning is issued if the water level at the Chisapani gauge rises above 10 m, with a danger warning (indicating the probability of severe flooding downstream) issued at 10.8 m",
+      "note": "The NRCS 2021 case study instead reports a warning level of 10.2 m at Chisapani (danger 10.8 m), so warning-level values differ by source."
+    },
+    {
+      "id": "st_devghat_2026",
+      "topic": "B. Rivers and stations",
+      "claim": "WRD Bihar's Gandak bulletin lists Devghat (Bharatpur, Nepal) maximum discharge as 674,400 cusecs (2026). Valmikinagar barrage: design 850,000 cusecs; maximum 639,750 cusecs (2003).",
+      "value": {
+        "devghat_max_cusecs_2026": 674400,
+        "valmikinagar_design_cusecs": 850000,
+        "valmikinagar_max_cusecs": 639750,
+        "valmikinagar_max_year": 2003
+      },
+      "unit": "cusecs",
+      "status": "verified",
+      "source_url": "https://www.fmiscwrdbihar.gov.in/bulletin/Gandak_Model_Result.pdf",
+      "source_title": "WRD Bihar (FMISC): Discharge and gauge forecast in Gandak basin, forecast issued 24-10-2026 12:30",
+      "accessed": "2026-10-25",
+      "quote": "Devghat / Gandak ... Bharatpur, Nepal ... 674400 (2026)",
+      "note": "Quote condensed from a table row; values exact."
+    },
+    {
+      "id": "st_dhm_data_gap",
+      "topic": "B. Rivers and stations",
+      "claim": "WRD Bihar's Oct 2026 forecasts note that DHM observed rainfall and water-level data were unavailable, so WRF model rainfall was used for both hindcast and forecast.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://www.fmiscwrdbihar.gov.in/bulletin/Kosi_Model_Result.pdf",
+      "source_title": "WRD Bihar (FMISC): Birpur discharge forecast / Kosi flood bulletin, forecast issued 24-10-2026 12:30",
+      "accessed": "2026-10-25",
+      "quote": "Due to the unavailability of DHM observed rainfall and water-level data ,WRF rainfall data have been used for both the hindcast and forecast periods.",
+      "note": "Same note appears on the Gandak and Bagmati bulletins. Useful context for why upstream Nepal data matters."
+    },
+    {
+      "id": "tt_chisapani_downstream",
+      "topic": "C. Travel and lead times",
+      "claim": "Karnali CBEWS gives downstream communities about 2-3 hours of warning from Chisapani gauge readings; a DHM-applied forecasting method raised lead time to 7-8 hours.",
+      "value": {
+        "cbews_h": "2-3",
+        "forecast_h": "7-8"
+      },
+      "unit": "hours",
+      "status": "secondary",
+      "source_url": "https://nhess.copernicus.org/articles/17/423/2017/nhess-17-423-2017.pdf",
+      "source_title": "Smith, Brown & Dugar (2017), Community-based early warning systems for flood risk mitigation in Nepal, NHESS 17, 423-437",
+      "accessed": "2026-10-25",
+      "quote": "The current CBEWS in Karnali offers 2–3 h of warning time to downstream communities",
+      "note": "Method: observed upstream gauge (CBEWS) vs. data-based time-series forecast with 5 h delay. Downstream communities are on the Nepal side (Bardiya/Kailali), not India."
+    },
+    {
+      "id": "tt_karnali_2021_lead",
+      "topic": "C. Travel and lead times",
+      "claim": "In the Oct 2021 Karnali flood the stated lead time for anticipatory action was 4 hours.",
+      "value": 4,
+      "unit": "hours",
+      "status": "secondary",
+      "source_url": "https://www.dpnet.org.np/public/uploads/files/Case%20Study-%20Implementing%20Anticipatory%20Action%20in%20Nepal%202022%202022-05-06%2007-28-34.pdf",
+      "source_title": "Nepal Red Cross Society et al.: Acting in anticipation against unseasonal floods in Nepal (case study, Oct 2021 Karnali floods)",
+      "accessed": "2026-10-25",
+      "quote": "Lead time: 4 hours"
+    },
+    {
+      "id": "tt_jure_chatara",
+      "topic": "C. Travel and lead times",
+      "claim": "In Aug 2014, discharge at Chatara dropped about 17.5 hours after the Jure landslide dammed the Sunkoshi; the authors read this as the travel time from the landslide to Chatara.",
+      "value": 17.5,
+      "unit": "hours",
+      "status": "secondary",
+      "source_url": "https://isprs-archives.copernicus.org/articles/XL-8/1345/2014/isprsarchives-XL-8-1345-2014.pdf",
+      "source_title": "Champati Ray & Chattoraj (2014), Sunkoshi landslide in Nepal and its possible impact in India, ISPRS Archives XL-8",
+      "accessed": "2026-10-25",
+      "quote": "a reduction in discharge around 17.5 hrs after the reported time of landslide and dam formation (2.30 hrs on 2nd August 2014), which is equivalent to travel time of the water from landslide area to the gauge site at Chatara on Sunkoshi"
+    },
+    {
+      "id": "tt_chatara_barrage",
+      "topic": "C. Travel and lead times",
+      "claim": "Chatara is 43 km from the Kosi barrage; the same paper expected floodwater from the landslide to reach the barrage in about 20 hours, implying roughly 2.5 hours from Chatara to the barrage (derived, not stated).",
+      "value": {
+        "distance_km": 43,
+        "landslide_to_barrage_h": 20,
+        "implied_chatara_to_barrage_h": 2.5
+      },
+      "unit": "km / hours",
+      "status": "secondary",
+      "source_url": "https://isprs-archives.copernicus.org/articles/XL-8/1345/2014/isprsarchives-XL-8-1345-2014.pdf",
+      "source_title": "Champati Ray & Chattoraj (2014), Sunkoshi landslide in Nepal and its possible impact in India, ISPRS Archives XL-8",
+      "accessed": "2026-10-25",
+      "quote": "Considering its distance of 43 km from Kosi barrage, it was expected that the flood water would reach Koshi barrage approximately after 20 hours in the event of breach.",
+      "note": "The 2.5 h figure is our subtraction (20 - 17.5) and should be labelled an estimate."
+    },
+    {
+      "id": "tt_devghat_valmikinagar",
+      "topic": "C. Travel and lead times",
+      "claim": "In Oct 2026, Bihar's Deputy CM said a flood wave that had crossed Devghat, about 80 km upstream of Valmikinagar barrage, was expected to reach the barrage in about six hours.",
+      "value": {
+        "distance_km": 80,
+        "expected_h": 6
+      },
+      "unit": "km / hours",
+      "status": "secondary",
+      "source_url": "https://theprint.in/india/no-major-impact-expected-at-bihar-barrage-from-nepal-flash-flood-deputy-cm/3068681/",
+      "source_title": "ThePrint (PTI), 11 Oct 2026: No major impact expected at Bihar barrage from Nepal flash flood: Deputy CM",
+      "accessed": "2026-10-25",
+      "quote": "around 80 km upstream of the Valmikinagar barrage",
+      "note": "Official's expectation reported by PTI, not a measured travel time."
+    },
+    {
+      "id": "tt_birpur_basua_distance",
+      "topic": "C. Travel and lead times",
+      "claim": "Basua is 64.25 km downstream of Birpur (Kosi); Chatra Bazar 47 km and Rajabas 27 km upstream. No travel time is given.",
+      "value": {
+        "basua_km_ds": 64.25,
+        "chatra_bazar_km_us": 47,
+        "rajabas_km_us": 27
+      },
+      "unit": "km",
+      "status": "verified",
+      "source_url": "https://www.fmiscwrdbihar.gov.in/bulletin/Kosi_Model_Result.pdf",
+      "source_title": "WRD Bihar (FMISC): Birpur discharge forecast / Kosi flood bulletin, forecast issued 24-10-2026 12:30",
+      "accessed": "2026-10-25",
+      "quote": "Basua (64.25 km d/s)"
+    },
+    {
+      "id": "tt_cwc_rule",
+      "topic": "C. Travel and lead times",
+      "claim": "CWC's SOP says forecast duration can be taken as travel time + 1 hour; CWC divisions issue short-range forecasts with 6-24 h lead time.",
+      "value": null,
+      "unit": "hours",
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "Duration of forecast can be used as travel time + 1hr."
+    },
+    {
+      "id": "tt_none_found",
+      "topic": "C. Travel and lead times",
+      "claim": "No published travel time was found for Bagmati (Pandheradobhan/Karmaiya to Dheng/Benibad), Chisapani to Indian stations (Girijapur/Elgin Bridge), Mahakali/Sharda, or Barahkshetra to Birpur. Treat any such value as a project estimate.",
+      "value": null,
+      "unit": null,
+      "status": "unverified",
+      "source_url": "",
+      "source_title": "No source found",
+      "accessed": "2026-10-25",
+      "quote": ""
+    },
+    {
+      "id": "tt_chatara_18h",
+      "topic": "C. Travel and lead times",
+      "claim": "A claim that floods take up to 18 hours to reach Chatara from Saptakoshi tributaries (attributed to a DHM hydrologist, Oct 2025) appeared in search summaries, but the opened article did not contain it.",
+      "value": 18,
+      "unit": "hours",
+      "status": "unverified",
+      "source_url": "https://ekantipur.com/news/2025/10/05/en/water-level-in-three-rivers-of-saptakoshi-above-danger-level-18-16.html",
+      "source_title": "Ekantipur (English AI translation), 5 Oct 2025",
+      "accessed": "2026-10-25",
+      "quote": ""
+    },
+    {
+      "id": "pf_2008_breach",
+      "topic": "D. Past floods",
+      "claim": "On 18 Aug 2008 the Eastern Kosi Afflux Embankment breached at 12.9 km near Kussha (Kusaha) village in Nepal, hitting Sunsari and Saptari (Nepal) and Supaul, Madhepura, Araria, Saharsa, Katihar and Purnea (Bihar).",
+      "value": "2008-08-18",
+      "unit": "date",
+      "status": "verified",
+      "source_url": "https://fmiscwrdbihar.gov.in/fmis/history.html",
+      "source_title": "WRD Bihar, Flood Management Improvement Support Centre: Flood history",
+      "accessed": "2026-10-25",
+      "quote": "breach near 12.9km of Eastern Kosi Afflux Embankment near Kussha village in Nepal on 18th August 2008"
+    },
+    {
+      "id": "pf_2008_affected",
+      "topic": "D. Past floods",
+      "claim": "2008 Kosi flood people affected: Wikipedia cites 'over 2.3 million' in north Bihar (news sources); the official-looking 3.3 million (GFDRR needs assessment) could not be opened.",
+      "value": 2300000,
+      "unit": "people",
+      "status": "secondary",
+      "source_url": "https://en.wikipedia.org/wiki/2008_Bihar_flood",
+      "source_title": "Wikipedia: 2008 Bihar flood",
+      "accessed": "2026-10-25",
+      "quote": "The flood affected over 2.3 million people in the northern part of Bihar.",
+      "note": "Figures vary by source (2.3M, ~3M, 3.3M). GFDRR page returned 403. Prefer 'millions' or cite the exact source."
+    },
+    {
+      "id": "pf_2024_birpur_peak",
+      "topic": "D. Past floods",
+      "claim": "Kosi at Birpur barrage peaked at 661,295 cusecs at 05:00 on 29 Sep 2024 (design discharge 9.50 lakh cusecs). This was not a record: the bulletin lists 788,200 cusecs on 5 Oct 1968.",
+      "value": {
+        "peak_cusecs": 661295,
+        "time": "2024-09-29 05:00",
+        "design_cusecs": 950000,
+        "record_cusecs": 788200,
+        "record_date": "1968-10-05"
+      },
+      "unit": "cusecs",
+      "status": "verified",
+      "source_url": "https://betastate.bihar.gov.in/file_2/FileUpload/2025/Jan/26-Jan-2025/43/DyPage/49e49e10-696c-41ae-8e4e-37dc9d5902d7.pdf",
+      "source_title": "WRD Bihar, Central Flood Control Cell: Discharge of important barrages of Bihar, 10.10.2024",
+      "accessed": "2026-10-25",
+      "quote": "6,61,295 ... 05:00 AM ... 29.09.2024",
+      "note": "661,295 cusecs ≈ 18,726 m³/s (1 cusec = 0.0283168 m³/s; our conversion). 'Highest since 1968' is supported by this bulletin; 'all-time record' is not."
+    },
+    {
+      "id": "pf_2024_barahkshetra",
+      "topic": "D. Past floods",
+      "claim": "Kosi at Barahkshetra (Nepal) peaked at 582,950 cusecs at 23:00 on 28 Sep 2024 (record 913,000 cusecs, 5 Oct 1968).",
+      "value": {
+        "peak_cusecs": 582950,
+        "time": "2024-09-28 23:00",
+        "record_cusecs": 913000
+      },
+      "unit": "cusecs",
+      "status": "verified",
+      "source_url": "https://betastate.bihar.gov.in/file_2/FileUpload/2025/Jan/26-Jan-2025/43/DyPage/49e49e10-696c-41ae-8e4e-37dc9d5902d7.pdf",
+      "source_title": "WRD Bihar, Central Flood Control Cell: Discharge of important barrages of Bihar, 10.10.2024",
+      "accessed": "2026-10-25",
+      "quote": "5,82,950 ... 11:00 PM ... 28.09.2024"
+    },
+    {
+      "id": "pf_2024_gandak",
+      "topic": "D. Past floods",
+      "claim": "Gandak at Valmikinagar barrage peaked at 562,500 cusecs at 22:00 on 28 Sep 2024 (design 8.50 lakh; record 639,750 cusecs on 31 Jul 2003).",
+      "value": {
+        "peak_cusecs": 562500,
+        "time": "2024-09-28 22:00"
+      },
+      "unit": "cusecs",
+      "status": "verified",
+      "source_url": "https://betastate.bihar.gov.in/file_2/FileUpload/2025/Jan/26-Jan-2025/43/DyPage/49e49e10-696c-41ae-8e4e-37dc9d5902d7.pdf",
+      "source_title": "WRD Bihar, Central Flood Control Cell: Discharge of important barrages of Bihar, 10.10.2024",
+      "accessed": "2026-10-25",
+      "quote": "5,62,500 ... 10:00 PM ... 28.09.2024"
+    },
+    {
+      "id": "pf_2024_bihar_alert",
+      "topic": "D. Past floods",
+      "claim": "On 28 Sep 2024 Bihar issued a 24-hour flash-flood high alert for 13 districts; all Kosi barrage gates were opened.",
+      "value": 13,
+      "unit": "districts",
+      "status": "secondary",
+      "source_url": "https://www.newsonair.gov.in/high-alert-issued-in-bihar-as-over-5-lakh-cusecs-of-water-released-from-kosi-and-gandak-barrages",
+      "source_title": "News On AIR, 28 Sep 2024: High alert issued in Bihar...",
+      "accessed": "2026-10-25",
+      "quote": "A high alert for flash floods for the next 24 hours has been issued for 13 districts"
+    },
+    {
+      "id": "pf_2024_nepal_deaths",
+      "topic": "D. Past floods",
+      "claim": "Nepal's Home Ministry put the late-Sept 2024 flood and landslide toll at 209 dead, 29 missing and 142 injured as of 30 Sep 2024.",
+      "value": 209,
+      "unit": "deaths (as of 2024-09-30)",
+      "status": "secondary",
+      "source_url": "https://www.newsonair.gov.in/nepal-flood-death-toll-rises-to-209-over-4500-rescued",
+      "source_title": "News On AIR, 30 Sep 2024: Nepal flood death toll rises to 209",
+      "accessed": "2026-10-25",
+      "quote": "the death toll has increased to 209 people, 29 people are still missing and 142 people are injured.",
+      "note": "Later tallies were higher (Wikipedia cites at least 224 deaths, uncited); quote the dated figure."
+    },
+    {
+      "id": "pf_2017_bihar",
+      "topic": "D. Past floods",
+      "claim": "2017 Bihar floods: toll reached 514 with 1.71 crore (17.1 million) people affected in 19 districts (Disaster Management department release, 29 Aug 2017).",
+      "value": {
+        "deaths": 514,
+        "affected": 17100000,
+        "districts": 19
+      },
+      "unit": "people",
+      "status": "secondary",
+      "source_url": "https://madhyamamonline.com/national/2017/aug/29/bihar-flood-toll-mounts-514",
+      "source_title": "Madhyamam, 29 Aug 2017: Bihar flood toll mounts to 514",
+      "accessed": "2026-10-25",
+      "quote": "With 32 more deaths, the toll in flood-hit Bihar rose to 514"
+    },
+    {
+      "id": "pf_2017_nepal",
+      "topic": "D. Past floods",
+      "claim": "Aug 2017 Nepal floods: NPC's Post Flood Recovery Needs Assessment counted 134 deaths and about 1.7 million affected in 18 severely affected districts (of 35 affected); over 190,000 houses destroyed or damaged.",
+      "value": {
+        "deaths": 134,
+        "affected": 1700000,
+        "severe_districts": 18,
+        "affected_districts": 35
+      },
+      "unit": "people",
+      "status": "secondary",
+      "source_url": "https://kathmandupost.com/miscellaneous/2018/03/26/post-flood-recovery-programme-concludes",
+      "source_title": "The Kathmandu Post, 26 Mar 2018: Post flood recovery programme concludes",
+      "accessed": "2026-10-25",
+      "quote": "around 1.7 million people (866,993 male and 821,480 female)"
+    },
+    {
+      "id": "pf_2013_kedarnath",
+      "topic": "D. Past floods",
+      "claim": "June 2013 Uttarakhand (Kedarnath) disaster: as reported by the state government on 9 May 2014, 169 people died and 4,021 were missing (presumed dead).",
+      "value": {
+        "dead": 169,
+        "missing_presumed_dead": 4021
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://nidm.gov.in/pdf/pubs/india%20disaster%20report%202013.pdf",
+      "source_title": "NIDM: India Disaster Report 2013 (published 2014)",
+      "accessed": "2026-10-25",
+      "quote": "As per the latest report made available by the State Government on 09 May 2014, a total of 169 people died and 4021 people were reported missing (presumed to be dead)."
+    },
+    {
+      "id": "pf_2023_himachal",
+      "topic": "D. Past floods",
+      "claim": "2023 Himachal Pradesh flood figures were not verified (only news snippets with conflicting tolls and losses).",
+      "value": null,
+      "unit": null,
+      "status": "unverified",
+      "source_url": "",
+      "source_title": "No source found",
+      "accessed": "2026-10-25",
+      "quote": ""
+    },
+    {
+      "id": "lg_np_nepali",
+      "topic": "E. Languages",
+      "claim": "Nepal 2021 census: Nepali is the mother tongue of 13,084,457 people (44.86%) out of 29,164,578.",
+      "value": {
+        "speakers": 13084457,
+        "percent": 44.86
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://lahurnip.org/uploads/resource/file/caste-ethnicity-report-nphc-2021.pdf",
+      "source_title": "National Statistics Office, Nepal: NPHC 2021 National Report on Caste/ethnicity, Language & Religion (copy hosted by LAHURNIP; official NSO site unreachable)",
+      "accessed": "2026-10-25",
+      "quote": "Nepali               13084457             44.86",
+      "note": "Official NSO report; the copy opened is hosted by LAHURNIP because NSO servers were unreachable."
+    },
+    {
+      "id": "lg_np_maithili",
+      "topic": "E. Languages",
+      "claim": "Nepal 2021 census: Maithili is the mother tongue of 3,222,389 people (11.05%).",
+      "value": {
+        "speakers": 3222389,
+        "percent": 11.05
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://lahurnip.org/uploads/resource/file/caste-ethnicity-report-nphc-2021.pdf",
+      "source_title": "National Statistics Office, Nepal: NPHC 2021 National Report on Caste/ethnicity, Language & Religion (copy hosted by LAHURNIP; official NSO site unreachable)",
+      "accessed": "2026-10-25",
+      "quote": "Maithili             3222389              11.05"
+    },
+    {
+      "id": "lg_np_bhojpuri",
+      "topic": "E. Languages",
+      "claim": "Nepal 2021 census: Bhojpuri is the mother tongue of 1,820,795 people (6.24%).",
+      "value": {
+        "speakers": 1820795,
+        "percent": 6.24
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://lahurnip.org/uploads/resource/file/caste-ethnicity-report-nphc-2021.pdf",
+      "source_title": "National Statistics Office, Nepal: NPHC 2021 National Report on Caste/ethnicity, Language & Religion (copy hosted by LAHURNIP; official NSO site unreachable)",
+      "accessed": "2026-10-25",
+      "quote": "Bhojpuri             1820795              6.24",
+      "note": "Nepal recorded 124 mother tongues in 2021."
+    },
+    {
+      "id": "lg_in_hindi",
+      "topic": "E. Languages",
+      "claim": "India 2011 census: Hindi (language group) has 528,347,193 speakers, 43.63% of the population.",
+      "value": {
+        "speakers": 528347193,
+        "percent": 43.63
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://censusindia.gov.in/nada/index.php/catalog/42458/download/46089/C-16_25062018.pdf",
+      "source_title": "Office of the Registrar General, India: Census of India 2011, Paper 1 of 2018, Language (Table C-16)",
+      "accessed": "2026-10-25",
+      "quote": "Hindi                                    52,83,47,193                  43.63"
+    },
+    {
+      "id": "lg_in_bhojpuri",
+      "topic": "E. Languages",
+      "claim": "India 2011 census: Bhojpuri has 50,579,447 mother-tongue speakers, counted under the Hindi language group.",
+      "value": 50579447,
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://censusindia.gov.in/nada/index.php/catalog/42458/download/46089/C-16_25062018.pdf",
+      "source_title": "Office of the Registrar General, India: Census of India 2011, Paper 1 of 2018, Language (Table C-16)",
+      "accessed": "2026-10-25",
+      "quote": "Bhojpuri                                             5,05,79,447"
+    },
+    {
+      "id": "lg_in_maithili",
+      "topic": "E. Languages",
+      "claim": "India 2011 census: Maithili (a scheduled language) has 13,583,464 speakers (1.12%).",
+      "value": {
+        "speakers": 13583464,
+        "percent": 1.12
+      },
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://censusindia.gov.in/nada/index.php/catalog/42458/download/46089/C-16_25062018.pdf",
+      "source_title": "Office of the Registrar General, India: Census of India 2011, Paper 1 of 2018, Language (Table C-16)",
+      "accessed": "2026-10-25",
+      "quote": "Maithili                                  1,35,83,464                   1.12"
+    },
+    {
+      "id": "lg_bihar",
+      "topic": "E. Languages",
+      "claim": "India 2011 census, Bihar: 80,698,466 Hindi speakers; 77.52% of Bihar's people report Hindi and 12.55% Maithili.",
+      "value": {
+        "hindi_speakers": 80698466,
+        "hindi_percent": 77.52,
+        "maithili_percent": 12.55
+      },
+      "unit": "people / %",
+      "status": "verified",
+      "source_url": "https://censusindia.gov.in/nada/index.php/catalog/42458/download/46089/C-16_25062018.pdf",
+      "source_title": "Office of the Registrar General, India: Census of India 2011, Paper 1 of 2018, Language (Table C-16)",
+      "accessed": "2026-10-25",
+      "quote": "Bihar                            10,000    N   78   N    N    1 7752   N    N    N 1255",
+      "note": "Statement 3 gives per-10,000 distribution (Hindi 7752, Maithili 1255). Hindi in the census includes Bhojpuri and other grouped mother tongues."
+    },
+    {
+      "id": "lg_in_nepali",
+      "topic": "E. Languages",
+      "claim": "India 2011 census: Nepali has 2,926,168 speakers in India (0.24%).",
+      "value": 2926168,
+      "unit": "people",
+      "status": "verified",
+      "source_url": "https://censusindia.gov.in/nada/index.php/catalog/42458/download/46089/C-16_25062018.pdf",
+      "source_title": "Office of the Registrar General, India: Census of India 2011, Paper 1 of 2018, Language (Table C-16)",
+      "accessed": "2026-10-25",
+      "quote": "Nepali                                      29,26,168                   0.24"
+    },
+    {
+      "id": "cl_polly_hindi",
+      "topic": "F. Cloud language support",
+      "claim": "Amazon Polly Hindi (hi-IN) voices: Aditi (standard), Kajal (neural and generative), Arjun (generative), Kiara (generative). All four are bilingual with Indian English.",
+      "value": [
+        "Aditi",
+        "Kajal",
+        "Arjun",
+        "Kiara"
+      ],
+      "unit": "voices",
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/polly/latest/dg/available-voices.html",
+      "source_title": "Amazon Polly Developer Guide: Available voices",
+      "accessed": "2026-10-25",
+      "quote": "Hindi | hi-IN | Aditi* Kajal* Arjun* Kiara* (table row; * = bilingual)",
+      "note": "Table columns: Generative No/Yes/Yes/Yes; Long Form No x4; Neural No/Yes/No/No; Standard Yes/No/No/No. Quote condensed from table."
+    },
+    {
+      "id": "cl_polly_no_nepali",
+      "topic": "F. Cloud language support",
+      "claim": "Amazon Polly lists no voice for Nepali, Maithili or Bhojpuri.",
+      "value": false,
+      "unit": "supported",
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/polly/latest/dg/available-voices.html",
+      "source_title": "Amazon Polly Developer Guide: Available voices",
+      "accessed": "2026-10-25",
+      "quote": "",
+      "note": "Absence checked in the full 42-row voice table on the access date."
+    },
+    {
+      "id": "cl_transcribe_hindi",
+      "topic": "F. Cloud language support",
+      "claim": "Amazon Transcribe supports Hindi (hi-IN) for both batch and streaming.",
+      "value": [
+        "batch",
+        "streaming"
+      ],
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html",
+      "source_title": "Amazon Transcribe Developer Guide: Supported languages",
+      "accessed": "2026-10-25",
+      "quote": "Hindi, Indian | hi-IN | batch, streaming (table row)"
+    },
+    {
+      "id": "cl_transcribe_nepali",
+      "topic": "F. Cloud language support",
+      "claim": "Amazon Transcribe supports Nepali (ne-NP) for batch and streaming, but streaming is unavailable in five Regions (Cape Town, Tokyo, Malaysia, Thailand, Ningxia). Maithili and Bhojpuri are not listed.",
+      "value": [
+        "batch",
+        "streaming*"
+      ],
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/transcribe/latest/dg/supported-languages.html",
+      "source_title": "Amazon Transcribe Developer Guide: Supported languages",
+      "accessed": "2026-10-25",
+      "quote": "Nepali | ne-NP | batch, streaming* (table row)",
+      "note": "*'Streaming for these languages is not available in the following AWS Regions: af-south-1 (Cape Town), ap-northeast-1 (Tokyo), ap-southeast-5 (Malaysia), ap-southeast-7 (Thailand), and cn-northwest-1 (Ningxia).'"
+    },
+    {
+      "id": "cl_whisper_fleurs",
+      "topic": "F. Cloud language support",
+      "claim": "Whisper paper, FLEURS WER: Hindi 21.5% and Nepali 47.1% with large-v2; Hindi 26.9% and Nepali 52.2% with large.",
+      "value": {
+        "large-v2": {
+          "hindi": 21.5,
+          "nepali": 47.1
+        },
+        "large": {
+          "hindi": 26.9,
+          "nepali": 52.2
+        }
+      },
+      "unit": "% WER",
+      "status": "verified",
+      "source_url": "https://arxiv.org/pdf/2212.04356",
+      "source_title": "Radford et al. (2022), Robust Speech Recognition via Large-Scale Weak Supervision (Whisper), arXiv:2212.04356",
+      "accessed": "2026-10-25",
+      "quote": "Table 13. WER (%) on Fleurs",
+      "note": "Primary paper (arXiv preprint). Appendix D.2.4 table values."
+    },
+    {
+      "id": "cl_whisper_cv9",
+      "topic": "F. Cloud language support",
+      "claim": "Whisper paper, Common Voice 9 WER for Hindi: 21.9% (large-v2), 25.0% (large). Nepali is not in that table.",
+      "value": {
+        "large-v2": 21.9,
+        "large": 25.0
+      },
+      "unit": "% WER",
+      "status": "verified",
+      "source_url": "https://arxiv.org/pdf/2212.04356",
+      "source_title": "Radford et al. (2022), Robust Speech Recognition via Large-Scale Weak Supervision (Whisper), arXiv:2212.04356",
+      "accessed": "2026-10-25",
+      "quote": "Table 11. WER (%) on CommonVoice9"
+    },
+    {
+      "id": "cl_whisper_hours",
+      "topic": "F. Cloud language support",
+      "claim": "Whisper training data had 12 hours of Hindi and 0.6 hours of Nepali transcribed speech.",
+      "value": {
+        "hindi_h": 12,
+        "nepali_h": 0.6
+      },
+      "unit": "hours",
+      "status": "verified",
+      "source_url": "https://arxiv.org/pdf/2212.04356",
+      "source_title": "Radford et al. (2022), Robust Speech Recognition via Large-Scale Weak Supervision (Whisper), arXiv:2212.04356",
+      "accessed": "2026-10-25",
+      "quote": "Nepali 0.6 ... Hindi 12 (Appendix E, multilingual speech recognition hours)"
+    },
+    {
+      "id": "sms_gsm7_160",
+      "topic": "G. SMS",
+      "claim": "One SMS holds up to 160 GSM-7 characters; with any non-GSM character (e.g., Devanagari) it holds up to 70.",
+      "value": {
+        "gsm7": 160,
+        "ucs2": 70
+      },
+      "unit": "characters",
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/sms-voice/latest/userguide/sms-limitations-character.html",
+      "source_title": "AWS End User Messaging SMS: SMS character limits",
+      "accessed": "2026-10-25",
+      "quote": "If your message contains any characters that are outside of the GSM 03.38 character set, it can have up to 70 characters."
+    },
+    {
+      "id": "sms_concat",
+      "topic": "G. SMS",
+      "claim": "In multi-part messages each part holds 153 GSM-7 characters or 67 non-GSM (UCS-2) characters; each part is billed.",
+      "value": {
+        "gsm7": 153,
+        "ucs2": 67
+      },
+      "unit": "characters per part",
+      "status": "verified",
+      "source_url": "https://docs.aws.amazon.com/sms-voice/latest/userguide/sms-limitations-character.html",
+      "source_title": "AWS End User Messaging SMS: SMS character limits",
+      "accessed": "2026-10-25",
+      "quote": "the number of characters in each message part is reduced to 153 for messages that only contain GSM 03.38 characters, or 67 for messages that contain other characters.",
+      "note": "Twilio confirms: 'UCS-2 encoded messages contain 67 Unicode characters.'"
+    },
+    {
+      "id": "sms_ucs2_twilio",
+      "topic": "G. SMS",
+      "claim": "Twilio: UCS-2 uses two bytes per character, cutting the limit to 70 characters.",
+      "value": 70,
+      "unit": "characters",
+      "status": "verified",
+      "source_url": "https://www.twilio.com/docs/glossary/what-sms-character-limit",
+      "source_title": "Twilio Docs glossary: What is the SMS character limit?",
+      "accessed": "2026-10-25",
+      "quote": "This reduces the character length limit of the message to 70 characters: 140 bytes divided by two-bytes per character."
+    },
+    {
+      "id": "tb_scheme_1989",
+      "topic": "H. Transboundary cooperation",
+      "claim": "India runs a 'Flood Forecasting and Warning System on rivers common to India and Nepal', in operation since 1989; in May 2002 it was agreed to raise Nepal sites from 42 to 47 and for Nepal to send real-time data from 5 key stations on the Gandak, Kosi, Rapti, Bagmati and Mahananda.",
+      "value": {
+        "since": 1989,
+        "sites_before": 42,
+        "sites_after": 47,
+        "key_stations": 5
+      },
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://archive.pib.gov.in/release02/lyr2003/rfeb2003/24022003/r2402200319.html",
+      "source_title": "PIB (Ministry of Water Resources), 24 Feb 2003: Indo-Nepal Treaty",
+      "accessed": "2026-10-25",
+      "quote": "has been in operation since 1989",
+      "note": "Old (2003) release; current station count not verified."
+    },
+    {
+      "id": "tb_cwc_nepal_data",
+      "topic": "H. Transboundary cooperation",
+      "claim": "CWC's 2025 SOP tells its Lucknow (MGD-1) and Patna (LGD-1) divisions to collect hydro-meteorological data from Nepal by wireless, e-mail or website.",
+      "value": null,
+      "unit": null,
+      "status": "verified",
+      "source_url": "https://cwc.gov.in/sites/default/files/sopapril2025.pdf",
+      "source_title": "Central Water Commission: Standard Operating Procedure for Flood Forecasting, April 2025",
+      "accessed": "2026-10-25",
+      "quote": "Collection of hydro-meteorological data from neighbouring countries like Nepal (MGD-1, Lucknow and LGD-1, Patna)"
+    },
+    {
+      "id": "tb_jcifm",
+      "topic": "H. Transboundary cooperation",
+      "claim": "The India-Nepal Joint Committee on Inundation and Flood Management (JCIFM) held its 14th meeting on 9-13 Mar 2022; its mandate covers flood, erosion and inundation on border rivers. The source does not mention forecasting.",
+      "value": "2022-03-13",
+      "unit": "date",
+      "status": "verified",
+      "source_url": "https://www.indembkathmandu.gov.in/media-detail/123",
+      "source_title": "Embassy of India, Kathmandu: 14th Meeting of the Joint Committee on Inundation and Flood Management (JCIFM)",
+      "accessed": "2026-10-25",
+      "quote": "management of flood, erosion and inundation issues fall within the Committee's mandate"
+    },
+    {
+      "id": "tb_jckgp_2026",
+      "topic": "H. Transboundary cooperation",
+      "claim": "The 11th Joint Committee on the Kosi and Gandak Projects met in Kathmandu from 30 Apr 2026; India agreed to provide satellite imagery requested by Nepal.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://newsonair.gov.in/india-and-nepal-to-hold-meeting-in-kathmandu-on-flood-forecasting-model-ahead-of-monsoon/",
+      "source_title": "News On AIR, 2 May 2026: India and Nepal to hold meeting in Kathmandu...",
+      "accessed": "2026-10-25",
+      "quote": "The Indian side also agreed to provide satellite imagery as requested by the Nepalese side."
+    },
+    {
+      "id": "tb_hourly_dhm",
+      "topic": "H. Transboundary cooperation",
+      "claim": "Outlook (Aug 2026), citing a Dec 2022 Jal Shakti release, says DHM data are updated hourly in the monsoon for CWC's 24-hour forecasts from its Lucknow and Patna control rooms, and names a 'Joint Team on Flood Forecasting'.",
+      "value": null,
+      "unit": null,
+      "status": "secondary",
+      "source_url": "https://outlookindia.com/national/when-a-flood-crosses-a-border-why-india-and-nepal-need-a-stronger-himalayan-disaster-framework",
+      "source_title": "Outlook India, 27 Aug 2026: When a flood crosses a border...",
+      "accessed": "2026-10-25",
+      "quote": "these data are updated hourly and used in 24-hour flood forecasts",
+      "note": "The underlying government release was not found or opened."
+    }
+  ]
+}

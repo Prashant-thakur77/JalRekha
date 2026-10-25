@@ -1,0 +1,121 @@
+{
+  "id": "us",
+  "name": "United States (evaluation sites)",
+  "country_code": "US",
+  "bounds": {
+    "min_lon": -125.0,
+    "max_lon": -66.0,
+    "min_lat": 24.0,
+    "max_lat": 50.0
+  },
+  "timezone": "America/New_York",
+  "languages": [
+    {
+      "code": "en",
+      "name": "English",
+      "native_name": "English",
+      "script": "Latn",
+      "cap_language": "en-US",
+      "tts": {
+        "provider": "polly",
+        "voice": "Kajal",
+        "engine": "neural",
+        "language_code": "en-IN"
+      },
+      "asr": {
+        "provider": "whisper",
+        "code": "en"
+      }
+    }
+  ],
+  "public_languages": [
+    "en"
+  ],
+  "channels": [
+    "sms",
+    "voice",
+    "cap",
+    "siren",
+    "telegram"
+  ],
+  "authority_roles": [
+    {
+      "id": "county_em",
+      "name": "County emergency manager (evaluation profile)",
+      "level": "county",
+      "approves": [
+        "send_sms",
+        "voice_call",
+        "publish_cap",
+        "all_clear",
+        "publish_route_status",
+        "dispatch_relief",
+        "cross_border_notify"
+      ]
+    }
+  ],
+  "levels": [
+    {
+      "id": "normal",
+      "legacy": "green",
+      "color": "green",
+      "label": {
+        "en": "Normal",
+        "hi": "सामान्य",
+        "ne": "सामान्य"
+      }
+    },
+    {
+      "id": "watch",
+      "legacy": "yellow",
+      "color": "yellow",
+      "label": {
+        "en": "Watch",
+        "hi": "सतर्क",
+        "ne": "सतर्क"
+      }
+    },
+    {
+      "id": "warning",
+      "legacy": "orange",
+      "color": "orange",
+      "label": {
+        "en": "Warning level",
+        "hi": "चेतावनी स्तर",
+        "ne": "चेतावनी तह"
+      }
+    },
+    {
+      "id": "danger",
+      "legacy": "red",
+      "color": "red",
+      "label": {
+        "en": "Danger level",
+        "hi": "खतरे का स्तर",
+        "ne": "खतराको तह"
+      }
+    }
+  ],
+  "level_basis": "Real-camera replay only: illustrative levels on the staff gauge, not official flood categories.",
+  "alert_format": {
+    "cap_sender": "nadisaathi-us@alerts.invalid",
+    "cap_web": "https://waterdata.usgs.gov/",
+    "sms_max_segments": 2,
+    "sender_name": "NadiSaathi (replay)"
+  },
+  "agencies": [
+    {
+      "id": "usgs",
+      "name": "U.S. Geological Survey",
+      "role": "Gauge data and camera imagery (public domain)",
+      "url": "https://apps.usgs.gov/hivis/"
+    }
+  ],
+  "admin_units": [
+    {
+      "id": "us-ny-delaware",
+      "name": "Delaware County, NY",
+      "type": "county"
+    }
+  ]
+}

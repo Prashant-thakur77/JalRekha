@@ -1,0 +1,331 @@
+{
+ "schema": "nadisaathi-cool-bench-v1",
+ "label": "C-stock-wheel-c7i.xlarge",
+ "generated_at": "2026-10-25T11:20:53.365040+00:00",
+ "generated_by": "bench/cool_bench.py",
+ "host": {
+  "opencv_version": "5.0.0",
+  "cv2_file": "/opt/venv/lib/python3.12/site-packages/cv2/__init__.py",
+  "kleidicv_build_lines": [],
+  "kleidicv_present": false,
+  "build_info_sha256": "0ef08003c31127b3b5d34410ab13483c511e73b99e278b1a8abd6ddcb265699a",
+  "machine": "x86_64",
+  "cpu_model": "Intel(R) Xeon(R) Platinum 8488C",
+  "cpu_count": 4,
+  "python": "3.12.3",
+  "numpy": "2.5.4",
+  "ec2_instance_id": "i-0b90161767413d896",
+  "ec2_instance_type": "c7i.xlarge",
+  "ec2_ami_id": "ami-0d6dd9e8265d48906",
+  "ec2_region": "us-east-1",
+  "cv_num_threads_default": 4,
+  "use_optimized": true
+ },
+ "workload": {
+  "bursts": 144,
+  "frames_per_burst": 5,
+  "resolution": [
+   960,
+   540
+  ],
+  "seeds": [
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111
+  ],
+  "conditions": [
+   "clean",
+   "rain",
+   "night",
+   "shake"
+  ],
+  "stage_fracs": [
+   0.25,
+   0.5,
+   0.8
+  ],
+  "heavy_registration": false,
+  "label": "SYNTHETIC staff-gauge bursts (identical on every host)"
+ },
+ "latency": {
+  "ms_per_burst_mean_of_repeats": 92.5,
+  "ms_per_burst_stdev": 0.4,
+  "repeats": [
+   91.70573294444445,
+   92.5945801597222,
+   92.67394002083337,
+   92.74689543055557,
+   92.7897590069444
+  ],
+  "per_stage_ms": {
+   "E1_edge": {
+    "p50": 0.362,
+    "p95": 0.406
+   },
+   "E2_temporal": {
+    "p50": 12.215,
+    "p95": 15.856
+   },
+   "E3_colour": {
+    "p50": 0.413,
+    "p95": 0.504
+   },
+   "fuse": {
+    "p50": 0.188,
+    "p95": 0.217
+   },
+   "median": {
+    "p50": 1.202,
+    "p95": 2.005
+   },
+   "overlay": {
+    "p50": 1.023,
+    "p95": 1.126
+   },
+   "quality": {
+    "p50": 0.713,
+    "p95": 0.798
+   },
+   "redact": {
+    "p50": 32.826,
+    "p95": 33.68
+   },
+   "register": {
+    "p50": 20.204,
+    "p95": 22.266
+   },
+   "surface_motion": {
+    "p50": 13.179,
+    "p95": 18.412
+   },
+   "total": {
+    "p50": 92.177,
+    "p95": 99.947
+   },
+   "warp": {
+    "p50": 11.611,
+    "p95": 11.885
+   }
+  }
+ },
+ "thread_scaling": [
+  {
+   "threads": 1,
+   "ms_per_burst": 126.69
+  },
+  {
+   "threads": 2,
+   "ms_per_burst": 88.15
+  },
+  {
+   "threads": 4,
+   "ms_per_burst": 86.55
+  }
+ ],
+ "throughput": {
+  "processes": 4,
+  "bursts": 80,
+  "wall_s": 5.39,
+  "bursts_per_s": 18.66,
+  "frames_per_s": 93.3,
+  "cameras_at_10s_cadence": 186
+ },
+ "micro_ms": {
+  "orb_registration": {
+   "ms_p50": 20.02,
+   "ms_min": 19.83,
+   "n": 5
+  },
+  "aliked_lightglue_registration": {
+   "ms_p50": 1799.38,
+   "ms_min": 1797.42,
+   "n": 3
+  },
+  "dis_flow_960x540": {
+   "ms_p50": 25.01,
+   "ms_min": 24.86,
+   "n": 5
+  },
+  "yunet_redact_960x540": {
+   "ms_p50": 32.47,
+   "ms_min": 31.9,
+   "n": 5
+  },
+  "grabcut_photo_check": {
+   "ms_p50": 365.33,
+   "ms_min": 361.74,
+   "n": 3
+  },
+  "resize_gaussian_canny_1080p": {
+   "ms_p50": 2.23,
+   "ms_min": 2.15,
+   "n": 20
+  }
+ },
+ "cost": {
+  "usd_per_hour": 0.1785,
+  "source": "command-line --price",
+  "software_fee_usd_per_hour": 0.0,
+  "usd_per_hour_total": 0.1785,
+  "usd_per_million_frames": 0.5314,
+  "note": "frames = 5-frame bursts x 5; cost uses the multi-process throughput"
+ },
+ "equivalence": {
+  "outputs_mm_sha256": "c8eabe95ed5abe8eed7f1d249938ea0fc22d25938a78e66d9798b4c3f5076c5d",
+  "stage_m": [
+   1.057,
+   2.069,
+   3.245,
+   1.057,
+   2.069,
+   3.181,
+   1.013,
+   2.069,
+   3.245,
+   1.024,
+   2.026,
+   3.245,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   0.635,
+   1.178,
+   1.926,
+   0.635,
+   1.178,
+   1.926,
+   0.588,
+   1.169,
+   1.906,
+   0.625,
+   1.178,
+   1.926,
+   0.742,
+   1.4,
+   2.216,
+   0.73,
+   1.388,
+   2.216,
+   0.73,
+   1.364,
+   2.252,
+   0.766,
+   1.436,
+   2.252,
+   1.044,
+   2.05,
+   3.258,
+   1.044,
+   2.05,
+   3.258,
+   1.003,
+   2.05,
+   3.268,
+   0.973,
+   2.06,
+   3.268,
+   0.957,
+   1.819,
+   2.872,
+   0.957,
+   1.819,
+   2.872,
+   0.925,
+   1.819,
+   2.863,
+   0.965,
+   1.827,
+   2.888,
+   1.124,
+   2.214,
+   3.531,
+   1.124,
+   2.214,
+   3.531,
+   1.069,
+   2.2,
+   3.545,
+   1.124,
+   2.214,
+   3.545,
+   1.008,
+   1.836,
+   3.004,
+   0.997,
+   1.857,
+   2.93,
+   0.944,
+   1.794,
+   2.899,
+   0.955,
+   1.836,
+   3.046,
+   1.04,
+   2.073,
+   3.323,
+   1.04,
+   2.073,
+   3.291,
+   1.04,
+   2.073,
+   3.323,
+   1.051,
+   2.073,
+   3.313,
+   0.856,
+   1.657,
+   2.72,
+   0.856,
+   1.657,
+   2.72,
+   0.856,
+   1.666,
+   2.669,
+   0.848,
+   1.657,
+   2.686,
+   1.071,
+   2.173,
+   3.479,
+   1.071,
+   2.173,
+   3.479,
+   1.071,
+   2.162,
+   3.479,
+   1.071,
+   2.185,
+   3.468,
+   0.641,
+   1.167,
+   1.847,
+   0.629,
+   1.167,
+   1.847,
+   0.617,
+   1.167,
+   1.859,
+   0.617,
+   1.179,
+   2.039
+  ]
+ }
+}

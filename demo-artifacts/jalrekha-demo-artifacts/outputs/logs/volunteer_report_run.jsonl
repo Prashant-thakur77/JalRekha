@@ -1,0 +1,6 @@
+{"timestamp":"2026-05-18T19:11:50-03:00","report_id":"volunteer-rep-001","reporter":"volunteer_user_b","channel":"offline_queue","status":"queued","reason":"no_connectivity"}
+{"timestamp":"2026-05-18T19:12:01-03:00","report_id":"volunteer-rep-001","channel":"local_radio","status":"forwarded","payload":"inputs/audio/report_bridge_water.wav"}
+{"timestamp":"2026-05-18T19:12:04-03:00","report_id":"volunteer-rep-001","stage":"asr","transcript":"El agua ya paso el puente y esta entrando por la calle lateral"}
+{"timestamp":"2026-05-18T19:12:06-03:00","report_id":"volunteer-rep-001","stage":"gemma_fusion","severity":"urgent","evidence":["water above bridge reference","resident report","rising trend"],"recommended_action":"notify municipal operator","uncertainty":0.18}
+{"timestamp":"2026-05-18T19:18:50-03:00","report_id":"volunteer-rep-002","reporter":"volunteer_user_c","channel":"online","status":"forwarded","payload":"inputs/audio/report_evacuation_water.wav"}
+{"timestamp":"2026-05-18T19:18:55-03:00","report_id":"volunteer-rep-002","stage":"gemma_fusion","severity":"critical","evidence":["evacuation route flooded","resident report","matches node critical state"],"recommended_action":"escalate to civil defense","uncertainty":0.11}

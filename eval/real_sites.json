@@ -1,0 +1,156 @@
+{
+  "schema": "nadisaathi-real-sites-v1",
+  "dataset": "datasets/usgs_hivis_stage (USGS HIVIS images + NWIS gauge height 00065; US public domain)",
+  "protocol": "Per site, frames sorted by time. Reference frame = first frame. Calibration split = earliest 25% of frames; test = remaining 75%. Each method's waterline position along the strip is mapped to stage by a robust (Theil-Sen) 2-parameter line fitted on that method's own calibration-split outputs. Thresholds and estimator code are frozen from the synthetic train split.",
+  "calib_frac": 0.25,
+  "sites": {
+    "NY_East_Branch_Delaware_River_at_Hancock_Staff": {
+      "in_scope": true,
+      "scene": "close-up staff gauge on a concrete wall, numerals in feet (10-20 ft)",
+      "strip": [
+        [
+          220,
+          40
+        ],
+        [
+          263,
+          690
+        ]
+      ],
+      "strip_half_width_px": 16,
+      "numeral_marks_ft": [
+        [
+          220,
+          82,
+          20
+        ],
+        [
+          225,
+          162,
+          19
+        ],
+        [
+          230,
+          234,
+          18
+        ],
+        [
+          235,
+          299,
+          17
+        ],
+        [
+          238,
+          365,
+          16
+        ],
+        [
+          245,
+          417,
+          15
+        ],
+        [
+          250,
+          462,
+          14
+        ],
+        [
+          252,
+          510,
+          13
+        ],
+        [
+          255,
+          547,
+          12
+        ],
+        [
+          257,
+          587,
+          11
+        ],
+        [
+          260,
+          622,
+          10
+        ]
+      ],
+      "numeral_note": "Pixel centres of the printed foot numerals read from the 2026-07-27 08:00 EDT frame; mark stage = numeral + datum offset (1 parameter, fitted on the calibration split).",
+      "numeral_reference": "2026-07-27T12-00-04Z"
+    },
+    "NY_Genesee_River_at_Avon_Staff_Gage": {
+      "in_scope": true,
+      "scene": "narrow staff gauge on a stone bridge abutment, far from the camera",
+      "strip": [
+        [
+          265,
+          45
+        ],
+        [
+          256,
+          340
+        ]
+      ],
+      "strip_half_width_px": 7,
+      "physical_scope_note": "Out of scope for physical calibration: the staff plates (numerals 20s-44) use a different datum from NWIS gauge height and sit above the water for almost the whole event; the water reaches the lowest plate only near the peak."
+    },
+    "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff": {
+      "in_scope": true,
+      "scene": "free-standing staff gauge mid-channel; fully submerged near the peak; camera reframed after 2026-09-03",
+      "strip": [
+        [
+          396,
+          140
+        ],
+        [
+          403,
+          340
+        ]
+      ],
+      "strip_half_width_px": 8,
+      "numeral_marks_ft": [
+        [
+          426.4,
+          166.1,
+          8.0
+        ],
+        [
+          428.9,
+          208.0,
+          7.0
+        ],
+        [
+          431.4,
+          247.6,
+          6.0
+        ],
+        [
+          433.6,
+          284.0,
+          5.0
+        ],
+        [
+          436.0,
+          317.4,
+          4.0
+        ]
+      ],
+      "numeral_half_width_px": 7,
+      "numeral_reference": "2026-08-31T12-00-12Z",
+      "numeral_note": "Plate-centre pixel positions (720x405 frame coordinates) of the printed 8.00/7.00/6.00/5.00/4.00 ft numerals, read from the full-resolution HIVIS 'overlay' image of 2026-08-31 12:00Z (3840x2160, scaled by 720/3840). No gauge readings were used."
+    },
+    "IL_Vermilion_River_near_Danville": {
+      "in_scope": false,
+      "scene": "bank and bridge, no staff gauge or fixed vertical reference in view"
+    },
+    "IN_White_River_at_Michigan_Street_at_Indianapolis": {
+      "in_scope": false,
+      "scene": "wide river view, no staff gauge in view"
+    },
+    "TX_White_Rk_Ck_at_Greenville_Ave_Dallas": {
+      "in_scope": false,
+      "scene": "wide creek view from a bridge, no staff gauge; view changes after 2026-10-01"
+    }
+  },
+  "physical_protocol": "Physical calibration (what an installer does): click the printed numerals on ONE reference frame and enter their values. stage_m = numeral_ft x 0.3048 with NO fitted parameters and NO gauge readings used, so every frame of the site is a held-out test frame. Estimator code and thresholds are frozen from the synthetic train split. In-range frames: truth within the marked span +/- 5 cm. Out-of-range frames (water below the gauge foot or gauge submerged) score as correct if the reading is clamped within 10 cm of the nearest gauge end."
+}

@@ -1,0 +1,21 @@
+{
+  "water_level_cm": {
+    "reference_line": 110.0,
+    "critical_line": 160.0
+  },
+  "trend_cm_per_min": {
+    "vigilance": 2.0,
+    "urgent": 4.0,
+    "critical": 6.0
+  },
+  "severity_rules": {
+    "nominal":   {"node_state": ["nominal"]},
+    "vigilance": {"node_state": ["vigilance"], "min_evidence": 1},
+    "urgent":    {"node_state": ["vigilance", "critical"], "min_evidence": 2, "requires_volunteer_report": true},
+    "critical":  {"node_state": ["critical"], "min_evidence": 2}
+  },
+  "deterministic_firewall": {
+    "skip_llm_if_node_critical_and_trend_rising": true,
+    "max_uncertainty_to_publish": 0.35
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "schema": "jalrekha-live-demo-manifest-v1",
+  "fixture_pack_version": "v1",
+  "title": "JalRekha ? Live Hardware Replay Demo fixtures",
+  "mode": "hardware_replay",
+  "disclaimer": "Synthetic-safe replay fixtures for public judging. They do not connect judges to a live Raspberry Pi or submit anything to SINAGIR.",
+  "files": {
+    "sensor_readings": "sensor_readings.csv",
+    "volunteer_reports": "volunteer_reports.jsonl",
+    "transcript": "transcripts/report_01.txt",
+    "frames": [
+      "frames/00_nominal.jpg",
+      "frames/01_vigilance.jpg",
+      "frames/02_urgent.jpg",
+      "frames/03_critical.jpg"
+    ],
+    "alert_trace": "expected_outputs/alert_trace.json"
+  },
+  "required_columns": [
+    "timestamp",
+    "frame_path",
+    "water_level_cm",
+    "reference_line_cm",
+    "urgent_line_cm",
+    "critical_line_cm",
+    "rain_mm_1h",
+    "source"
+  ]
+}

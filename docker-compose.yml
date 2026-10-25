@@ -1,0 +1,62 @@
+# Dev-only compose for JalRekha.
+# Brings up the FastAPI backend and an optional local Ollama runtime
+# serving Gemma 4 (E2B for text, vision-capable variant for multimodal).
+# IMPORTANT: gemma4:e2b is text-only (no vision adapter); a vision-capable
+# variant (e.g. gemma4:26b or gemma3:4b) MUST be used for multimodal analysis,
+# otherwise Ollama returns 500 "missing data required for image input" and
+# JalRekha Node falls back to the deterministic OpenCV path.
+# Frontend and Android are out of scope here.
+#
+# Usage:
+#   docker compose up backend                  # backend only
+#   docker compose --profile llm up            # backend + ollama
+#
+# The backend image is built from backend/ using its own pyproject.toml.
+
+services:
+    backend:
+        build:
+            context: ./backend
+            dockerfile: Dockerfile
+        image: jalrekha-backend:dev
+        container_name: jalrekha-backend
+        working_dir: /app
+        environment:
+            PYTHONPATH: src
+            JALREKHA_DATA_DIR: /data
+            JALREKHA_LLM_ENABLED: "true"
+            JALREKHA_LLM_BASE_URL: http://ollama:11434/v1
+            # Central reasoning + actuator tool-calling. gemma4:e2b does NOT
+            # support /api/chat tools (Ollama responds 400 "does not support tools"),
+            # so use the vision-and-tools capable variant for fusion + actuators.
+            JALREKHA_LLM_MODEL: gemma4:26b
+            JALREKHA_LLM_API_KEY: ollama
+            JALREKHA_MULTIMODAL_ENABLED: "true"
+            JALREKHA_MULTIMODAL_BASE_URL: http://ollama:11434/v1
+            JALREKHA_MULTIMODAL_MODEL: gemma4:26b
+        volumes:
+            - ./backend:/app
+            - jalrekha-data:/data
+        ports:
+            - "8000:8000"
+        command: >
+            uvicorn jalrekha.main:app
+            --host 0.0.0.0 --port 8000 --reload
+        depends_on:
+            - ollama
+
+    ollama:
+        image: ollama/ollama:latest
+        container_name: jalrekha-ollama
+        profiles: ["llm"]
+        ports:
+            - "11434:11434"
+        volumes:
+            - ollama-models:/root/.ollama
+        # Pull the model once after first start:
+        #   docker exec jalrekha-ollama ollama pull gemma4:e2b   # text LLM
+        #   docker exec jalrekha-ollama ollama pull gemma4:26b   # multimodal (vision)
+
+volumes:
+    jalrekha-data:
+    ollama-models:

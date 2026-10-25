@@ -1,0 +1,59 @@
+{
+  "id": "in",
+  "name": "India",
+  "country_code": "IN",
+  "bounds": {"min_lon": 68.0, "max_lon": 97.5, "min_lat": 6.5, "max_lat": 35.7},
+  "timezone": "Asia/Kolkata",
+  "languages": [
+    {"code": "hi", "name": "Hindi", "native_name": "हिन्दी", "script": "Deva", "cap_language": "hi-IN",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "hi-IN"},
+     "asr": {"provider": "whisper", "code": "hi", "note": "Amazon Transcribe also supports hi-IN"}},
+    {"code": "mai", "name": "Maithili", "native_name": "मैथिली", "script": "Deva", "cap_language": "mai-IN",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "hi-IN", "note": "No Maithili voice; Hindi voice reads the Devanagari text (labelled fallback)"},
+     "asr": null, "needs_native_review": true},
+    {"code": "bho", "name": "Bhojpuri", "native_name": "भोजपुरी", "script": "Deva", "cap_language": "bho-IN",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "hi-IN", "note": "No Bhojpuri voice; Hindi voice reads the Devanagari text (labelled fallback)"},
+     "asr": null, "needs_native_review": true},
+    {"code": "en", "name": "English", "native_name": "English", "script": "Latn", "cap_language": "en-IN",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "en-IN"},
+     "asr": {"provider": "whisper", "code": "en"}}
+  ],
+  "public_languages": ["hi", "mai", "en"],
+  "channels": ["sms", "voice", "cap", "siren", "telegram"],
+  "authority_roles": [
+    {"id": "ddma_control_room", "name": "District Disaster Management Authority control room (District EOC)", "level": "district", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "sdma_eoc", "name": "State Emergency Operation Centre (SDMA)", "level": "state", "approves": ["publish_cap", "all_clear"]},
+    {"id": "panchayat_volunteer", "name": "Panchayat volunteer", "level": "village", "approves": []},
+    {"id": "ngo_relief_team", "name": "NGO relief team lead", "level": "field", "approves": ["dispatch_relief"]},
+    {"id": "cwc_division", "name": "CWC flood forecasting division (informed, not an approver)", "level": "national", "approves": []}
+  ],
+  "levels": [
+    {"id": "normal", "legacy": "green", "color": "green", "label": {"en": "Normal", "hi": "सामान्य", "ne": "सामान्य"}},
+    {"id": "watch", "legacy": "yellow", "color": "yellow", "label": {"en": "Watch", "hi": "सतर्क", "ne": "सतर्क"}},
+    {"id": "warning", "legacy": "orange", "color": "orange", "label": {"en": "Warning level", "hi": "चेतावनी स्तर", "ne": "चेतावनी तह"}},
+    {"id": "danger", "legacy": "red", "color": "red", "label": {"en": "Danger level", "hi": "खतरे का स्तर", "ne": "खतराको तह"}}
+  ],
+  "level_basis": "CWC warning level and danger level per forecast station where published; scenario sites use site-relative gauge levels and are labelled as such.",
+  "alert_format": {"cap_sender": "nadisaathi-in@alerts.invalid", "cap_web": "https://sachet.ndma.gov.in/", "sms_max_segments": 2, "sender_name": "NadiSaathi (pilot, unofficial)"},
+  "agencies": [
+    {"id": "cwc", "name": "Central Water Commission", "role": "Official flood forecasting", "url": "https://ffs.india-water.gov.in/"},
+    {"id": "imd", "name": "India Meteorological Department", "role": "Weather warnings", "url": "https://mausam.imd.gov.in/"},
+    {"id": "ndma", "name": "National Disaster Management Authority (SACHET CAP alerts)", "role": "National CAP alert platform", "url": "https://sachet.ndma.gov.in/"},
+    {"id": "bsdma", "name": "Bihar State Disaster Management Authority", "role": "State DRR authority", "url": "http://bsdma.org/"}
+  ],
+  "admin_units": [
+    {"id": "in-supaul", "name": "Supaul", "type": "district", "parent": "Bihar"},
+    {"id": "in-saharsa", "name": "Saharsa", "type": "district", "parent": "Bihar"},
+    {"id": "in-madhepura", "name": "Madhepura", "type": "district", "parent": "Bihar"},
+    {"id": "in-khagaria", "name": "Khagaria", "type": "district", "parent": "Bihar"},
+    {"id": "in-araria", "name": "Araria", "type": "district", "parent": "Bihar"},
+    {"id": "in-west-champaran", "name": "West Champaran", "type": "district", "parent": "Bihar"},
+    {"id": "in-east-champaran", "name": "East Champaran", "type": "district", "parent": "Bihar"},
+    {"id": "in-gopalganj", "name": "Gopalganj", "type": "district", "parent": "Bihar"},
+    {"id": "in-sitamarhi", "name": "Sitamarhi", "type": "district", "parent": "Bihar"},
+    {"id": "in-muzaffarpur", "name": "Muzaffarpur", "type": "district", "parent": "Bihar"},
+    {"id": "in-bahraich", "name": "Bahraich", "type": "district", "parent": "Uttar Pradesh"},
+    {"id": "in-barabanki", "name": "Barabanki", "type": "district", "parent": "Uttar Pradesh"},
+    {"id": "in-lakhimpur-kheri", "name": "Lakhimpur Kheri", "type": "district", "parent": "Uttar Pradesh"}
+  ]
+}

@@ -1,0 +1,5 @@
+timestamp,frame_path,water_level_cm,reference_line_cm,urgent_line_cm,critical_line_cm,rain_mm_1h,source
+2026-05-18T20:00:00Z,frames/00_nominal.jpg,42,60,80,95,4.2,replay_node
+2026-05-18T20:05:00Z,frames/01_vigilance.jpg,67,60,80,95,8.6,replay_node
+2026-05-18T20:10:00Z,frames/02_urgent.jpg,84,60,80,95,15.4,replay_node
+2026-05-18T20:15:00Z,frames/03_critical.jpg,99,60,80,95,23.1,replay_node

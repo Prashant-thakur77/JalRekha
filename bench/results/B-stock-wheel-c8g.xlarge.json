@@ -1,0 +1,334 @@
+{
+ "schema": "nadisaathi-cool-bench-v1",
+ "label": "B-stock-wheel-c8g.xlarge",
+ "generated_at": "2026-10-25T11:20:31.623650+00:00",
+ "generated_by": "bench/cool_bench.py",
+ "host": {
+  "opencv_version": "5.0.0",
+  "cv2_file": "/opt/venv/lib/python3.12/site-packages/cv2/__init__.py",
+  "kleidicv_build_lines": [
+   "3rdparty dependencies:       ittnotify libprotobuf libjpeg-turbo libwebp libtiff libopenjp2 tegra_hal kleidicv_hal kleidicv kleidicv_thread",
+   "Custom HAL:                  YES (carotene (ver 0.0.1) KleidiCV (ver 26.03))"
+  ],
+  "kleidicv_present": true,
+  "build_info_sha256": "4460ffe25568d7f496997f0593f568f4d91ee4740c97f057b2986c237e8a386c",
+  "machine": "aarch64",
+  "cpu_model": "Neoverse-V2",
+  "cpu_count": 4,
+  "python": "3.12.3",
+  "numpy": "2.5.4",
+  "ec2_instance_id": "i-043a7fe410ca60532",
+  "ec2_instance_type": "c8g.xlarge",
+  "ec2_ami_id": "ami-09a93d801db0bafae",
+  "ec2_region": "us-east-1",
+  "cv_num_threads_default": 4,
+  "use_optimized": true
+ },
+ "workload": {
+  "bursts": 144,
+  "frames_per_burst": 5,
+  "resolution": [
+   960,
+   540
+  ],
+  "seeds": [
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111
+  ],
+  "conditions": [
+   "clean",
+   "rain",
+   "night",
+   "shake"
+  ],
+  "stage_fracs": [
+   0.25,
+   0.5,
+   0.8
+  ],
+  "heavy_registration": false,
+  "label": "SYNTHETIC staff-gauge bursts (identical on every host)"
+ },
+ "latency": {
+  "ms_per_burst_mean_of_repeats": 87.05,
+  "ms_per_burst_stdev": 0.19,
+  "repeats": [
+   86.6718451597223,
+   87.07157641666669,
+   87.14868304861106,
+   87.1639909791667,
+   87.17940909722228
+  ],
+  "per_stage_ms": {
+   "E1_edge": {
+    "p50": 0.291,
+    "p95": 0.325
+   },
+   "E2_temporal": {
+    "p50": 7.806,
+    "p95": 10.533
+   },
+   "E3_colour": {
+    "p50": 0.363,
+    "p95": 0.435
+   },
+   "fuse": {
+    "p50": 0.173,
+    "p95": 0.196
+   },
+   "median": {
+    "p50": 1.053,
+    "p95": 1.429
+   },
+   "overlay": {
+    "p50": 0.856,
+    "p95": 0.88
+   },
+   "quality": {
+    "p50": 0.688,
+    "p95": 0.743
+   },
+   "redact": {
+    "p50": 33.945,
+    "p95": 35.592
+   },
+   "register": {
+    "p50": 22.231,
+    "p95": 24.694
+   },
+   "surface_motion": {
+    "p50": 10.848,
+    "p95": 14.67
+   },
+   "total": {
+    "p50": 87.064,
+    "p95": 93.303
+   },
+   "warp": {
+    "p50": 9.648,
+    "p95": 9.757
+   }
+  }
+ },
+ "thread_scaling": [
+  {
+   "threads": 1,
+   "ms_per_burst": 169.82
+  },
+  {
+   "threads": 2,
+   "ms_per_burst": 113.77
+  },
+  {
+   "threads": 4,
+   "ms_per_burst": 83.37
+  }
+ ],
+ "throughput": {
+  "processes": 4,
+  "bursts": 80,
+  "wall_s": 4.84,
+  "bursts_per_s": 19.89,
+  "frames_per_s": 99.4,
+  "cameras_at_10s_cadence": 198
+ },
+ "micro_ms": {
+  "orb_registration": {
+   "ms_p50": 22.37,
+   "ms_min": 22.33,
+   "n": 5
+  },
+  "aliked_lightglue_registration": {
+   "ms_p50": 1222.92,
+   "ms_min": 1221.45,
+   "n": 3
+  },
+  "dis_flow_960x540": {
+   "ms_p50": 16.35,
+   "ms_min": 16.32,
+   "n": 5
+  },
+  "yunet_redact_960x540": {
+   "ms_p50": 34.06,
+   "ms_min": 33.74,
+   "n": 5
+  },
+  "grabcut_photo_check": {
+   "ms_p50": 333.97,
+   "ms_min": 330.9,
+   "n": 3
+  },
+  "resize_gaussian_canny_1080p": {
+   "ms_p50": 1.66,
+   "ms_min": 1.63,
+   "n": 20
+  }
+ },
+ "cost": {
+  "usd_per_hour": 0.15952,
+  "source": "command-line --price",
+  "software_fee_usd_per_hour": 0.0,
+  "usd_per_hour_total": 0.15952,
+  "usd_per_million_frames": 0.4458,
+  "note": "frames = 5-frame bursts x 5; cost uses the multi-process throughput"
+ },
+ "equivalence": {
+  "outputs_mm_sha256": "c8eabe95ed5abe8eed7f1d249938ea0fc22d25938a78e66d9798b4c3f5076c5d",
+  "stage_m": [
+   1.057,
+   2.069,
+   3.245,
+   1.057,
+   2.069,
+   3.181,
+   1.013,
+   2.069,
+   3.245,
+   1.024,
+   2.026,
+   3.245,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   1.114,
+   2.16,
+   3.477,
+   0.635,
+   1.178,
+   1.926,
+   0.635,
+   1.178,
+   1.926,
+   0.588,
+   1.169,
+   1.906,
+   0.625,
+   1.178,
+   1.926,
+   0.742,
+   1.4,
+   2.216,
+   0.73,
+   1.388,
+   2.216,
+   0.73,
+   1.364,
+   2.252,
+   0.766,
+   1.436,
+   2.252,
+   1.044,
+   2.05,
+   3.258,
+   1.044,
+   2.05,
+   3.258,
+   1.003,
+   2.05,
+   3.268,
+   0.973,
+   2.06,
+   3.268,
+   0.957,
+   1.819,
+   2.872,
+   0.957,
+   1.819,
+   2.872,
+   0.925,
+   1.819,
+   2.863,
+   0.965,
+   1.827,
+   2.888,
+   1.124,
+   2.214,
+   3.531,
+   1.124,
+   2.214,
+   3.531,
+   1.069,
+   2.2,
+   3.545,
+   1.124,
+   2.214,
+   3.545,
+   1.008,
+   1.836,
+   3.004,
+   0.997,
+   1.857,
+   2.93,
+   0.944,
+   1.794,
+   2.899,
+   0.955,
+   1.836,
+   3.046,
+   1.04,
+   2.073,
+   3.323,
+   1.04,
+   2.073,
+   3.291,
+   1.04,
+   2.073,
+   3.323,
+   1.051,
+   2.073,
+   3.313,
+   0.856,
+   1.657,
+   2.72,
+   0.856,
+   1.657,
+   2.72,
+   0.856,
+   1.666,
+   2.669,
+   0.848,
+   1.657,
+   2.686,
+   1.071,
+   2.173,
+   3.479,
+   1.071,
+   2.173,
+   3.479,
+   1.071,
+   2.162,
+   3.479,
+   1.071,
+   2.185,
+   3.468,
+   0.641,
+   1.167,
+   1.847,
+   0.629,
+   1.167,
+   1.847,
+   0.617,
+   1.167,
+   1.859,
+   0.617,
+   1.179,
+   2.039
+  ]
+ }
+}

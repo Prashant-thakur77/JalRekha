@@ -1,0 +1,85 @@
+{
+  "runtime": {
+    "mode": "golden_fixture_output",
+    "notebook_executes_model": false,
+    "model_family": "Gemma 4",
+    "prompt_version": "live-demo-v1",
+    "fixture_pack_version": "v1",
+    "output_origin": "hand-authored golden fixture for reproducible judging",
+    "disclaimer": "Cached/golden output is used for reproducible judging; optional live inference requires local model/runtime."
+  },
+  "deployment_target": {
+    "hardware": "Raspberry Pi 5 8GB",
+    "inference_runtime": "LiteRT-LM",
+    "evidence_location": "repo docs / benchmark card / demo video"
+  },
+  "node": {
+    "notebook_mode": "hardware_replay",
+    "deployment_target": "Raspberry Pi 5 + LiteRT-LM",
+    "same_data_contract": true,
+    "sample_contract": {
+      "runner_mode_expected_in_deployment": "litert-multimodal-temporal",
+      "frames_analyzed": 4,
+      "alert_orchestration_input": "temporal water-level readings plus curated replay frames"
+    }
+  },
+  "volunteer": {
+    "parser": "cached_or_golden_replay",
+    "same_prompt_contract": true,
+    "report_id": "volunteer-replay-001",
+    "structured_observation": {
+      "water_level_category": "critical",
+      "trend": "rising",
+      "road_status": "dangerous",
+      "urgency": "immediate",
+      "confidence": 0.82
+    }
+  },
+  "final_alert": {
+    "level": "critical",
+    "score": 0.91,
+    "evidence": [
+      {
+        "source": "node_replay",
+        "detail": "Water level crossed the critical threshold: 99 cm >= 95 cm.",
+        "state": "critical"
+      },
+      {
+        "source": "volunteer_report_replay",
+        "detail": "Citizen report says water passed the red bridge mark and is entering the low street.",
+        "state": "urgent"
+      },
+      {
+        "source": "orchestration_rules",
+        "detail": "Independent node and citizen evidence corroborate immediate local risk.",
+        "state": "critical"
+      }
+    ],
+    "reasoning_summary": "Golden fixture output: the alert is critical because replayed node readings cross the critical line and the JalRekha Volunteer report independently confirms dangerous flooding near the bridge access. This notebook demonstrates the data contract, prompt contract, and alert orchestration; it does not run live LiteRT-LM by default.",
+    "recommended_action": "Escalate to municipal civil defense for operator review, prepare local warning channels if available, and preserve the audit trace."
+  },
+  "sinagir_ready_export": {
+    "disclaimer": "Preview only; not submitted to SINAGIR production endpoints.",
+    "schema": "sinagir-ready-v1-preview",
+    "event": {
+      "external_id": "node-live-demo-fixture-001",
+      "hazard_type": "inundacion",
+      "severity": {
+        "level": "critical",
+        "score": 0.91
+      },
+      "summary": "Replay critical flood-risk alert from JalRekha Node evidence and JalRekha Volunteer citizen report.",
+      "origin_system": "JalRekha hardware replay demo"
+    },
+    "cap_preview": {
+      "status": "Test",
+      "msgType": "Alert",
+      "scope": "Public",
+      "category": "Met",
+      "event": "Inundacion repentina",
+      "urgency": "Immediate",
+      "severity": "Severe",
+      "certainty": "Likely"
+    }
+  }
+}

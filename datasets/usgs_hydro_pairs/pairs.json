@@ -1,0 +1,559 @@
+{
+ "schema": "nadisaathi-usgs-hydro-pairs-v1",
+ "fetched_at_utc": "2026-10-25T11:09:14+00:00",
+ "period": {
+  "start": "2021-01-01",
+  "end": "2026-10-01",
+  "train_end": "2023-12-31"
+ },
+ "parameter": "00065 gauge height, converted ft -> m (x 0.3048), local gauge datum (not comparable across sites)",
+ "grid": "15-min UTC; per bin the reading at the bin start, else the first reading in the bin",
+ "min_coverage": 0.8,
+ "source": "USGS NWIS instantaneous values, https://waterservices.usgs.gov/nwis/iv/",
+ "nws_source": "NOAA NWPS gauge API, https://api.water.noaa.gov/nwps/v1/gauges/<usgs id> (flood categories, ft)",
+ "licence": "U.S. public domain, credit U.S. Geological Survey (gauge data); NWS flood categories are U.S. Government work",
+ "pairs": [
+  {
+   "id": "delaware_callicoon_montague",
+   "river": "Delaware River",
+   "up": "01427510",
+   "down": "01438500",
+   "up_name": "DELAWARE RIVER AT CALLICOON NY",
+   "down_name": "Delaware River at Montague NJ",
+   "straight_line_km": 54.3,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "delaware_montague_trenton",
+   "river": "Delaware River",
+   "up": "01438500",
+   "down": "01463500",
+   "up_name": "Delaware River at Montague NJ",
+   "down_name": "Delaware River at Trenton NJ",
+   "straight_line_km": 120.9,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "susquehanna_conklin_wilkesbarre",
+   "river": "Susquehanna River",
+   "up": "01503000",
+   "down": "01536500",
+   "up_name": "SUSQUEHANNA RIVER AT CONKLIN NY",
+   "down_name": "Susquehanna River at Wilkes-Barre, PA",
+   "straight_line_km": 87.5,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "susquehanna_wilkesbarre_harrisburg",
+   "river": "Susquehanna River",
+   "up": "01536500",
+   "down": "01570500",
+   "up_name": "Susquehanna River at Wilkes-Barre, PA",
+   "down_name": "Susquehanna River at Harrisburg, PA",
+   "straight_line_km": 139.4,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "potomac_hancock_pointofrocks",
+   "river": "Potomac River",
+   "up": "01613000",
+   "down": "01638500",
+   "up_name": "POTOMAC RIVER AT HANCOCK, MD",
+   "down_name": "POTOMAC RIVER AT POINT OF ROCKS, MD",
+   "straight_line_km": 72.0,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "potomac_pointofrocks_littlefalls",
+   "river": "Potomac River",
+   "up": "01638500",
+   "down": "01646500",
+   "up_name": "POTOMAC RIVER AT POINT OF ROCKS, MD",
+   "down_name": "POTOMAC RIVER NEAR WASH, DC LITTLE FALLS PUMP STA",
+   "straight_line_km": 50.8,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "juniata_huntingdon_newport",
+   "river": "Juniata River",
+   "up": "01559000",
+   "down": "01567000",
+   "up_name": "Juniata River at Huntingdon, PA",
+   "down_name": "Juniata River at Newport, PA",
+   "straight_line_km": 75.2,
+   "usable": true,
+   "dropped_reason": null
+  },
+  {
+   "id": "wabash_lafayette_terrehaute",
+   "river": "Wabash River",
+   "up": "03335500",
+   "down": "03341500",
+   "up_name": "WABASH RIVER AT LAFAYETTE, IN",
+   "down_name": "WABASH RIVER AT TERRE HAUTE, IN",
+   "straight_line_km": 115.3,
+   "usable": true,
+   "dropped_reason": null
+  }
+ ],
+ "sites": {
+  "01427510": {
+   "name": "DELAWARE RIVER AT CALLICOON NY",
+   "lat": 41.75675,
+   "lon": -75.05741667,
+   "n_15min": 201005,
+   "coverage_train": 0.9964,
+   "coverage_test": 0.9981,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01427510&parameterCd=00065",
+   "nws": {
+    "lid": "CCRN6",
+    "name": "Delaware River at Callicoon",
+    "units": "ft",
+    "stages_ft": {
+     "major": 14.8,
+     "moderate": 13,
+     "minor": 12,
+     "action": 9
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01427510",
+    "nwps_observed_ft": 3.24,
+    "nwps_observed_time": "2026-10-25T09:30:00Z",
+    "usgs_latest_ft": 3.24,
+    "usgs_latest_time": "2026-10-25T09:30:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01438500": {
+   "name": "Delaware River at Montague NJ",
+   "lat": 41.30916667,
+   "lon": -74.79527778,
+   "n_15min": 201538,
+   "coverage_train": 0.9998,
+   "coverage_test": 0.9999,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01438500&parameterCd=00065",
+   "nws": {
+    "lid": "MTGN4",
+    "name": "Delaware River at Montague",
+    "units": "ft",
+    "stages_ft": {
+     "major": 31,
+     "moderate": 28,
+     "minor": 25,
+     "action": 23
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01438500",
+    "nwps_observed_ft": 5.09,
+    "nwps_observed_time": "2026-10-25T09:45:00Z",
+    "usgs_latest_ft": 5.09,
+    "usgs_latest_time": "2026-10-25T09:45:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01463500": {
+   "name": "Delaware River at Trenton NJ",
+   "lat": 40.22166667,
+   "lon": -74.77805556,
+   "n_15min": 201076,
+   "coverage_train": 0.9997,
+   "coverage_test": 0.996,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01463500&parameterCd=00065",
+   "nws": {
+    "lid": "TREN4",
+    "name": "Delaware River at Trenton",
+    "units": "ft",
+    "stages_ft": {
+     "major": 25,
+     "moderate": 23,
+     "minor": 20,
+     "action": 17
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01463500",
+    "nwps_observed_ft": 8.56,
+    "nwps_observed_time": "2026-10-25T10:15:00Z",
+    "usgs_latest_ft": 8.56,
+    "usgs_latest_time": "2026-10-25T10:15:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01503000": {
+   "name": "SUSQUEHANNA RIVER AT CONKLIN NY",
+   "lat": 42.03555556,
+   "lon": -75.80227778,
+   "n_15min": 201484,
+   "coverage_train": 0.9996,
+   "coverage_test": 0.9998,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01503000&parameterCd=00065",
+   "nws": {
+    "lid": "CKLN6",
+    "name": "Susquehanna River at Conklin",
+    "units": "ft",
+    "stages_ft": {
+     "major": 20,
+     "moderate": 15,
+     "minor": 12,
+     "action": 10
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01503000",
+    "nwps_observed_ft": 2.88,
+    "nwps_observed_time": "2026-10-25T10:00:00Z",
+    "usgs_latest_ft": 2.88,
+    "usgs_latest_time": "2026-10-25T10:00:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01536500": {
+   "name": "Susquehanna River at Wilkes-Barre, PA",
+   "lat": 41.2509149,
+   "lon": -75.8807518,
+   "n_15min": 201117,
+   "coverage_train": 0.9983,
+   "coverage_test": 0.9998,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01536500&parameterCd=00065",
+   "nws": {
+    "lid": "WBRP1",
+    "name": "Susquehanna River at Wilkes Barre",
+    "units": "ft",
+    "stages_ft": {
+     "major": 30,
+     "moderate": 28,
+     "minor": 22,
+     "action": 10
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01536500",
+    "nwps_observed_ft": 1.07,
+    "nwps_observed_time": "2026-10-25T09:45:00Z",
+    "usgs_latest_ft": 1.07,
+    "usgs_latest_time": "2026-10-25T09:45:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01559000": {
+   "name": "Juniata River at Huntingdon, PA",
+   "lat": 40.48473768,
+   "lon": -78.0188672,
+   "n_15min": 201549,
+   "coverage_train": 0.9998,
+   "coverage_test": 1.0,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01559000&parameterCd=00065",
+   "nws": {
+    "lid": "HUJP1",
+    "name": "Juniata River at Huntingdon",
+    "units": "ft",
+    "stages_ft": {
+     "major": 15,
+     "moderate": 13,
+     "minor": 12,
+     "action": 9
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01559000",
+    "nwps_observed_ft": 1.78,
+    "nwps_observed_time": "2026-10-25T10:00:00Z",
+    "usgs_latest_ft": 1.78,
+    "usgs_latest_time": "2026-10-25T10:00:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01567000": {
+   "name": "Juniata River at Newport, PA",
+   "lat": 40.478333,
+   "lon": -77.129444,
+   "n_15min": 162352,
+   "coverage_train": 0.9947,
+   "coverage_test": 1.0,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01567000&parameterCd=00065",
+   "nws": {
+    "lid": "NPTP1",
+    "name": "Juniata River at Newport",
+    "units": "ft",
+    "stages_ft": {
+     "major": 30,
+     "moderate": 25,
+     "minor": 22,
+     "action": 17
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01567000",
+    "nwps_observed_ft": 3.98,
+    "nwps_observed_time": "2026-10-25T10:15:00Z",
+    "usgs_latest_ft": 3.98,
+    "usgs_latest_time": "2026-10-25T10:15:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01570500": {
+   "name": "Susquehanna River at Harrisburg, PA",
+   "lat": 40.25473717,
+   "lon": -76.8860538,
+   "n_15min": 100552,
+   "coverage_train": 0.9957,
+   "coverage_test": 1.0,
+   "usable": true,
+   "cadence_min_seen": [
+    30,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:30:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01570500&parameterCd=00065",
+   "nws": {
+    "lid": "HARP1",
+    "name": "Susquehanna River at Harrisburg",
+    "units": "ft",
+    "stages_ft": {
+     "major": 23,
+     "moderate": 20,
+     "minor": 17,
+     "action": 11
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01570500",
+    "nwps_observed_ft": 3.69,
+    "nwps_observed_time": "2026-10-25T10:00:00Z",
+    "usgs_latest_ft": 3.69,
+    "usgs_latest_time": "2026-10-25T10:00:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01613000": {
+   "name": "POTOMAC RIVER AT HANCOCK, MD",
+   "lat": 39.69755556,
+   "lon": -78.17788889,
+   "n_15min": 201070,
+   "coverage_train": 0.9995,
+   "coverage_test": 0.9964,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01613000&parameterCd=00065",
+   "nws": {
+    "lid": "HNKM2",
+    "name": "Potomac River at Hancock",
+    "units": "ft",
+    "stages_ft": {
+     "major": 35,
+     "moderate": 33,
+     "minor": 25,
+     "action": 21
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01613000",
+    "nwps_observed_ft": 3.65,
+    "nwps_observed_time": "2026-10-25T10:15:00Z",
+    "usgs_latest_ft": 3.65,
+    "usgs_latest_time": "2026-10-25T10:15:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "01638500": {
+   "name": "POTOMAC RIVER AT POINT OF ROCKS, MD",
+   "lat": 39.2735833,
+   "lon": -77.5431111,
+   "n_15min": 200140,
+   "coverage_train": 0.9989,
+   "coverage_test": 1.0,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01638500&parameterCd=00065",
+   "nws": {
+    "lid": "PORM2",
+    "name": "Potomac River at Point of Rocks",
+    "units": "ft",
+    "stages_ft": {
+     "major": 27,
+     "moderate": 20,
+     "minor": 16,
+     "action": 11
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01638500",
+    "nwps_observed_ft": 1.74,
+    "nwps_observed_time": "2026-10-25T10:10:00Z",
+    "usgs_latest_ft": 1.71,
+    "usgs_latest_time": "2026-10-25T10:10:00+00:00",
+    "datum_diff_ft": 0.03
+   }
+  },
+  "01646500": {
+   "name": "POTOMAC RIVER NEAR WASH, DC LITTLE FALLS PUMP STA",
+   "lat": 38.94977778,
+   "lon": -77.12763889,
+   "n_15min": 199799,
+   "coverage_train": 0.9984,
+   "coverage_test": 0.9905,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=01646500&parameterCd=00065",
+   "nws": {
+    "lid": "BRKM2",
+    "name": "Potomac River near Washington DC (Little Falls)",
+    "units": "ft",
+    "stages_ft": {
+     "major": 14,
+     "moderate": 12,
+     "minor": 10,
+     "action": 5
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/01646500",
+    "nwps_observed_ft": 3.1,
+    "nwps_observed_time": "2026-10-25T09:50:00Z",
+    "usgs_latest_ft": 3.1,
+    "usgs_latest_time": "2026-10-25T09:50:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "03335500": {
+   "name": "WABASH RIVER AT LAFAYETTE, IN",
+   "lat": 40.42194444,
+   "lon": -86.8969444,
+   "n_15min": 200642,
+   "coverage_train": 0.9935,
+   "coverage_test": 0.9989,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=03335500&parameterCd=00065",
+   "nws": {
+    "lid": "LAFI3",
+    "name": "Wabash River at Lafayette",
+    "units": "ft",
+    "stages_ft": {
+     "major": 26,
+     "moderate": 18,
+     "minor": 11,
+     "action": 7
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/03335500",
+    "nwps_observed_ft": 3,
+    "nwps_observed_time": "2026-10-25T09:30:00Z",
+    "usgs_latest_ft": 3.0,
+    "usgs_latest_time": "2026-10-25T09:30:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  },
+  "03341500": {
+   "name": "WABASH RIVER AT TERRE HAUTE, IN",
+   "lat": 39.4657222,
+   "lon": -87.4195,
+   "n_15min": 193993,
+   "coverage_train": 0.9948,
+   "coverage_test": 0.9979,
+   "usable": true,
+   "cadence_min_seen": [
+    15,
+    30,
+    45,
+    60
+   ],
+   "first": "2021-01-01T05:00:00+00:00",
+   "last": "2026-10-01T23:45:00+00:00",
+   "nwis_url": "https://waterservices.usgs.gov/nwis/iv/?format=json&sites=03341500&parameterCd=00065",
+   "nws": {
+    "lid": "TERI3",
+    "name": "Wabash River at Terre Haute...US Hwy 150 Eastbound",
+    "units": "ft",
+    "stages_ft": {
+     "major": 30,
+     "moderate": 24.5,
+     "minor": 16.5,
+     "action": 11.5
+    },
+    "source": "https://api.water.noaa.gov/nwps/v1/gauges/03341500",
+    "nwps_observed_ft": 5.19,
+    "nwps_observed_time": "2026-10-25T10:30:00Z",
+    "usgs_latest_ft": 5.19,
+    "usgs_latest_time": "2026-10-25T10:30:00+00:00",
+    "datum_diff_ft": 0.0
+   }
+  }
+ }
+}

@@ -1,0 +1,7 @@
+timestamp: 2026-05-18T19:18:44-03:00
+reporter: volunteer_user_c
+location: ruta de evacuación, cuadras 4-6
+language: es-AR
+
+Estamos cortando la ruta de evacuación porque hay agua hasta las rodillas.
+Necesitamos que manden a Defensa Civil, no podemos sacar a la gente mayor por acá.

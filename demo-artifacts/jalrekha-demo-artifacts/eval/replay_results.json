@@ -1,0 +1,15 @@
+{
+  "run_id": "replay-2026-05-18",
+  "host": "x86_dev_host + llama.cpp q5_K_M",
+  "summary": {
+    "cases_total": 4,
+    "cases_passed": 4,
+    "cases_failed": 0
+  },
+  "results": [
+    {"case_id": "river_nominal",            "final_state": "NOMINAL",  "passed": true},
+    {"case_id": "river_warning",            "final_state": "WATCH",    "passed": true},
+    {"case_id": "bridge_water_warning",     "final_state": "URGENT",   "passed": true, "evidence_count": 3, "uncertainty": 0.18},
+    {"case_id": "evacuation_route_critical","final_state": "CRITICAL", "passed": true, "evidence_count": 4, "uncertainty": 0.11}
+  ]
+}

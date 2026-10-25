@@ -1,0 +1,422 @@
+{
+ "sigma_gauge_m": 0.03,
+ "camera_noise_sigma_m": 0.05,
+ "camera_noise_seed": 2026,
+ "history_h": 6.0,
+ "event": {
+  "dedup_h": 24,
+  "persist_readings": 2,
+  "definition": "downstream raw stage crosses warning from below, stays >= warning for 2 readings, and was below warning for the previous 24 h"
+ },
+ "window": {
+  "travel_time_multiplier": 3.0,
+  "max_h": 48.0,
+  "min_h": 1.0,
+  "downstream_search_after_h": 6.0,
+  "definition": "upstream alert onset counts for a downstream event if it falls in [t_cross - W, t_cross], W = clip(3 x TRAIN median travel time, 1 h, 48 h), and after the downstream last fell below warning"
+ },
+ "false_alert": {
+  "episode_merge_h": 6.0,
+  "downstream_horizon_h": 6.0,
+  "definition": "an upstream alert episode is false if the downstream raw stage does not reach its warning level within W after the episode onset; a downstream-only episode is false if it does not reach warning within 6 h"
+ },
+ "travel_time": {
+  "xcorr_max_lag_h": 60,
+  "seg_before_h": 72,
+  "seg_after_h": 24,
+  "peak_search_h": 48,
+  "method": "per TRAIN downstream P95 event: lag maximising the cross-correlation of the positive hourly rises (1-h trailing mean) of upstream vs downstream; median over events"
+ },
+ "percentiles": {
+  "warning": 95,
+  "danger": 99
+ },
+ "nws_datum_tolerance_ft": 0.2,
+ "primary_rule": "nws_action if >= 6 pairs have a usable NWS action stage at both gauges and those pairs have >= 30 TRAIN downstream events at action stage in total; else p95",
+ "bootstrap": {
+  "n": 2000,
+  "seed": 7
+ },
+ "schema": "nadisaathi-leadtime-config-v1",
+ "frozen_at": "2026-10-25T11:12:40+00:00",
+ "note": "Written by run_leadtime.py --freeze from TRAIN rows only, before any TEST metric was computed. (First freeze 2026-10-25 had a key collision that overwrote the travel-time settings with the per-pair results and crashed the first run before any TEST metric was produced; this re-freeze fixes the key and drops the step prescreen in favour of filtering every reading. TRAIN-derived values are unchanged.) Thresholds, travel times and windows below are fixed; the alert rule constants come from backend/src/jalrekha/agent/policy.py (hash below).",
+ "splits": {
+  "train": [
+   "2021-01-01",
+   "2023-12-31"
+  ],
+  "test": [
+   "2024-01-01",
+   "2026-10-01"
+  ]
+ },
+ "data": {
+  "pairs_json_sha256": "dc64f6077b523648c258a46d277179da493f2eed676164f67d7da385b973de6b",
+  "fetched_at_utc": "2026-10-25T11:09:14+00:00"
+ },
+ "policy": {
+  "R_FAST_M_PER_H": 0.3,
+  "CROSS_HORIZON_H": 1.5,
+  "HISTORY_HOURS": 6.0,
+  "policy_py_sha256": "dce92d5926751376b42fa442e7300d2c1c9a4bc16d6e55df4629ae14a3db6bbe",
+  "temporal_py_sha256": "49b2a5b503ebfa406957da08ed8cf5d96736e875f070467a7c59bd543096cf08"
+ },
+ "pairs": [
+  {
+   "id": "delaware_callicoon_montague",
+   "river": "Delaware River",
+   "up": "01427510",
+   "down": "01438500",
+   "up_name": "DELAWARE RIVER AT CALLICOON NY",
+   "down_name": "Delaware River at Montague NJ",
+   "straight_line_km": 54.3
+  },
+  {
+   "id": "delaware_montague_trenton",
+   "river": "Delaware River",
+   "up": "01438500",
+   "down": "01463500",
+   "up_name": "Delaware River at Montague NJ",
+   "down_name": "Delaware River at Trenton NJ",
+   "straight_line_km": 120.9
+  },
+  {
+   "id": "susquehanna_conklin_wilkesbarre",
+   "river": "Susquehanna River",
+   "up": "01503000",
+   "down": "01536500",
+   "up_name": "SUSQUEHANNA RIVER AT CONKLIN NY",
+   "down_name": "Susquehanna River at Wilkes-Barre, PA",
+   "straight_line_km": 87.5
+  },
+  {
+   "id": "susquehanna_wilkesbarre_harrisburg",
+   "river": "Susquehanna River",
+   "up": "01536500",
+   "down": "01570500",
+   "up_name": "Susquehanna River at Wilkes-Barre, PA",
+   "down_name": "Susquehanna River at Harrisburg, PA",
+   "straight_line_km": 139.4
+  },
+  {
+   "id": "potomac_hancock_pointofrocks",
+   "river": "Potomac River",
+   "up": "01613000",
+   "down": "01638500",
+   "up_name": "POTOMAC RIVER AT HANCOCK, MD",
+   "down_name": "POTOMAC RIVER AT POINT OF ROCKS, MD",
+   "straight_line_km": 72.0
+  },
+  {
+   "id": "potomac_pointofrocks_littlefalls",
+   "river": "Potomac River",
+   "up": "01638500",
+   "down": "01646500",
+   "up_name": "POTOMAC RIVER AT POINT OF ROCKS, MD",
+   "down_name": "POTOMAC RIVER NEAR WASH, DC LITTLE FALLS PUMP STA",
+   "straight_line_km": 50.8
+  },
+  {
+   "id": "juniata_huntingdon_newport",
+   "river": "Juniata River",
+   "up": "01559000",
+   "down": "01567000",
+   "up_name": "Juniata River at Huntingdon, PA",
+   "down_name": "Juniata River at Newport, PA",
+   "straight_line_km": 75.2
+  },
+  {
+   "id": "wabash_lafayette_terrehaute",
+   "river": "Wabash River",
+   "up": "03335500",
+   "down": "03341500",
+   "up_name": "WABASH RIVER AT LAFAYETTE, IN",
+   "down_name": "WABASH RIVER AT TERRE HAUTE, IN",
+   "straight_line_km": 115.3
+  }
+ ],
+ "dropped_pairs": [],
+ "thresholds": {
+  "01427510": {
+   "p95_m": 1.6825,
+   "p99_m": 2.1573,
+   "nws_action_m": 2.7432,
+   "nws_minor_m": 3.6576,
+   "nws_lid": "CCRN6",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 4.1697
+  },
+  "01438500": {
+   "p95_m": 2.9291,
+   "p99_m": 3.813,
+   "nws_action_m": 7.0104,
+   "nws_minor_m": 7.62,
+   "nws_lid": "MTGN4",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.6477
+  },
+  "01463500": {
+   "p95_m": 3.7582,
+   "p99_m": 4.6221,
+   "nws_action_m": 5.1816,
+   "nws_minor_m": 6.096,
+   "nws_lid": "TREN4",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.3276
+  },
+  "01503000": {
+   "p95_m": 2.3957,
+   "p99_m": 3.2004,
+   "nws_action_m": 3.048,
+   "nws_minor_m": 3.6576,
+   "nws_lid": "CKLN6",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 4.5994
+  },
+  "01536500": {
+   "p95_m": 3.237,
+   "p99_m": 4.7854,
+   "nws_action_m": 3.048,
+   "nws_minor_m": 6.7056,
+   "nws_lid": "WBRP1",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.858
+  },
+  "01559000": {
+   "p95_m": 1.1826,
+   "p99_m": 1.7709,
+   "nws_action_m": 2.7432,
+   "nws_minor_m": 3.6576,
+   "nws_lid": "HUJP1",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 3.8222
+  },
+  "01567000": {
+   "p95_m": 2.0574,
+   "p99_m": 3.0541,
+   "nws_action_m": 5.1816,
+   "nws_minor_m": 6.7056,
+   "nws_lid": "NPTP1",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 5.6358
+  },
+  "01570500": {
+   "p95_m": 2.3439,
+   "p99_m": 3.1394,
+   "nws_action_m": 3.3528,
+   "nws_minor_m": 5.1816,
+   "nws_lid": "HARP1",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 4.0782
+  },
+  "01613000": {
+   "p95_m": 2.3805,
+   "p99_m": 3.4381,
+   "nws_action_m": 6.4008,
+   "nws_minor_m": 7.62,
+   "nws_lid": "HNKM2",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.6324
+  },
+  "01638500": {
+   "p95_m": 1.6246,
+   "p99_m": 2.731,
+   "nws_action_m": 3.3528,
+   "nws_minor_m": 4.8768,
+   "nws_lid": "PORM2",
+   "nws_datum_diff_ft": 0.03,
+   "nws_datum_ok": true,
+   "train_max_m": 5.5748
+  },
+  "01646500": {
+   "p95_m": 1.5179,
+   "p99_m": 2.0147,
+   "nws_action_m": 1.524,
+   "nws_minor_m": 3.048,
+   "nws_lid": "BRKM2",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 3.0968
+  },
+  "03335500": {
+   "p95_m": 3.9441,
+   "p99_m": 5.0201,
+   "nws_action_m": 2.1336,
+   "nws_minor_m": 3.3528,
+   "nws_lid": "LAFI3",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.1844
+  },
+  "03341500": {
+   "p95_m": 5.7577,
+   "p99_m": 6.797,
+   "nws_action_m": 3.5052,
+   "nws_minor_m": 5.0292,
+   "nws_lid": "TERI3",
+   "nws_datum_diff_ft": 0.0,
+   "nws_datum_ok": true,
+   "train_max_m": 6.986
+  }
+ },
+ "travel_time_train": {
+  "delaware_callicoon_montague": {
+   "n_events": 27,
+   "n_xcorr": 27,
+   "n_peak": 27,
+   "xcorr_lag_median_h": 8.25,
+   "xcorr_lag_iqr_h": [
+    5.62,
+    10.88
+   ],
+   "peak_to_peak_median_h": 8.75,
+   "peak_to_peak_iqr_h": [
+    6.62,
+    10.12
+   ],
+   "window_h": 24.75,
+   "train_events_p95": 27,
+   "train_events_nws_action": 0
+  },
+  "delaware_montague_trenton": {
+   "n_events": 24,
+   "n_xcorr": 24,
+   "n_peak": 24,
+   "xcorr_lag_median_h": 3.88,
+   "xcorr_lag_iqr_h": [
+    0.0,
+    20.75
+   ],
+   "peak_to_peak_median_h": 16.25,
+   "peak_to_peak_iqr_h": [
+    1.69,
+    19.5
+   ],
+   "window_h": 11.64,
+   "train_events_p95": 24,
+   "train_events_nws_action": 4
+  },
+  "susquehanna_conklin_wilkesbarre": {
+   "n_events": 24,
+   "n_xcorr": 24,
+   "n_peak": 24,
+   "xcorr_lag_median_h": 12.62,
+   "xcorr_lag_iqr_h": [
+    7.31,
+    15.38
+   ],
+   "peak_to_peak_median_h": 7.38,
+   "peak_to_peak_iqr_h": [
+    0.44,
+    17.75
+   ],
+   "window_h": 37.86,
+   "train_events_p95": 24,
+   "train_events_nws_action": 25
+  },
+  "susquehanna_wilkesbarre_harrisburg": {
+   "n_events": 21,
+   "n_xcorr": 21,
+   "n_peak": 21,
+   "xcorr_lag_median_h": 21.5,
+   "xcorr_lag_iqr_h": [
+    8.0,
+    25.75
+   ],
+   "peak_to_peak_median_h": 18.5,
+   "peak_to_peak_iqr_h": [
+    9.25,
+    22.5
+   ],
+   "window_h": 48.0,
+   "train_events_p95": 21,
+   "train_events_nws_action": 7
+  },
+  "potomac_hancock_pointofrocks": {
+   "n_events": 15,
+   "n_xcorr": 14,
+   "n_peak": 14,
+   "xcorr_lag_median_h": 12.25,
+   "xcorr_lag_iqr_h": [
+    2.75,
+    18.75
+   ],
+   "peak_to_peak_median_h": 15.62,
+   "peak_to_peak_iqr_h": [
+    14.12,
+    19.19
+   ],
+   "window_h": 36.75,
+   "train_events_p95": 15,
+   "train_events_nws_action": 3
+  },
+  "potomac_pointofrocks_littlefalls": {
+   "n_events": 13,
+   "n_xcorr": 12,
+   "n_peak": 12,
+   "xcorr_lag_median_h": 8.88,
+   "xcorr_lag_iqr_h": [
+    3.69,
+    10.88
+   ],
+   "peak_to_peak_median_h": 5.88,
+   "peak_to_peak_iqr_h": [
+    0.0,
+    8.06
+   ],
+   "window_h": 26.64,
+   "train_events_p95": 13,
+   "train_events_nws_action": 12
+  },
+  "juniata_huntingdon_newport": {
+   "n_events": 23,
+   "n_xcorr": 23,
+   "n_peak": 23,
+   "xcorr_lag_median_h": 23.0,
+   "xcorr_lag_iqr_h": [
+    2.88,
+    25.0
+   ],
+   "peak_to_peak_median_h": 23.25,
+   "peak_to_peak_iqr_h": [
+    20.0,
+    24.88
+   ],
+   "window_h": 48.0,
+   "train_events_p95": 23,
+   "train_events_nws_action": 2
+  },
+  "wabash_lafayette_terrehaute": {
+   "n_events": 9,
+   "n_xcorr": 9,
+   "n_peak": 9,
+   "xcorr_lag_median_h": 11.25,
+   "xcorr_lag_iqr_h": [
+    0.5,
+    14.25
+   ],
+   "peak_to_peak_median_h": 26.25,
+   "peak_to_peak_iqr_h": [
+    18.5,
+    54.0
+   ],
+   "window_h": 33.75,
+   "train_events_p95": 9,
+   "train_events_nws_action": 21
+  }
+ },
+ "primary_threshold": "nws_action",
+ "primary_threshold_evidence": {
+  "pairs_with_nws_action": 8,
+  "train_events_nws_action": 74
+ }
+}

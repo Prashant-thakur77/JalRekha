@@ -1,0 +1,1819 @@
+{
+ "meta": {
+  "label": "SYNTHETIC scenario suite (procedural staff-gauge scenes, exact truth; held-out gauge seeds)",
+  "generated_by": "eval/run_agent_suite.py",
+  "generated_at": "2026-10-25T13:23:00.735781+00:00",
+  "seeds": [
+   316,
+   330,
+   419,
+   440,
+   501,
+   535
+  ],
+  "unseen_seeds": [
+   363,
+   452,
+   511
+  ],
+  "variants": 36,
+  "policy_sha256": "b30d81369e93dc478114c81592e0fe3462190cc7efc0df6362cad44b8702429a",
+  "baseline": "rule-only: raw reading thresholds, no quality gate / consensus / Kalman, fixed 10-min cadence",
+  "baseline_projection_no_gates": "the agent's Kalman projection rule on every raw reading: no quality gate, no consensus check, no second opinion, fixed 10-min cadence",
+  "note": "The suite revealed a scenario-caching bug during development (fixed); the hard near-warning variants were added after the first fresh-eyes review.",
+  "wall_s": 646.4
+ },
+ "summary": {
+  "agent": {
+   "flood_runs": 9,
+   "quiet_runs": 27,
+   "false_alert_runs": 0,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": 62.5,
+   "alert_lead_min_values": [
+    62.5,
+    65.0,
+    61.5,
+    69.0,
+    61.0,
+    53.0,
+    40.0,
+    72.5,
+    64.5
+   ],
+   "decision_cycles": 1129,
+   "ms_per_cycle_median": 266.2,
+   "success_runs": 36
+  },
+  "baseline_rule_only": {
+   "flood_runs": 9,
+   "quiet_runs": 27,
+   "false_alert_runs": 1,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": -4.0,
+   "alert_lead_min_values": [
+    -2.5,
+    -10.0,
+    -8.5,
+    -6.0,
+    -4.0,
+    -2.0,
+    0.0,
+    2.5,
+    -5.5
+   ],
+   "decision_cycles": 954,
+   "ms_per_cycle_median": 176.9,
+   "success_runs": 35
+  },
+  "baseline_projection_no_gates": {
+   "flood_runs": 9,
+   "quiet_runs": 27,
+   "false_alert_runs": 2,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": 56.0,
+   "alert_lead_min_values": [
+    57.5,
+    60.0,
+    51.5,
+    54.0,
+    56.0,
+    58.0,
+    60.0,
+    52.5,
+    54.5
+   ],
+   "decision_cycles": 954,
+   "ms_per_cycle_median": 174.9,
+   "success_runs": 34
+  }
+ },
+ "summary_unseen_seeds": {
+  "seeds": [
+   363,
+   452,
+   511
+  ],
+  "agent": {
+   "flood_runs": 3,
+   "quiet_runs": 9,
+   "false_alert_runs": 0,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": 64.5,
+   "alert_lead_min_values": [
+    40.0,
+    72.5,
+    64.5
+   ],
+   "decision_cycles": 375,
+   "ms_per_cycle_median": 263.1,
+   "success_runs": 12
+  },
+  "baseline_rule_only": {
+   "flood_runs": 3,
+   "quiet_runs": 9,
+   "false_alert_runs": 1,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": 0.0,
+   "alert_lead_min_values": [
+    0.0,
+    2.5,
+    -5.5
+   ],
+   "decision_cycles": 318,
+   "ms_per_cycle_median": 175.1,
+   "success_runs": 11
+  },
+  "baseline_projection_no_gates": {
+   "flood_runs": 3,
+   "quiet_runs": 9,
+   "false_alert_runs": 2,
+   "false_sirens": 0,
+   "missed_alerts": 0,
+   "missed_sirens": 0,
+   "alert_lead_min_median": 54.5,
+   "alert_lead_min_values": [
+    60.0,
+    52.5,
+    54.5
+   ],
+   "decision_cycles": 318,
+   "ms_per_cycle_median": 176.7,
+   "success_runs": 10
+  }
+ },
+ "runs": {
+  "agent": [
+   {
+    "variant": "flood-316",
+    "flood": true,
+    "t_true_warning_min": 167.5,
+    "t_true_danger_min": 209.0,
+    "first_alert_min": 105.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 55,
+    "ms_per_cycle": 218.3,
+    "alert_lead_min": 62.5,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D1": 4,
+     "D4": 1,
+     "D5": 1,
+     "D7": 1,
+     "D6": 1,
+     "D3": 10,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "review_reading",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 303.9,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D3": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 367.8,
+    "false_alert": false,
+    "branches": {
+     "D2": 11
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 383.4,
+    "false_alert": false,
+    "branches": {
+     "D1": 8,
+     "D2": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "flood-330",
+    "flood": true,
+    "t_true_warning_min": 170.0,
+    "t_true_danger_min": 210.5,
+    "first_alert_min": 105.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 57,
+    "ms_per_cycle": 196.3,
+    "alert_lead_min": 65.0,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D1": 1,
+     "D4": 1,
+     "D5": 1,
+     "D3": 3,
+     "D6": 1,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 234.8,
+    "false_alert": false,
+    "branches": {
+     "D1": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 340.0,
+    "false_alert": false,
+    "branches": {
+     "D2": 11
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 356.0,
+    "false_alert": false,
+    "branches": {
+     "D1": 5,
+     "D2": 5,
+     "D3": 4
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "flood-419",
+    "flood": true,
+    "t_true_warning_min": 171.5,
+    "t_true_danger_min": 211.5,
+    "first_alert_min": 110.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 57,
+    "ms_per_cycle": 290.3,
+    "alert_lead_min": 61.5,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D4": 1,
+     "D3": 17,
+     "D5": 1,
+     "D1": 1,
+     "D6": 1,
+     "D2": 2,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 249.0,
+    "false_alert": false,
+    "branches": {
+     "D1": 6
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 465.7,
+    "false_alert": false,
+    "branches": {
+     "D2": 8
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 266.4,
+    "false_alert": false,
+    "branches": {
+     "D1": 6
+    },
+    "approvals": []
+   },
+   {
+    "variant": "flood-440",
+    "flood": true,
+    "t_true_warning_min": 174.0,
+    "t_true_danger_min": 213.0,
+    "first_alert_min": 105.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 56,
+    "ms_per_cycle": 194.9,
+    "alert_lead_min": 69.0,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D1": 3,
+     "D3": 11,
+     "D4": 1,
+     "D5": 2,
+     "D6": 1,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 245.7,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D3": 2
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 338.3,
+    "false_alert": false,
+    "branches": {
+     "D2": 11
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 365.1,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D2": 4
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "flood-501",
+    "flood": true,
+    "t_true_warning_min": 176.0,
+    "t_true_danger_min": 214.0,
+    "first_alert_min": 115.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 54,
+    "ms_per_cycle": 243.9,
+    "alert_lead_min": 61.0,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D4": 1,
+     "D5": 1,
+     "D3": 6,
+     "D7": 1,
+     "D6": 1,
+     "D2": 8,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "review_reading",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 253.2,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D3": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 181.5,
+    "false_alert": false,
+    "branches": {
+     "D2": 8
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 266.1,
+    "false_alert": false,
+    "branches": {
+     "D1": 6
+    },
+    "approvals": []
+   },
+   {
+    "variant": "flood-535",
+    "flood": true,
+    "t_true_warning_min": 178.0,
+    "t_true_danger_min": 215.5,
+    "first_alert_min": 125.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 58,
+    "ms_per_cycle": 213.6,
+    "alert_lead_min": 53.0,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D4": 1,
+     "D1": 4,
+     "D5": 1,
+     "D3": 26,
+     "D6": 1,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "review_reading",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 28,
+    "ms_per_cycle": 247.8,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D4": 1,
+     "D5": 2,
+     "D9": 1
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 361.1,
+    "false_alert": false,
+    "branches": {
+     "D2": 11
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 382.1,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D2": 4,
+     "D3": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "flood-363",
+    "flood": true,
+    "t_true_warning_min": 180.0,
+    "t_true_danger_min": 216.5,
+    "first_alert_min": 140.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 55,
+    "ms_per_cycle": 251.8,
+    "alert_lead_min": 40.0,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D3": 50,
+     "D1": 2,
+     "D4": 1,
+     "D5": 3,
+     "D6": 3,
+     "D2": 8,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "review_reading",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 241.4,
+    "false_alert": false,
+    "branches": {
+     "D3": 2,
+     "D1": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 189.5,
+    "false_alert": false,
+    "branches": {
+     "D2": 8
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 365.4,
+    "false_alert": false,
+    "branches": {
+     "D3": 25,
+     "D1": 6,
+     "D2": 4
+    },
+    "approvals": [
+     "review_reading"
+    ]
+   },
+   {
+    "variant": "flood-452",
+    "flood": true,
+    "t_true_warning_min": 182.5,
+    "t_true_danger_min": 217.5,
+    "first_alert_min": 110.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 56,
+    "ms_per_cycle": 196.5,
+    "alert_lead_min": 72.5,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D4": 1,
+     "D3": 17,
+     "D5": 3,
+     "D1": 3,
+     "D6": 1,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 270.1,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D2": 2
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 465.5,
+    "false_alert": false,
+    "branches": {
+     "D2": 8
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 366.3,
+    "false_alert": false,
+    "branches": {
+     "D1": 8,
+     "D2": 4
+    },
+    "approvals": []
+   },
+   {
+    "variant": "flood-511",
+    "flood": true,
+    "t_true_warning_min": 184.5,
+    "t_true_danger_min": 218.5,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 55,
+    "ms_per_cycle": 233.7,
+    "alert_lead_min": 64.5,
+    "missed_alert": false,
+    "missed_siren": false,
+    "branches": {
+     "D4": 1,
+     "D5": 3,
+     "D1": 4,
+     "D3": 17,
+     "D6": 1,
+     "D2": 4,
+     "D9": 1
+    },
+    "approvals": [
+     "cross_border_notify",
+     "publish_cap",
+     "send_sms"
+    ]
+   },
+   {
+    "variant": "near-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 27,
+    "ms_per_cycle": 256.0,
+    "false_alert": false,
+    "branches": {
+     "D1": 6,
+     "D4": 1,
+     "D5": 1,
+     "D9": 1
+    },
+    "approvals": []
+   },
+   {
+    "variant": "moved-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 500.3,
+    "false_alert": false,
+    "branches": {
+     "D2": 8
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   },
+   {
+    "variant": "quiet-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 367.3,
+    "false_alert": false,
+    "branches": {
+     "D1": 4,
+     "D2": 4,
+     "D3": 4
+    },
+    "approvals": [
+     "recalibrate"
+    ]
+   }
+  ],
+  "baseline_rule_only": [
+   {
+    "variant": "flood-316",
+    "flood": true,
+    "t_true_warning_min": 167.5,
+    "t_true_danger_min": 209.0,
+    "first_alert_min": 170.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 179.6,
+    "alert_lead_min": -2.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.7,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 155.8,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 188.1,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-330",
+    "flood": true,
+    "t_true_warning_min": 170.0,
+    "t_true_danger_min": 210.5,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 165.9,
+    "alert_lead_min": -10.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 176.1,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 153.9,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.2,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-419",
+    "flood": true,
+    "t_true_warning_min": 171.5,
+    "t_true_danger_min": 211.5,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 192.2,
+    "alert_lead_min": -8.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 177.7,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 153.1,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.9,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-440",
+    "flood": true,
+    "t_true_warning_min": 174.0,
+    "t_true_danger_min": 213.0,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 160.6,
+    "alert_lead_min": -6.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 175.7,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 155.0,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.7,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-501",
+    "flood": true,
+    "t_true_warning_min": 176.0,
+    "t_true_danger_min": 214.0,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 161.6,
+    "alert_lead_min": -4.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 179.8,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 155.0,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 188.0,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-535",
+    "flood": true,
+    "t_true_warning_min": 178.0,
+    "t_true_danger_min": 215.5,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 169.5,
+    "alert_lead_min": -2.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 181.4,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 161.0,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 189.4,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-363",
+    "flood": true,
+    "t_true_warning_min": 180.0,
+    "t_true_danger_min": 216.5,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 165.4,
+    "alert_lead_min": 0.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 179.9,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": 60.0,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 158.7,
+    "false_alert": true
+   },
+   {
+    "variant": "quiet-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 186.2,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-452",
+    "flood": true,
+    "t_true_warning_min": 182.5,
+    "t_true_danger_min": 217.5,
+    "first_alert_min": 180.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 156.2,
+    "alert_lead_min": 2.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 170.3,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 154.2,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 187.1,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-511",
+    "flood": true,
+    "t_true_warning_min": 184.5,
+    "t_true_danger_min": 218.5,
+    "first_alert_min": 190.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 197.6,
+    "alert_lead_min": -5.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.9,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 156.1,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 196.7,
+    "false_alert": false
+   }
+  ],
+  "baseline_projection_no_gates": [
+   {
+    "variant": "flood-316",
+    "flood": true,
+    "t_true_warning_min": 167.5,
+    "t_true_danger_min": 209.0,
+    "first_alert_min": 110.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 178.1,
+    "alert_lead_min": 57.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 182.0,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 156.4,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-316",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 193.4,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-330",
+    "flood": true,
+    "t_true_warning_min": 170.0,
+    "t_true_danger_min": 210.5,
+    "first_alert_min": 110.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 163.6,
+    "alert_lead_min": 60.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 175.5,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 152.3,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-330",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 239.8,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-419",
+    "flood": true,
+    "t_true_warning_min": 171.5,
+    "t_true_danger_min": 211.5,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 162.9,
+    "alert_lead_min": 51.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 177.3,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 151.9,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-419",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 182.1,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-440",
+    "flood": true,
+    "t_true_warning_min": 174.0,
+    "t_true_danger_min": 213.0,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 159.4,
+    "alert_lead_min": 54.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 174.3,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 151.6,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-440",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 183.6,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-501",
+    "flood": true,
+    "t_true_warning_min": 176.0,
+    "t_true_danger_min": 214.0,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 163.7,
+    "alert_lead_min": 56.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 176.7,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 157.1,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-501",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 185.4,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-535",
+    "flood": true,
+    "t_true_warning_min": 178.0,
+    "t_true_danger_min": 215.5,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 165.5,
+    "alert_lead_min": 58.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 179.5,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 161.9,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-535",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 188.9,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-363",
+    "flood": true,
+    "t_true_warning_min": 180.0,
+    "t_true_danger_min": 216.5,
+    "first_alert_min": 120.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 167.5,
+    "alert_lead_min": 60.0,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 182.5,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": 60.0,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 159.3,
+    "false_alert": true
+   },
+   {
+    "variant": "quiet-363",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 187.4,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-452",
+    "flood": true,
+    "t_true_warning_min": 182.5,
+    "t_true_danger_min": 217.5,
+    "first_alert_min": 130.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 156.4,
+    "alert_lead_min": 52.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 172.8,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": 140.0,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 153.2,
+    "false_alert": true
+   },
+   {
+    "variant": "quiet-452",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 180.7,
+    "false_alert": false
+   },
+   {
+    "variant": "flood-511",
+    "flood": true,
+    "t_true_warning_min": 184.5,
+    "t_true_danger_min": 218.5,
+    "first_alert_min": 130.0,
+    "sirens": 1,
+    "false_sirens": 0,
+    "cycles": 37,
+    "ms_per_cycle": 180.5,
+    "alert_lead_min": 54.5,
+    "missed_alert": false,
+    "missed_siren": false
+   },
+   {
+    "variant": "near-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 182.1,
+    "false_alert": false
+   },
+   {
+    "variant": "moved-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 19,
+    "ms_per_cycle": 160.6,
+    "false_alert": false
+   },
+   {
+    "variant": "quiet-511",
+    "flood": false,
+    "t_true_warning_min": null,
+    "t_true_danger_min": null,
+    "first_alert_min": null,
+    "sirens": 0,
+    "false_sirens": 0,
+    "cycles": 25,
+    "ms_per_cycle": 195.0,
+    "false_alert": false
+   }
+  ]
+ },
+ "plan_splits": [
+  {
+   "variant": "moved-363",
+   "no_gates_alert_min": 60.0,
+   "agent_cycle": {
+    "t_min": 60.0,
+    "branches": [
+     "D2"
+    ],
+    "summary": "camera moved: site degraded, recalibration requested",
+    "trace_id": "tr_e961d15abfcf"
+   }
+  },
+  {
+   "variant": "moved-452",
+   "no_gates_alert_min": 140.0,
+   "agent_cycle": {
+    "t_min": 140.0,
+    "branches": [],
+    "summary": "4.76 m, +0.01 m/h, normal",
+    "trace_id": "tr_b6f3bf0c3aa5"
+   }
+  }
+ ]
+}

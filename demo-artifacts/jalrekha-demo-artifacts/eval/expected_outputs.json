@@ -1,0 +1,47 @@
+{
+  "cases": [
+    {
+      "case_id": "river_nominal",
+      "input": "inputs/video/river_nominal.mp4",
+      "expected": {
+        "node_state_sequence": ["nominal", "nominal", "nominal"],
+        "final_state": "NOMINAL",
+        "cloud_required": false
+      }
+    },
+    {
+      "case_id": "river_warning",
+      "input": "inputs/video/river_warning.mp4",
+      "expected": {
+        "node_state_sequence": ["nominal", "vigilance", "vigilance"],
+        "final_state": "WATCH",
+        "cloud_required": false
+      }
+    },
+    {
+      "case_id": "bridge_water_warning",
+      "input": ["inputs/audio/report_bridge_water.wav", "inputs/video/river_warning.mp4"],
+      "expected": {
+        "final_state": "URGENT",
+        "severity": "urgent",
+        "evidence_min_count": 3,
+        "cloud_required": false
+      }
+    },
+    {
+      "case_id": "evacuation_route_critical",
+      "input": ["inputs/audio/report_evacuation_water.wav", "inputs/video/river_critical.mp4"],
+      "expected": {
+        "node_state_sequence": ["vigilance", "critical", "critical"],
+        "final_state": "CRITICAL",
+        "severity": "critical",
+        "evidence_min_count": 4,
+        "cloud_required": false
+      }
+    }
+  ],
+  "tolerance": {
+    "water_level_cm_abs": 5.0,
+    "uncertainty_max": 0.35
+  }
+}

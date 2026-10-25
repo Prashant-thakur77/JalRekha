@@ -1,0 +1,3415 @@
+{
+ "meta": {
+  "dataset": "datasets/usgs_hivis_stage (USGS HIVIS images + NWIS gauge height 00065; US public domain)",
+  "protocol": "Per site, frames sorted by time. Reference frame = first frame. Calibration split = earliest 25% of frames; test = remaining 75%. Each method's waterline position along the strip is mapped to stage by a robust (Theil-Sen) 2-parameter line fitted on that method's own calibration-split outputs. Thresholds and estimator code are frozen from the synthetic train split.",
+  "label": "REAL held-out frames (later 75% of each site's time series)",
+  "config_sha256": "4bf533452d38520f3c03fd863ebf5a12be97c0b8d71153e693af62bb5791f2f9",
+  "sites_config_sha256": "08ba3f28c8ec5f82262bbedda1b3f9f425c083cb40349aa26b88f2aba037f280",
+  "opencv_version": "5.0.0",
+  "generated_by": "eval/run_real.py",
+  "wall_s": 174.6
+ },
+ "pooled": {
+  "full": {
+   "mean_site_mae_cm": 87.66,
+   "sites_with_readings": 3
+  },
+  "E1_only": {
+   "mean_site_mae_cm": 93.79,
+   "sites_with_readings": 3
+  },
+  "E3_only": {
+   "mean_site_mae_cm": 87.05,
+   "sites_with_readings": 3
+  },
+  "full_no_registration": {
+   "mean_site_mae_cm": 86.01,
+   "sites_with_readings": 3
+  },
+  "B1_naive_max_edge": {
+   "mean_site_mae_cm": 91.41,
+   "sites_with_readings": 3
+  },
+  "B0_base_repo_firewall": {
+   "mean_site_mae_cm": 189.78,
+   "sites_with_readings": 3
+  },
+  "B0r_base_repo_border_fixed": {
+   "mean_site_mae_cm": 97.09,
+   "sites_with_readings": 3
+  },
+  "B_const_calibration_median": {
+   "mean_site_mae_cm": 90.61,
+   "sites_with_readings": 3
+  }
+ },
+ "sites": {
+  "NY_East_Branch_Delaware_River_at_Hancock_Staff": {
+   "in_scope": true,
+   "scene": "close-up staff gauge on a concrete wall, numerals in feet (10-20 ft)",
+   "n_frames": 88,
+   "n_calibration": 22,
+   "n_test": 66,
+   "stage_range_m": [
+    2.822,
+    5.511
+   ],
+   "test_stage_range_m": [
+    2.825,
+    5.511
+   ],
+   "methods": {
+    "full": {
+     "fit": {
+      "a": 2.7671,
+      "b": 0.6731
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 67.36,
+      "mae_ci95_cm": [
+       52.17,
+       83.94
+      ],
+      "median_abs_cm": 40.08,
+      "p90_abs_cm": 200.11,
+      "within_15cm": 0.1667,
+      "bias_cm": -67.36
+     },
+     "test_usable_only": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 67.36,
+      "mae_ci95_cm": [
+       52.17,
+       83.94
+      ],
+      "median_abs_cm": 40.08,
+      "p90_abs_cm": 200.11,
+      "within_15cm": 0.1667,
+      "bias_cm": -67.36
+     },
+     "usable_rate_test": 1.0
+    },
+    "E1_only": {
+     "fit": {
+      "a": 2.7879,
+      "b": 0.589
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 70.88,
+      "mae_ci95_cm": [
+       54.62,
+       88.3
+      ],
+      "median_abs_cm": 45.85,
+      "p90_abs_cm": 214.85,
+      "within_15cm": 0.1667,
+      "bias_cm": -70.87
+     }
+    },
+    "E3_only": {
+     "fit": {
+      "a": 2.7671,
+      "b": 0.6731
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 67.36,
+      "mae_ci95_cm": [
+       52.17,
+       83.94
+      ],
+      "median_abs_cm": 40.08,
+      "p90_abs_cm": 200.11,
+      "within_15cm": 0.1667,
+      "bias_cm": -67.36
+     }
+    },
+    "full_no_registration": {
+     "fit": {
+      "a": 2.7829,
+      "b": 0.5049
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 69.88,
+      "mae_ci95_cm": [
+       54.03,
+       87.34
+      ],
+      "median_abs_cm": 41.21,
+      "p90_abs_cm": 208.79,
+      "within_15cm": 0.1667,
+      "bias_cm": -69.87
+     }
+    },
+    "B1_naive_max_edge": {
+     "fit": {
+      "a": 2.8285,
+      "b": 0.0
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 77.37,
+      "mae_ci95_cm": [
+       59.33,
+       96.91
+      ],
+      "median_abs_cm": 48.92,
+      "p90_abs_cm": 235.92,
+      "within_15cm": 0.1667,
+      "bias_cm": -77.36
+     }
+    },
+    "B0_base_repo_firewall": {
+     "fit": {
+      "a": 0.0,
+      "b": 0.0
+     },
+     "test": {
+      "n": 66,
+      "coverage": 0.0152,
+      "mae_cm": 369.11,
+      "mae_ci95_cm": [
+       NaN,
+       NaN
+      ],
+      "median_abs_cm": 369.11,
+      "p90_abs_cm": 369.11,
+      "within_15cm": 0.0,
+      "bias_cm": -369.11
+     }
+    },
+    "B0r_base_repo_border_fixed": {
+     "fit": {
+      "a": 2.8285,
+      "b": 0.0
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 77.37,
+      "mae_ci95_cm": [
+       59.33,
+       96.91
+      ],
+      "median_abs_cm": 48.92,
+      "p90_abs_cm": 235.92,
+      "within_15cm": 0.1667,
+      "bias_cm": -77.36
+     }
+    },
+    "B_const_calibration_median": {
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 77.37,
+      "mae_ci95_cm": [
+       59.33,
+       96.91
+      ],
+      "median_abs_cm": 48.92,
+      "p90_abs_cm": 235.92,
+      "within_15cm": 0.1667,
+      "bias_cm": -77.36
+     }
+    },
+    "full_numeral_calibration": {
+     "fit": {
+      "datum_offset_m": -0.1197
+     },
+     "note": "Pixel centres of the printed foot numerals read from the 2026-07-27 08:00 EDT frame; mark stage = numeral + datum offset (1 parameter, fitted on the calibration split).",
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 14.4,
+      "mae_ci95_cm": [
+       9.11,
+       23.32
+      ],
+      "median_abs_cm": 10.13,
+      "p90_abs_cm": 19.09,
+      "within_15cm": 0.8636,
+      "bias_cm": -6.18
+     }
+    }
+   }
+  },
+  "NY_Genesee_River_at_Avon_Staff_Gage": {
+   "in_scope": true,
+   "scene": "narrow staff gauge on a stone bridge abutment, far from the camera",
+   "n_frames": 88,
+   "n_calibration": 22,
+   "n_test": 66,
+   "stage_range_m": [
+    4.404,
+    7.458
+   ],
+   "test_stage_range_m": [
+    4.886,
+    7.458
+   ],
+   "methods": {
+    "full": {
+     "fit": {
+      "a": 3.7427,
+      "b": 1.7905
+     },
+     "test": {
+      "n": 66,
+      "coverage": 0.9697,
+      "mae_cm": 162.21,
+      "mae_ci95_cm": [
+       132.95,
+       191.92
+      ],
+      "median_abs_cm": 119.3,
+      "p90_abs_cm": 349.49,
+      "within_15cm": 0.0312,
+      "bias_cm": -148.38
+     },
+     "test_usable_only": {
+      "n": 66,
+      "coverage": 0.9697,
+      "mae_cm": 162.21,
+      "mae_ci95_cm": [
+       132.95,
+       191.92
+      ],
+      "median_abs_cm": 119.3,
+      "p90_abs_cm": 349.49,
+      "within_15cm": 0.0312,
+      "bias_cm": -148.38
+     },
+     "usable_rate_test": 0.9697
+    },
+    "E1_only": {
+     "fit": {
+      "a": 4.4139,
+      "b": 0.1009
+     },
+     "test": {
+      "n": 66,
+      "coverage": 0.9394,
+      "mae_cm": 160.45,
+      "mae_ci95_cm": [
+       137.11,
+       183.87
+      ],
+      "median_abs_cm": 144.95,
+      "p90_abs_cm": 297.71,
+      "within_15cm": 0.0,
+      "bias_cm": -160.45
+     }
+    },
+    "E3_only": {
+     "fit": {
+      "a": 3.444,
+      "b": 2.4718
+     },
+     "test": {
+      "n": 66,
+      "coverage": 0.8788,
+      "mae_cm": 160.48,
+      "mae_ci95_cm": [
+       131.19,
+       191.95
+      ],
+      "median_abs_cm": 142.1,
+      "p90_abs_cm": 357.08,
+      "within_15cm": 0.0862,
+      "bias_cm": -131.44
+     }
+    },
+    "full_no_registration": {
+     "fit": {
+      "a": 3.7355,
+      "b": 1.8003
+     },
+     "test": {
+      "n": 66,
+      "coverage": 0.9848,
+      "mae_cm": 157.81,
+      "mae_ci95_cm": [
+       129.83,
+       186.66
+      ],
+      "median_abs_cm": 115.56,
+      "p90_abs_cm": 349.77,
+      "within_15cm": 0.0154,
+      "bias_cm": -144.31
+     }
+    },
+    "B1_naive_max_edge": {
+     "fit": {
+      "a": 4.4155,
+      "b": 0.064
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 163.31,
+      "mae_ci95_cm": [
+       141.45,
+       185.72
+      ],
+      "median_abs_cm": 148.78,
+      "p90_abs_cm": 293.83,
+      "within_15cm": 0.0,
+      "bias_cm": -163.31
+     }
+    },
+    "B0_base_repo_firewall": {
+     "fit": {
+      "a": 4.4638,
+      "b": 0.0
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 160.92,
+      "mae_ci95_cm": [
+       138.9,
+       183.28
+      ],
+      "median_abs_cm": 146.91,
+      "p90_abs_cm": 292.45,
+      "within_15cm": 0.0,
+      "bias_cm": -160.92
+     }
+    },
+    "B0r_base_repo_border_fixed": {
+     "fit": {
+      "a": 8.0326,
+      "b": -3.1956
+     },
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 163.96,
+      "mae_ci95_cm": [
+       142.03,
+       186.33
+      ],
+      "median_abs_cm": 147.98,
+      "p90_abs_cm": 292.6,
+      "within_15cm": 0.0,
+      "bias_cm": -163.96
+     }
+    },
+    "B_const_calibration_median": {
+     "test": {
+      "n": 66,
+      "coverage": 1.0,
+      "mae_cm": 160.92,
+      "mae_ci95_cm": [
+       138.9,
+       183.28
+      ],
+      "median_abs_cm": 146.91,
+      "p90_abs_cm": 292.45,
+      "within_15cm": 0.0,
+      "bias_cm": -160.92
+     }
+    }
+   }
+  },
+  "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff": {
+   "in_scope": true,
+   "scene": "free-standing staff gauge mid-channel; fully submerged near the peak; camera reframed after 2026-09-03",
+   "n_frames": 75,
+   "n_calibration": 19,
+   "n_test": 56,
+   "stage_range_m": [
+    1.106,
+    2.646
+   ],
+   "test_stage_range_m": [
+    1.155,
+    2.646
+   ],
+   "methods": {
+    "full": {
+     "fit": {
+      "a": 1.1754,
+      "b": -0.0858
+     },
+     "test": {
+      "n": 56,
+      "coverage": 0.9643,
+      "mae_cm": 33.41,
+      "mae_ci95_cm": [
+       23.99,
+       44.04
+      ],
+      "median_abs_cm": 17.47,
+      "p90_abs_cm": 85.36,
+      "within_15cm": 0.4259,
+      "bias_cm": -33.41
+     },
+     "test_usable_only": {
+      "n": 56,
+      "coverage": 0.8571,
+      "mae_cm": 34.09,
+      "mae_ci95_cm": [
+       25.32,
+       44.39
+      ],
+      "median_abs_cm": 18.09,
+      "p90_abs_cm": 81.24,
+      "within_15cm": 0.375,
+      "bias_cm": -34.09
+     },
+     "usable_rate_test": 0.8571
+    },
+    "E1_only": {
+     "fit": {
+      "a": 1.1551,
+      "b": 0.0056
+     },
+     "test": {
+      "n": 56,
+      "coverage": 0.4643,
+      "mae_cm": 50.05,
+      "mae_ci95_cm": [
+       33.69,
+       68.03
+      ],
+      "median_abs_cm": 47.24,
+      "p90_abs_cm": 119.58,
+      "within_15cm": 0.3462,
+      "bias_cm": -50.01
+     }
+    },
+    "E3_only": {
+     "fit": {
+      "a": 1.1754,
+      "b": -0.0858
+     },
+     "test": {
+      "n": 56,
+      "coverage": 0.9643,
+      "mae_cm": 33.31,
+      "mae_ci95_cm": [
+       23.99,
+       43.88
+      ],
+      "median_abs_cm": 17.47,
+      "p90_abs_cm": 85.36,
+      "within_15cm": 0.4259,
+      "bias_cm": -33.31
+     }
+    },
+    "full_no_registration": {
+     "fit": {
+      "a": 1.3109,
+      "b": -0.3496
+     },
+     "test": {
+      "n": 56,
+      "coverage": 1.0,
+      "mae_cm": 30.35,
+      "mae_ci95_cm": [
+       21.22,
+       40.52
+      ],
+      "median_abs_cm": 14.81,
+      "p90_abs_cm": 86.62,
+      "within_15cm": 0.5,
+      "bias_cm": -30.0
+     }
+    },
+    "B1_naive_max_edge": {
+     "fit": {
+      "a": 1.1308,
+      "b": 0.0
+     },
+     "test": {
+      "n": 56,
+      "coverage": 1.0,
+      "mae_cm": 33.55,
+      "mae_ci95_cm": [
+       24.65,
+       43.39
+      ],
+      "median_abs_cm": 20.11,
+      "p90_abs_cm": 81.99,
+      "within_15cm": 0.3929,
+      "bias_cm": -33.55
+     }
+    },
+    "B0_base_repo_firewall": {
+     "fit": {
+      "a": 1.1308,
+      "b": 0.0
+     },
+     "test": {
+      "n": 56,
+      "coverage": 0.6786,
+      "mae_cm": 39.32,
+      "mae_ci95_cm": [
+       27.37,
+       52.91
+      ],
+      "median_abs_cm": 21.79,
+      "p90_abs_cm": 103.54,
+      "within_15cm": 0.2632,
+      "bias_cm": -39.32
+     }
+    },
+    "B0r_base_repo_border_fixed": {
+     "fit": {
+      "a": 2.7855,
+      "b": -1.0098
+     },
+     "test": {
+      "n": 56,
+      "coverage": 1.0,
+      "mae_cm": 49.93,
+      "mae_ci95_cm": [
+       36.47,
+       63.17
+      ],
+      "median_abs_cm": 23.01,
+      "p90_abs_cm": 138.11,
+      "within_15cm": 0.3571,
+      "bias_cm": -8.72
+     }
+    },
+    "B_const_calibration_median": {
+     "test": {
+      "n": 56,
+      "coverage": 1.0,
+      "mae_cm": 33.55,
+      "mae_ci95_cm": [
+       24.65,
+       43.39
+      ],
+      "median_abs_cm": 20.11,
+      "p90_abs_cm": 81.99,
+      "within_15cm": 0.3929,
+      "bias_cm": -33.55
+     }
+    }
+   }
+  },
+  "IL_Vermilion_River_near_Danville": {
+   "in_scope": false,
+   "scene": "bank and bridge, no staff gauge or fixed vertical reference in view",
+   "n_frames": 97
+  },
+  "IN_White_River_at_Michigan_Street_at_Indianapolis": {
+   "in_scope": false,
+   "scene": "wide river view, no staff gauge in view",
+   "n_frames": 88
+  },
+  "TX_White_Rk_Ck_at_Greenville_Ave_Dallas": {
+   "in_scope": false,
+   "scene": "wide creek view from a bridge, no staff gauge; view changes after 2026-10-01",
+   "n_frames": 88
+  }
+ },
+ "frames": [
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T12:00:03Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T13:00:06Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T14:00:06Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T15:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T16:00:06Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T17:00:05Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T18:00:08Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T19:00:03Z",
+   "split": "cal",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T20:00:12Z",
+   "split": "cal",
+   "truth_m": 2.8316,
+   "pred_m": 2.8296,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T21:00:09Z",
+   "split": "cal",
+   "truth_m": 2.8316,
+   "pred_m": 2.8306,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-26T22:00:10Z",
+   "split": "cal",
+   "truth_m": 2.8316,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T12:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T13:00:03Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8255,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T14:00:10Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T15:00:08Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T16:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8255,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T17:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8255,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T18:00:12Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T19:00:06Z",
+   "split": "cal",
+   "truth_m": 2.8255,
+   "pred_m": 2.8296,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T20:00:19Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8296,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T21:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-27T22:00:04Z",
+   "split": "cal",
+   "truth_m": 2.8224,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T12:00:14Z",
+   "split": "test",
+   "truth_m": 2.8346,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T13:00:11Z",
+   "split": "test",
+   "truth_m": 2.8316,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T14:00:09Z",
+   "split": "test",
+   "truth_m": 2.8255,
+   "pred_m": 2.8265,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T15:00:09Z",
+   "split": "test",
+   "truth_m": 2.8285,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T16:00:12Z",
+   "split": "test",
+   "truth_m": 2.8316,
+   "pred_m": 2.8275,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T17:00:02Z",
+   "split": "test",
+   "truth_m": 2.8377,
+   "pred_m": 2.8285,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T18:00:03Z",
+   "split": "test",
+   "truth_m": 2.8438,
+   "pred_m": 2.8285,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T19:00:03Z",
+   "split": "test",
+   "truth_m": 2.8499,
+   "pred_m": 2.8316,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T20:00:07Z",
+   "split": "test",
+   "truth_m": 2.859,
+   "pred_m": 2.8306,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T21:00:22Z",
+   "split": "test",
+   "truth_m": 2.8682,
+   "pred_m": 2.8316,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-28T22:00:11Z",
+   "split": "test",
+   "truth_m": 2.8743,
+   "pred_m": 2.8337,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T12:00:07Z",
+   "split": "test",
+   "truth_m": 5.3127,
+   "pred_m": 3.1861,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T13:00:06Z",
+   "split": "test",
+   "truth_m": 5.2151,
+   "pred_m": 3.1272,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T14:00:11Z",
+   "split": "test",
+   "truth_m": 5.1603,
+   "pred_m": 3.183,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T15:00:12Z",
+   "split": "test",
+   "truth_m": 5.2243,
+   "pred_m": 3.2553,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T16:00:18Z",
+   "split": "test",
+   "truth_m": 5.3675,
+   "pred_m": 3.2553,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T17:00:09Z",
+   "split": "test",
+   "truth_m": 5.5108,
+   "pred_m": 3.0982,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T18:00:13Z",
+   "split": "test",
+   "truth_m": 5.4894,
+   "pred_m": 3.2553,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T19:00:08Z",
+   "split": "test",
+   "truth_m": 5.3736,
+   "pred_m": 3.1912,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T20:00:08Z",
+   "split": "test",
+   "truth_m": 5.1603,
+   "pred_m": 3.1354,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T21:00:15Z",
+   "split": "test",
+   "truth_m": 4.9317,
+   "pred_m": 3.1189,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-29T22:00:07Z",
+   "split": "test",
+   "truth_m": 4.7366,
+   "pred_m": 3.0652,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T12:00:06Z",
+   "split": "test",
+   "truth_m": 3.8557,
+   "pred_m": 2.937,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T13:00:16Z",
+   "split": "test",
+   "truth_m": 3.8283,
+   "pred_m": 2.936,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T14:00:04Z",
+   "split": "test",
+   "truth_m": 3.8009,
+   "pred_m": 2.9339,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T15:00:07Z",
+   "split": "test",
+   "truth_m": 3.7795,
+   "pred_m": 2.9308,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T16:00:15Z",
+   "split": "test",
+   "truth_m": 3.7521,
+   "pred_m": 2.9298,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T17:00:08Z",
+   "split": "test",
+   "truth_m": 3.7338,
+   "pred_m": 2.9308,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T18:00:12Z",
+   "split": "test",
+   "truth_m": 3.7125,
+   "pred_m": 2.9277,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T19:00:09Z",
+   "split": "test",
+   "truth_m": 3.6911,
+   "pred_m": 3.4248,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T20:00:13Z",
+   "split": "test",
+   "truth_m": 3.6728,
+   "pred_m": 2.9257,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T21:00:04Z",
+   "split": "test",
+   "truth_m": 3.6515,
+   "pred_m": 2.9195,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-30T22:00:04Z",
+   "split": "test",
+   "truth_m": 3.6332,
+   "pred_m": 2.9174,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T12:00:09Z",
+   "split": "test",
+   "truth_m": 3.4503,
+   "pred_m": 2.8874,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T13:00:03Z",
+   "split": "test",
+   "truth_m": 3.4412,
+   "pred_m": 2.8895,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T14:00:08Z",
+   "split": "test",
+   "truth_m": 3.4351,
+   "pred_m": 2.8874,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T15:00:06Z",
+   "split": "test",
+   "truth_m": 3.429,
+   "pred_m": 2.8854,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T16:00:13Z",
+   "split": "test",
+   "truth_m": 3.4168,
+   "pred_m": 2.8843,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T17:00:08Z",
+   "split": "test",
+   "truth_m": 3.4107,
+   "pred_m": 2.8854,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T18:00:11Z",
+   "split": "test",
+   "truth_m": 3.4016,
+   "pred_m": 2.8885,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T19:00:12Z",
+   "split": "test",
+   "truth_m": 3.3955,
+   "pred_m": 2.8833,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T20:00:12Z",
+   "split": "test",
+   "truth_m": 3.3863,
+   "pred_m": 2.8864,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T21:00:11Z",
+   "split": "test",
+   "truth_m": 3.3802,
+   "pred_m": 2.8812,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-07-31T22:00:03Z",
+   "split": "test",
+   "truth_m": 3.3711,
+   "pred_m": 2.8781,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T12:00:11Z",
+   "split": "test",
+   "truth_m": 3.2644,
+   "pred_m": 2.8647,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T13:00:11Z",
+   "split": "test",
+   "truth_m": 3.2614,
+   "pred_m": 2.8595,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T14:00:12Z",
+   "split": "test",
+   "truth_m": 3.2553,
+   "pred_m": 2.8575,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T15:00:12Z",
+   "split": "test",
+   "truth_m": 3.2522,
+   "pred_m": 2.8657,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T16:00:12Z",
+   "split": "test",
+   "truth_m": 3.2492,
+   "pred_m": 2.8585,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T17:00:06Z",
+   "split": "test",
+   "truth_m": 3.2431,
+   "pred_m": 2.8585,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T18:00:08Z",
+   "split": "test",
+   "truth_m": 3.24,
+   "pred_m": 2.8585,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T19:00:08Z",
+   "split": "test",
+   "truth_m": 3.2339,
+   "pred_m": 2.8595,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T20:00:12Z",
+   "split": "test",
+   "truth_m": 3.2309,
+   "pred_m": 2.8606,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T21:00:13Z",
+   "split": "test",
+   "truth_m": 3.2278,
+   "pred_m": 2.8575,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-01T22:00:11Z",
+   "split": "test",
+   "truth_m": 3.2248,
+   "pred_m": 2.8575,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T12:00:11Z",
+   "split": "test",
+   "truth_m": 3.1669,
+   "pred_m": 2.8544,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T13:00:12Z",
+   "split": "test",
+   "truth_m": 3.1638,
+   "pred_m": 2.8544,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T14:00:08Z",
+   "split": "test",
+   "truth_m": 3.1577,
+   "pred_m": 2.8544,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T15:00:21Z",
+   "split": "test",
+   "truth_m": 3.1547,
+   "pred_m": 2.8533,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T16:00:03Z",
+   "split": "test",
+   "truth_m": 3.1516,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T17:00:13Z",
+   "split": "test",
+   "truth_m": 3.1516,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T18:00:13Z",
+   "split": "test",
+   "truth_m": 3.1455,
+   "pred_m": 2.8533,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T19:00:08Z",
+   "split": "test",
+   "truth_m": 3.1455,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T20:00:03Z",
+   "split": "test",
+   "truth_m": 3.1425,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T21:00:12Z",
+   "split": "test",
+   "truth_m": 3.1425,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_East_Branch_Delaware_River_at_Hancock_Staff",
+   "t": "2026-08-02T22:00:16Z",
+   "split": "test",
+   "truth_m": 3.1394,
+   "pred_m": 2.8523,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T12:00:08Z",
+   "split": "cal",
+   "truth_m": 4.4044,
+   "pred_m": 4.4533,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T13:00:04Z",
+   "split": "cal",
+   "truth_m": 4.4044,
+   "pred_m": 4.4533,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T14:00:07Z",
+   "split": "cal",
+   "truth_m": 4.4044,
+   "pred_m": 4.4715,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T15:00:31Z",
+   "split": "cal",
+   "truth_m": 4.4105,
+   "pred_m": 4.4655,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T16:00:08Z",
+   "split": "cal",
+   "truth_m": 4.4135,
+   "pred_m": 4.4594,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T17:00:07Z",
+   "split": "cal",
+   "truth_m": 4.4166,
+   "pred_m": 4.4473,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T18:00:08Z",
+   "split": "cal",
+   "truth_m": 4.4196,
+   "pred_m": 4.4594,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T19:00:04Z",
+   "split": "cal",
+   "truth_m": 4.4226,
+   "pred_m": 4.4715,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T20:00:12Z",
+   "split": "cal",
+   "truth_m": 4.4287,
+   "pred_m": 4.3987,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T21:00:27Z",
+   "split": "cal",
+   "truth_m": 4.4318,
+   "pred_m": 4.4837,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-01T22:00:09Z",
+   "split": "cal",
+   "truth_m": 4.4379,
+   "pred_m": 4.4776,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T12:00:04Z",
+   "split": "cal",
+   "truth_m": 4.4897,
+   "pred_m": 4.4715,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T13:00:08Z",
+   "split": "cal",
+   "truth_m": 4.4958,
+   "pred_m": 4.508,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T14:00:15Z",
+   "split": "cal",
+   "truth_m": 4.5019,
+   "pred_m": 4.4897,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T15:00:08Z",
+   "split": "cal",
+   "truth_m": 4.5049,
+   "pred_m": 4.4776,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T16:00:27Z",
+   "split": "cal",
+   "truth_m": 4.508,
+   "pred_m": 4.0833,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T17:00:13Z",
+   "split": "cal",
+   "truth_m": 4.5141,
+   "pred_m": 3.8285,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T18:00:08Z",
+   "split": "cal",
+   "truth_m": 4.5202,
+   "pred_m": 4.4533,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T19:00:09Z",
+   "split": "cal",
+   "truth_m": 4.5324,
+   "pred_m": 4.5019,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T20:00:08Z",
+   "split": "cal",
+   "truth_m": 4.5415,
+   "pred_m": 4.4897,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T21:00:13Z",
+   "split": "cal",
+   "truth_m": 4.5568,
+   "pred_m": 4.4958,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-02T22:00:04Z",
+   "split": "cal",
+   "truth_m": 4.5781,
+   "pred_m": 4.4958,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T12:00:21Z",
+   "split": "test",
+   "truth_m": 5.3645,
+   "pred_m": 4.4715,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T13:00:16Z",
+   "split": "test",
+   "truth_m": 5.4498,
+   "pred_m": 4.4958,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T14:00:16Z",
+   "split": "test",
+   "truth_m": 5.5352,
+   "pred_m": 4.4897,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T15:00:20Z",
+   "split": "test",
+   "truth_m": 5.6205,
+   "pred_m": 4.4897,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T16:00:22Z",
+   "split": "test",
+   "truth_m": 5.7028,
+   "pred_m": 3.8285,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T17:00:14Z",
+   "split": "test",
+   "truth_m": 5.7851,
+   "pred_m": 3.8345,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T18:00:04Z",
+   "split": "test",
+   "truth_m": 5.8674,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T19:00:21Z",
+   "split": "test",
+   "truth_m": 5.9558,
+   "pred_m": 3.8103,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T20:00:06Z",
+   "split": "test",
+   "truth_m": 6.0564,
+   "pred_m": 4.4958,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T21:00:21Z",
+   "split": "test",
+   "truth_m": 6.1539,
+   "pred_m": 4.4776,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-03T22:00:21Z",
+   "split": "test",
+   "truth_m": 6.2575,
+   "pred_m": 3.8163,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T12:00:12Z",
+   "split": "test",
+   "truth_m": 7.2603,
+   "pred_m": 3.8103,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T13:00:12Z",
+   "split": "test",
+   "truth_m": 7.3061,
+   "pred_m": 5.4301,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T14:00:04Z",
+   "split": "test",
+   "truth_m": 7.3426,
+   "pred_m": 3.8285,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T15:00:22Z",
+   "split": "test",
+   "truth_m": 7.3762,
+   "pred_m": 5.2238,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T16:00:21Z",
+   "split": "test",
+   "truth_m": 7.4005,
+   "pred_m": 3.8345,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T17:00:13Z",
+   "split": "test",
+   "truth_m": 7.4219,
+   "pred_m": 3.8467,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T18:00:22Z",
+   "split": "test",
+   "truth_m": 7.4341,
+   "pred_m": 3.8224,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T19:00:21Z",
+   "split": "test",
+   "truth_m": 7.4463,
+   "pred_m": 3.8163,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T20:00:21Z",
+   "split": "test",
+   "truth_m": 7.4554,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T21:00:21Z",
+   "split": "test",
+   "truth_m": 7.4585,
+   "pred_m": 3.8224,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-04T22:00:22Z",
+   "split": "test",
+   "truth_m": 7.4554,
+   "pred_m": 3.8163,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T12:00:40Z",
+   "split": "test",
+   "truth_m": 7.2177,
+   "pred_m": 4.969,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T13:00:04Z",
+   "split": "test",
+   "truth_m": 7.1933,
+   "pred_m": 4.7264,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T14:00:12Z",
+   "split": "test",
+   "truth_m": 7.1689,
+   "pred_m": 3.8103,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T15:00:13Z",
+   "split": "test",
+   "truth_m": 7.1445,
+   "pred_m": 5.2542,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T16:00:42Z",
+   "split": "test",
+   "truth_m": 7.1201,
+   "pred_m": 3.7981,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T17:00:21Z",
+   "split": "test",
+   "truth_m": 7.0957,
+   "pred_m": 3.8103,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T18:00:22Z",
+   "split": "test",
+   "truth_m": 7.0714,
+   "pred_m": 3.7981,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T19:00:29Z",
+   "split": "test",
+   "truth_m": 7.0439,
+   "pred_m": 3.8042,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T20:00:22Z",
+   "split": "test",
+   "truth_m": 7.0195,
+   "pred_m": 3.7799,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T21:00:20Z",
+   "split": "test",
+   "truth_m": 6.9921,
+   "pred_m": 3.786,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-05T22:00:21Z",
+   "split": "test",
+   "truth_m": 6.9647,
+   "pred_m": 3.786,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T12:00:12Z",
+   "split": "test",
+   "truth_m": 6.3246,
+   "pred_m": 5.1268,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T13:00:21Z",
+   "split": "test",
+   "truth_m": 6.2606,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T14:00:12Z",
+   "split": "test",
+   "truth_m": 6.1966,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T15:00:12Z",
+   "split": "test",
+   "truth_m": 6.1356,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T16:00:22Z",
+   "split": "test",
+   "truth_m": 6.0777,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T17:00:12Z",
+   "split": "test",
+   "truth_m": 6.0168,
+   "pred_m": 5.4483,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T18:00:21Z",
+   "split": "test",
+   "truth_m": 5.9619,
+   "pred_m": null,
+   "usable": false,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T19:00:31Z",
+   "split": "test",
+   "truth_m": 5.9101,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T20:00:42Z",
+   "split": "test",
+   "truth_m": 5.8583,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T21:00:04Z",
+   "split": "test",
+   "truth_m": 5.8125,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-06T22:00:22Z",
+   "split": "test",
+   "truth_m": 5.7638,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T12:00:21Z",
+   "split": "test",
+   "truth_m": 5.2944,
+   "pred_m": 5.1753,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T13:00:23Z",
+   "split": "test",
+   "truth_m": 5.273,
+   "pred_m": 5.4665,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T14:00:21Z",
+   "split": "test",
+   "truth_m": 5.2548,
+   "pred_m": 5.4058,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T15:00:21Z",
+   "split": "test",
+   "truth_m": 5.2334,
+   "pred_m": 5.2784,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T16:00:21Z",
+   "split": "test",
+   "truth_m": 5.2121,
+   "pred_m": null,
+   "usable": false,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T17:00:13Z",
+   "split": "test",
+   "truth_m": 5.1968,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T18:00:21Z",
+   "split": "test",
+   "truth_m": 5.1786,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T19:00:22Z",
+   "split": "test",
+   "truth_m": 5.1603,
+   "pred_m": 5.4483,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T20:00:21Z",
+   "split": "test",
+   "truth_m": 5.145,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T21:00:21Z",
+   "split": "test",
+   "truth_m": 5.1328,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-07T22:00:12Z",
+   "split": "test",
+   "truth_m": 5.1176,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T12:00:12Z",
+   "split": "test",
+   "truth_m": 4.9652,
+   "pred_m": 5.2724,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T13:00:23Z",
+   "split": "test",
+   "truth_m": 4.956,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T14:00:06Z",
+   "split": "test",
+   "truth_m": 4.9469,
+   "pred_m": 3.8831,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T15:00:21Z",
+   "split": "test",
+   "truth_m": 4.9378,
+   "pred_m": 5.2784,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T16:00:04Z",
+   "split": "test",
+   "truth_m": 4.9286,
+   "pred_m": 4.4776,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T17:00:23Z",
+   "split": "test",
+   "truth_m": 4.9225,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T18:00:13Z",
+   "split": "test",
+   "truth_m": 4.9164,
+   "pred_m": 3.7678,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T19:00:12Z",
+   "split": "test",
+   "truth_m": 4.9073,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T20:00:06Z",
+   "split": "test",
+   "truth_m": 4.9012,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T21:00:13Z",
+   "split": "test",
+   "truth_m": 4.892,
+   "pred_m": 5.4422,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Genesee_River_at_Avon_Staff_Gage",
+   "t": "2026-09-08T22:00:22Z",
+   "split": "test",
+   "truth_m": 4.8859,
+   "pred_m": 5.4362,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T12:00:12Z",
+   "split": "cal",
+   "truth_m": 1.1064,
+   "pred_m": 1.1334,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T13:00:03Z",
+   "split": "cal",
+   "truth_m": 1.1095,
+   "pred_m": 1.1334,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T14:00:04Z",
+   "split": "cal",
+   "truth_m": 1.1095,
+   "pred_m": 1.1308,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T15:00:04Z",
+   "split": "cal",
+   "truth_m": 1.1095,
+   "pred_m": 1.1325,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred",
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T16:00:08Z",
+   "split": "cal",
+   "truth_m": 1.1125,
+   "pred_m": 1.1295,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T18:00:05Z",
+   "split": "cal",
+   "truth_m": 1.1156,
+   "pred_m": 1.1304,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T19:00:07Z",
+   "split": "cal",
+   "truth_m": 1.1186,
+   "pred_m": 1.1317,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T20:00:05Z",
+   "split": "cal",
+   "truth_m": 1.1156,
+   "pred_m": 1.1287,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred",
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T21:00:12Z",
+   "split": "cal",
+   "truth_m": 1.1217,
+   "pred_m": 1.1299,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred",
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-08-31T22:00:13Z",
+   "split": "cal",
+   "truth_m": 1.1308,
+   "pred_m": 1.1308,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T12:00:06Z",
+   "split": "cal",
+   "truth_m": 1.1887,
+   "pred_m": 1.1295,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T13:00:04Z",
+   "split": "cal",
+   "truth_m": 1.1887,
+   "pred_m": 1.1317,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred",
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T14:00:07Z",
+   "split": "cal",
+   "truth_m": 1.1918,
+   "pred_m": 1.1329,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred",
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T15:00:08Z",
+   "split": "cal",
+   "truth_m": 1.1918,
+   "pred_m": 1.1342,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T16:00:12Z",
+   "split": "cal",
+   "truth_m": 1.1918,
+   "pred_m": 1.1308,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T17:00:06Z",
+   "split": "cal",
+   "truth_m": 1.1918,
+   "pred_m": 1.1522,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T18:00:08Z",
+   "split": "cal",
+   "truth_m": 1.1918,
+   "pred_m": 1.1334,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T19:00:04Z",
+   "split": "cal",
+   "truth_m": 1.1887,
+   "pred_m": 1.1347,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T20:00:12Z",
+   "split": "cal",
+   "truth_m": 1.1857,
+   "pred_m": 1.1317,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T21:00:08Z",
+   "split": "test",
+   "truth_m": 1.1887,
+   "pred_m": 1.1347,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-01T22:00:05Z",
+   "split": "test",
+   "truth_m": 1.1887,
+   "pred_m": 1.1338,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T12:00:04Z",
+   "split": "test",
+   "truth_m": 1.1582,
+   "pred_m": 1.1317,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T13:00:08Z",
+   "split": "test",
+   "truth_m": 1.1552,
+   "pred_m": 1.1291,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T14:00:12Z",
+   "split": "test",
+   "truth_m": 1.1613,
+   "pred_m": 1.1325,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T16:00:07Z",
+   "split": "test",
+   "truth_m": 1.2009,
+   "pred_m": 1.1591,
+   "usable": false,
+   "reg": "aliked_lightglue",
+   "q": [
+    "blurred"
+   ],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T17:00:07Z",
+   "split": "test",
+   "truth_m": 1.1979,
+   "pred_m": 1.1518,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "blurred"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T18:00:08Z",
+   "split": "test",
+   "truth_m": 1.1979,
+   "pred_m": 1.1334,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T19:00:08Z",
+   "split": "test",
+   "truth_m": 1.2101,
+   "pred_m": 1.1359,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T20:00:03Z",
+   "split": "test",
+   "truth_m": 1.2405,
+   "pred_m": 1.1317,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-02T21:00:15Z",
+   "split": "test",
+   "truth_m": 1.2375,
+   "pred_m": 1.1321,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T12:00:04Z",
+   "split": "test",
+   "truth_m": 2.6457,
+   "pred_m": 1.1389,
+   "usable": false,
+   "reg": "orb",
+   "q": [
+    "low_contrast_fog_or_occlusion"
+   ],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T13:00:16Z",
+   "split": "test",
+   "truth_m": 2.5847,
+   "pred_m": 1.1574,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T14:00:06Z",
+   "split": "test",
+   "truth_m": 2.4384,
+   "pred_m": 1.1137,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T15:00:04Z",
+   "split": "test",
+   "truth_m": 2.2708,
+   "pred_m": 1.1458,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T16:00:22Z",
+   "split": "test",
+   "truth_m": 2.1214,
+   "pred_m": 1.1137,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T17:00:13Z",
+   "split": "test",
+   "truth_m": 1.9964,
+   "pred_m": 1.1119,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T18:00:03Z",
+   "split": "test",
+   "truth_m": 1.905,
+   "pred_m": 1.1235,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T19:00:20Z",
+   "split": "test",
+   "truth_m": 1.8288,
+   "pred_m": 1.1274,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T20:00:06Z",
+   "split": "test",
+   "truth_m": 1.7709,
+   "pred_m": 1.1312,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T21:00:21Z",
+   "split": "test",
+   "truth_m": 1.7221,
+   "pred_m": 1.1261,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-03T22:00:21Z",
+   "split": "test",
+   "truth_m": 1.6794,
+   "pred_m": 1.1317,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T12:00:12Z",
+   "split": "test",
+   "truth_m": 1.6551,
+   "pred_m": 1.1257,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T13:00:04Z",
+   "split": "test",
+   "truth_m": 1.6368,
+   "pred_m": 1.1531,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T14:00:04Z",
+   "split": "test",
+   "truth_m": 1.6185,
+   "pred_m": 1.1535,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T18:00:03Z",
+   "split": "test",
+   "truth_m": 1.5545,
+   "pred_m": 1.1548,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T20:00:15Z",
+   "split": "test",
+   "truth_m": 1.521,
+   "pred_m": 1.1604,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T21:00:21Z",
+   "split": "test",
+   "truth_m": 1.5057,
+   "pred_m": 1.1034,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-04T22:00:21Z",
+   "split": "test",
+   "truth_m": 1.4905,
+   "pred_m": 1.1634,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T12:00:21Z",
+   "split": "test",
+   "truth_m": 1.3655,
+   "pred_m": 1.1329,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T13:00:04Z",
+   "split": "test",
+   "truth_m": 1.3655,
+   "pred_m": 1.1437,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T14:00:12Z",
+   "split": "test",
+   "truth_m": 1.3625,
+   "pred_m": 1.1419,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T15:00:04Z",
+   "split": "test",
+   "truth_m": 1.3594,
+   "pred_m": 1.1681,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T16:00:21Z",
+   "split": "test",
+   "truth_m": 1.3503,
+   "pred_m": 1.1445,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T17:00:21Z",
+   "split": "test",
+   "truth_m": 1.3503,
+   "pred_m": 1.1677,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T18:00:04Z",
+   "split": "test",
+   "truth_m": 1.3472,
+   "pred_m": 1.1681,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T19:00:25Z",
+   "split": "test",
+   "truth_m": 1.3411,
+   "pred_m": 1.1672,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T20:00:21Z",
+   "split": "test",
+   "truth_m": 1.3381,
+   "pred_m": 1.1685,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T21:00:13Z",
+   "split": "test",
+   "truth_m": 1.335,
+   "pred_m": 1.1454,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-05T22:00:21Z",
+   "split": "test",
+   "truth_m": 1.3289,
+   "pred_m": 1.1677,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T14:00:03Z",
+   "split": "test",
+   "truth_m": 1.2924,
+   "pred_m": 1.1458,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T15:00:04Z",
+   "split": "test",
+   "truth_m": 1.2893,
+   "pred_m": 1.1454,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T17:00:12Z",
+   "split": "test",
+   "truth_m": 1.2863,
+   "pred_m": 1.1445,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T18:00:21Z",
+   "split": "test",
+   "truth_m": 1.2832,
+   "pred_m": 1.1437,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T19:00:21Z",
+   "split": "test",
+   "truth_m": 1.2832,
+   "pred_m": null,
+   "usable": false,
+   "reg": "orb",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T20:00:04Z",
+   "split": "test",
+   "truth_m": 1.2802,
+   "pred_m": 1.1047,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-06T21:00:03Z",
+   "split": "test",
+   "truth_m": 1.2771,
+   "pred_m": 1.1034,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T12:00:21Z",
+   "split": "test",
+   "truth_m": 1.2466,
+   "pred_m": 1.1479,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T13:00:22Z",
+   "split": "test",
+   "truth_m": 1.2466,
+   "pred_m": 1.1462,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T15:00:04Z",
+   "split": "test",
+   "truth_m": 1.2466,
+   "pred_m": 1.1471,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T16:00:21Z",
+   "split": "test",
+   "truth_m": 1.2436,
+   "pred_m": 1.1475,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T17:00:04Z",
+   "split": "test",
+   "truth_m": 1.2436,
+   "pred_m": 1.1471,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T18:00:04Z",
+   "split": "test",
+   "truth_m": 1.2436,
+   "pred_m": 1.1544,
+   "usable": true,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T19:00:22Z",
+   "split": "test",
+   "truth_m": 1.2436,
+   "pred_m": null,
+   "usable": false,
+   "reg": "aliked_lightglue",
+   "q": [],
+   "agree": false
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T20:00:04Z",
+   "split": "test",
+   "truth_m": 1.2405,
+   "pred_m": 1.1055,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  },
+  {
+   "site": "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff",
+   "t": "2026-09-07T21:00:22Z",
+   "split": "test",
+   "truth_m": 1.2405,
+   "pred_m": 1.1064,
+   "usable": true,
+   "reg": "orb",
+   "q": [],
+   "agree": true
+  }
+ ]
+}

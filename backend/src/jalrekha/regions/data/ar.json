@@ -1,0 +1,132 @@
+{
+  "id": "ar",
+  "name": "Argentina (Litoral)",
+  "country_code": "AR",
+  "bounds": {
+    "min_lon": -73.6,
+    "max_lon": -53.6,
+    "min_lat": -55.2,
+    "max_lat": -21.7
+  },
+  "timezone": "America/Argentina/Buenos_Aires",
+  "languages": [
+    {
+      "code": "es",
+      "name": "Spanish",
+      "native_name": "Español",
+      "script": "Latn",
+      "cap_language": "es-AR",
+      "tts": {
+        "provider": "polly",
+        "voice": "Mia",
+        "engine": "neural",
+        "language_code": "es-MX"
+      },
+      "asr": {
+        "provider": "whisper",
+        "code": "es"
+      }
+    },
+    {
+      "code": "en",
+      "name": "English",
+      "native_name": "English",
+      "script": "Latn",
+      "cap_language": "en-US",
+      "tts": null,
+      "asr": {
+        "provider": "whisper",
+        "code": "en"
+      }
+    }
+  ],
+  "public_languages": [
+    "es"
+  ],
+  "channels": [
+    "sms",
+    "voice",
+    "cap",
+    "siren",
+    "telegram"
+  ],
+  "authority_roles": [
+    {
+      "id": "civil_defense",
+      "name": "Municipal Civil Defense",
+      "level": "municipality",
+      "approves": [
+        "send_sms",
+        "voice_call",
+        "publish_cap",
+        "all_clear",
+        "publish_route_status",
+        "dispatch_relief"
+      ]
+    }
+  ],
+  "levels": [
+    {
+      "id": "normal",
+      "legacy": "green",
+      "color": "green",
+      "label": {
+        "en": "Normal",
+        "hi": "सामान्य",
+        "ne": "सामान्य"
+      }
+    },
+    {
+      "id": "watch",
+      "legacy": "yellow",
+      "color": "yellow",
+      "label": {
+        "en": "Watch",
+        "hi": "सतर्क",
+        "ne": "सतर्क"
+      }
+    },
+    {
+      "id": "warning",
+      "legacy": "orange",
+      "color": "orange",
+      "label": {
+        "en": "Warning level",
+        "hi": "चेतावनी स्तर",
+        "ne": "चेतावनी तह"
+      }
+    },
+    {
+      "id": "danger",
+      "legacy": "red",
+      "color": "red",
+      "label": {
+        "en": "Danger level",
+        "hi": "खतरे का स्तर",
+        "ne": "खतराको तह"
+      }
+    }
+  ],
+  "level_basis": "Site-relative calibration lines (original deployment profile).",
+  "alert_format": {
+    "cap_sender": "jalrekha@demo.local",
+    "cap_web": "https://www.argentina.gob.ar/sinagir",
+    "sms_max_segments": 2,
+    "sender_name": "JalRekha"
+  },
+  "agencies": [
+    {
+      "id": "sinagir",
+      "name": "SINAGIR",
+      "role": "National risk management system",
+      "url": "https://www.argentina.gob.ar/sinagir"
+    }
+  ],
+  "admin_units": [
+    {
+      "id": "ar-santa-fe",
+      "name": "Santa Fe",
+      "type": "province"
+    }
+  ]
+}

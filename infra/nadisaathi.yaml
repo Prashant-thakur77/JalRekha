@@ -1,0 +1,844 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >-
+  NadiSaathi flood early-warning: FastAPI backend + PWA on one Graviton (arm64) EC2
+  instance behind CloudFront HTTPS, with S3, SNS, CloudWatch observability, a cost
+  budget and a keep-warm health probe. Deploy with `make deploy`.
+
+Metadata:
+  AWS::CloudFormation::Interface:
+    ParameterGroups:
+      - Label: { default: Compute }
+        Parameters: [InstanceType, ImageId, UseCoolAmi, CoolAmiId, RootDeviceName, SubnetId]
+      - Label: { default: Public HTTPS endpoint }
+        Parameters: [EnableCloudFront, EnableApiGateway, VpcLinkSubnetIds]
+      - Label: { default: Notifications and cost }
+        Parameters: [AlertEmail, BudgetLimitUsd, BudgetEmail]
+
+Parameters:
+  InstanceType:
+    Type: String
+    Default: c8g.xlarge
+    Description: Graviton (arm64) instance type. c8g.xlarge = 4 vCPU / 8 GiB.
+  ImageId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/canonical/ubuntu/server/24.04/stable/current/arm64/hvm/ebs-gp3/ami-id
+    Description: SSM public parameter (or any SSM path) that resolves to an arm64 Ubuntu AMI.
+  UseCoolAmi:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: Set to true to boot CoolAmiId instead of ImageId (needs an accepted Marketplace subscription).
+  CoolAmiId:
+    Type: String
+    Default: ami-01db31139bc5615d8
+    Description: COOL Graviton4 v2 Marketplace AMI (us-east-1).
+  RootDeviceName:
+    Type: String
+    Default: /dev/sda1
+    Description: Root device name of the chosen AMI (both Ubuntu and COOL use /dev/sda1).
+  SubnetId:
+    Type: String
+    Default: ""
+    Description: Optional default-VPC subnet. Empty lets EC2 choose. deploy.sh picks one in an AZ that offers InstanceType.
+  EnableCloudFront:
+    Type: String
+    Default: "true"
+    AllowedValues: ["true", "false"]
+    Description: Front the instance with CloudFront (needs a CloudFront-verified account).
+  EnableApiGateway:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: >-
+      Also/instead expose an API Gateway HTTP API (HTTPS, private VPC-link integration).
+      Use while CloudFront is unavailable to the account; can run alongside CloudFront.
+  VpcLinkSubnetIds:
+    Type: CommaDelimitedList
+    Default: ""
+    Description: Default-VPC subnets for the API Gateway VPC link (required when EnableApiGateway=true).
+  AlertEmail:
+    Type: String
+    Default: ""
+    Description: Optional e-mail subscribed to the operator/alarm SNS topic (must confirm the subscription mail).
+  BudgetLimitUsd:
+    Type: Number
+    Default: 60
+    MinValue: 1
+    Description: Monthly cost budget in USD.
+  BudgetEmail:
+    Type: String
+    Default: ""
+    Description: Optional e-mail for the 80% budget notification. Empty keeps the budget without a notification.
+
+Rules:
+  AtLeastOnePublicEndpoint:
+    Assertions:
+      - Assert: !Or [!Equals [!Ref EnableCloudFront, "true"], !Equals [!Ref EnableApiGateway, "true"]]
+        AssertDescription: Enable CloudFront, API Gateway, or both.
+
+Conditions:
+  UseCool: !Equals [!Ref UseCoolAmi, "true"]
+  HasSubnet: !Not [!Equals [!Ref SubnetId, ""]]
+  HasAlertEmail: !Not [!Equals [!Ref AlertEmail, ""]]
+  HasBudgetEmail: !Not [!Equals [!Ref BudgetEmail, ""]]
+  CloudFrontOn: !Equals [!Ref EnableCloudFront, "true"]
+  ApiGwOn: !Equals [!Ref EnableApiGateway, "true"]
+
+Mappings:
+  # Managed CloudFront policy IDs (global, fixed by AWS).
+  CloudFront:
+    Policies:
+      CachingDisabled: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
+      AllViewerExceptHostHeader: b689b0a8-53d0-40ab-baf2-68738e2966ac
+  # com.amazonaws.global.cloudfront.origin-facing (aws ec2 describe-managed-prefix-lists)
+  PrefixLists:
+    us-east-1:
+      CloudFrontOriginFacing: pl-3b927c52
+
+Resources:
+  # ---------------------------------------------------------------- storage
+  Bucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Delete
+    UpdateReplacePolicy: Retain
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-${AWS::AccountId}-${AWS::Region}"
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault: { SSEAlgorithm: AES256 }
+            BucketKeyEnabled: true
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      OwnershipControls:
+        Rules: [{ ObjectOwnership: BucketOwnerEnforced }]
+      LifecycleConfiguration:
+        Rules:
+          - Id: expire-frames
+            Status: Enabled
+            Prefix: frames/
+            ExpirationInDays: 30
+          - Id: expire-traces
+            Status: Enabled
+            Prefix: traces/
+            ExpirationInDays: 30
+          - Id: abort-multipart
+            Status: Enabled
+            AbortIncompleteMultipartUpload: { DaysAfterInitiation: 3 }
+      Tags: [{ Key: app, Value: nadisaathi }]
+
+  BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref Bucket
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Sid: DenyInsecureTransport
+            Effect: Deny
+            Principal: "*"
+            Action: s3:*
+            Resource: [!GetAtt Bucket.Arn, !Sub "${Bucket.Arn}/*"]
+            Condition: { Bool: { aws:SecureTransport: "false" } }
+
+  # ----------------------------------------------------------- notifications
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "${AWS::StackName}-alerts"
+      DisplayName: NadiSaathi
+      Tags: [{ Key: app, Value: nadisaathi }]
+
+  TopicEmail:
+    Type: AWS::SNS::Subscription
+    Condition: HasAlertEmail
+    Properties:
+      TopicArn: !Ref Topic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  # ------------------------------------------------------------------ logs
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/${AWS::StackName}/app"
+      RetentionInDays: 14
+
+  # ------------------------------------------------------------------- IAM
+  InstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Description: NadiSaathi EC2 instance role (least privilege).
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: ec2.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: nadisaathi-app
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Sid: BucketList
+                Effect: Allow
+                Action: [s3:ListBucket, s3:GetBucketLocation]
+                Resource: !GetAtt Bucket.Arn
+              - Sid: BucketObjects
+                Effect: Allow
+                Action: [s3:GetObject, s3:PutObject, s3:DeleteObject, s3:AbortMultipartUpload]
+                Resource: !Sub "${Bucket.Arn}/*"
+              # Converse/ConverseStream are authorised by InvokeModel/InvokeModelWithResponseStream.
+              # Cross-region inference profiles (us.*) route to us-east-1/us-east-2/us-west-2,
+              # hence the region wildcard on foundation-model ARNs.
+              - Sid: BedrockNovaAnthropic
+                Effect: Allow
+                Action: [bedrock:InvokeModel, bedrock:InvokeModelWithResponseStream]
+                Resource:
+                  - arn:aws:bedrock:*::foundation-model/amazon.nova-*
+                  - arn:aws:bedrock:*::foundation-model/anthropic.*
+                  - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.amazon.nova-*"
+                  - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/us.anthropic.*"
+                  - !Sub "arn:aws:bedrock:*:${AWS::AccountId}:inference-profile/global.anthropic.*"
+              - Sid: Polly
+                Effect: Allow
+                Action: polly:SynthesizeSpeech
+                Resource: "*"
+              - Sid: PublishStackTopic
+                Effect: Allow
+                Action: sns:Publish
+                Resource: !Ref Topic
+              # Direct SMS publishes (PhoneNumber=...) have no resource ARN, so IAM evaluates
+              # them against "*". NotResource excludes every topic ARN, so this statement
+              # allows SMS only and grants nothing on other topics.
+              - Sid: PublishSmsOnly
+                Effect: Allow
+                Action: sns:Publish
+                NotResource: arn:aws:sns:*:*:*
+              # Fixed-name ARN (not !Ref) so the role does not depend on the state machine.
+              - Sid: StartApprovalEscalation
+                Effect: Allow
+                Action: states:StartExecution
+                Resource: !Sub "arn:aws:states:${AWS::Region}:${AWS::AccountId}:stateMachine:${AWS::StackName}-approval-escalation"
+              - Sid: ReadOwnParameters
+                Effect: Allow
+                Action: [ssm:GetParameter, ssm:GetParameters, ssm:GetParametersByPath]
+                Resource: !Sub "arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter/nadisaathi/*"
+              # App metrics (NadiSaathi) and CloudWatch agent host metrics (CWAgent) only.
+              - Sid: PutMetricsScoped
+                Effect: Allow
+                Action: cloudwatch:PutMetricData
+                Resource: "*"
+                Condition:
+                  StringEquals: { cloudwatch:namespace: [NadiSaathi, CWAgent] }
+              # Covers the CloudWatch agent log shipping and SSM Run Command output.
+              - Sid: StackLogGroup
+                Effect: Allow
+                Action: logs:*
+                Resource:
+                  - !GetAtt LogGroup.Arn
+                  - !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:${LogGroup}:log-stream:*"
+      Tags: [{ Key: app, Value: nadisaathi }]
+
+  InstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles: [!Ref InstanceRole]
+
+  # --------------------------------------------------------------- network
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: NadiSaathi API - port 8000 from CloudFront / API Gateway VPC link only, no SSH
+      Tags: [{ Key: Name, Value: !Sub "${AWS::StackName}-sg" }]
+
+  IngressFromCloudFront:
+    Type: AWS::EC2::SecurityGroupIngress
+    Condition: CloudFrontOn
+    Properties:
+      GroupId: !GetAtt SecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 8000
+      ToPort: 8000
+      SourcePrefixListId: !FindInMap [PrefixLists, !Ref "AWS::Region", CloudFrontOriginFacing]
+      Description: CloudFront origin-facing
+
+  VpcLinkSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Condition: ApiGwOn
+    Properties:
+      GroupDescription: NadiSaathi API Gateway VPC link ENIs (no ingress)
+      Tags: [{ Key: Name, Value: !Sub "${AWS::StackName}-vpclink-sg" }]
+
+  IngressFromVpcLink:
+    Type: AWS::EC2::SecurityGroupIngress
+    Condition: ApiGwOn
+    Properties:
+      GroupId: !GetAtt SecurityGroup.GroupId
+      IpProtocol: tcp
+      FromPort: 8000
+      ToPort: 8000
+      SourceSecurityGroupId: !GetAtt VpcLinkSecurityGroup.GroupId
+      Description: API Gateway VPC link
+
+  # --------------------------------------------------------------- compute
+  LaunchTemplate:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        MetadataOptions:
+          HttpEndpoint: enabled
+          HttpTokens: required
+          HttpPutResponseHopLimit: 2
+        BlockDeviceMappings:
+          - DeviceName: !Ref RootDeviceName
+            Ebs:
+              VolumeSize: 30
+              VolumeType: gp3
+              Encrypted: true
+              DeleteOnTermination: true
+        TagSpecifications:
+          - ResourceType: volume
+            Tags: [{ Key: Name, Value: !Sub "${AWS::StackName}-root" }, { Key: app, Value: nadisaathi }]
+
+  Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      LaunchTemplate:
+        LaunchTemplateId: !Ref LaunchTemplate
+        Version: !GetAtt LaunchTemplate.LatestVersionNumber
+      ImageId: !If [UseCool, !Ref CoolAmiId, !Ref ImageId]
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref InstanceProfile
+      SubnetId: !If [HasSubnet, !Ref SubnetId, !Ref "AWS::NoValue"]
+      SecurityGroupIds: [!GetAtt SecurityGroup.GroupId]
+      Tags:
+        - { Key: Name, Value: !Ref "AWS::StackName" }
+        - { Key: app, Value: nadisaathi }
+      # Minimal bootstrap: record stack wiring, install the AWS CLI, then hand over to
+      # infra/userdata.sh shipped in the code bundle (the same script runs on every update).
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euxo pipefail
+          exec >>/var/log/nadisaathi-bootstrap.log 2>&1
+          mkdir -p /etc/nadisaathi
+          cat >/etc/nadisaathi/stack.env <<EOF
+          NADISAATHI_STACK=${AWS::StackName}
+          NADISAATHI_S3_BUCKET=${Bucket}
+          NADISAATHI_SNS_TOPIC_ARN=${Topic}
+          NADISAATHI_LOG_GROUP=${LogGroup}
+          AWS_REGION=${AWS::Region}
+          AWS_DEFAULT_REGION=${AWS::Region}
+          EOF
+          export DEBIAN_FRONTEND=noninteractive
+          apt-get update -y
+          apt-get install -y --no-install-recommends curl unzip ca-certificates
+          if ! command -v aws >/dev/null; then
+            curl -fsSL https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip -o /tmp/awscli.zip
+            unzip -q -o /tmp/awscli.zip -d /tmp && /tmp/aws/install --update
+          fi
+          cat >/usr/local/bin/nadisaathi-deploy <<'EOS'
+          #!/bin/bash
+          # Pull s3://<bucket>/deploy/bundle.tar.gz and run the provisioner inside it.
+          set -euo pipefail
+          exec 9>/var/lock/nadisaathi-deploy
+          flock 9
+          set -a; . /etc/nadisaathi/stack.env; set +a
+          work=$(mktemp -d)
+          trap 'rm -rf "$work"' EXIT
+          for i in $(seq 1 240); do
+            if aws s3 cp --only-show-errors "s3://$NADISAATHI_S3_BUCKET/deploy/bundle.tar.gz" "$work/bundle.tar.gz"; then break; fi
+            echo "waiting for bundle ($i)"; sleep 10
+          done
+          test -s "$work/bundle.tar.gz"
+          mkdir -p "$work/src"
+          tar -xzf "$work/bundle.tar.gz" -C "$work/src"
+          bash "$work/src/infra/userdata.sh" "$work/src"
+          EOS
+          chmod 0755 /usr/local/bin/nadisaathi-deploy
+          /usr/local/bin/nadisaathi-deploy
+
+  ElasticIp:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      InstanceId: !Ref Instance
+      Tags: [{ Key: Name, Value: !Sub "${AWS::StackName}-eip" }]
+
+  # --------------------------------------------------------------- CloudFront
+  Distribution:
+    Type: AWS::CloudFront::Distribution
+    Condition: CloudFrontOn
+    Properties:
+      DistributionConfig:
+        Enabled: true
+        Comment: !Sub "${AWS::StackName} API + PWA"
+        HttpVersion: http2and3
+        IPV6Enabled: true
+        PriceClass: PriceClass_All
+        Origins:
+          - Id: ec2-origin
+            # Stable public DNS name of the Elastic IP (ec2-a-b-c-d.compute-1.amazonaws.com),
+            # so stop/start or instance replacement never changes the origin.
+            DomainName: !Join
+              - ""
+              - - "ec2-"
+                - !Join ["-", !Split [".", !GetAtt ElasticIp.PublicIp]]
+                - ".compute-1.amazonaws.com"
+            CustomOriginConfig:
+              HTTPPort: 8000
+              OriginProtocolPolicy: http-only
+              OriginReadTimeout: 60
+              OriginKeepaliveTimeout: 60
+        DefaultCacheBehavior:
+          TargetOriginId: ec2-origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+          CachedMethods: [GET, HEAD]
+          Compress: true
+          CachePolicyId: !FindInMap [CloudFront, Policies, CachingDisabled]
+          OriginRequestPolicyId: !FindInMap [CloudFront, Policies, AllViewerExceptHostHeader]
+        CacheBehaviors:
+          - PathPattern: /api/*
+            TargetOriginId: ec2-origin
+            ViewerProtocolPolicy: redirect-to-https
+            AllowedMethods: [GET, HEAD, OPTIONS, PUT, PATCH, POST, DELETE]
+            CachedMethods: [GET, HEAD]
+            Compress: true
+            CachePolicyId: !FindInMap [CloudFront, Policies, CachingDisabled]
+            OriginRequestPolicyId: !FindInMap [CloudFront, Policies, AllViewerExceptHostHeader]
+      Tags: [{ Key: app, Value: nadisaathi }]
+
+  # ------------------------------------------- API Gateway (HTTPS alternative)
+  # HTTP API -> VPC link -> Cloud Map -> instance private IP:8000. No public port needed.
+  DiscoveryNamespace:
+    Type: AWS::ServiceDiscovery::HttpNamespace
+    Condition: ApiGwOn
+    Properties:
+      Name: !Sub "${AWS::StackName}.internal"
+      Description: NadiSaathi API Gateway private integration
+
+  DiscoveryService:
+    Type: AWS::ServiceDiscovery::Service
+    Condition: ApiGwOn
+    Properties:
+      Name: api
+      NamespaceId: !Ref DiscoveryNamespace
+
+  DiscoveryInstance:
+    Type: AWS::ServiceDiscovery::Instance
+    Condition: ApiGwOn
+    Properties:
+      ServiceId: !Ref DiscoveryService
+      InstanceId: ec2
+      InstanceAttributes:
+        AWS_INSTANCE_IPV4: !GetAtt Instance.PrivateIp
+        AWS_INSTANCE_PORT: "8000"
+
+  VpcLink:
+    Type: AWS::ApiGatewayV2::VpcLink
+    Condition: ApiGwOn
+    Properties:
+      Name: !Sub "${AWS::StackName}-vpclink"
+      SubnetIds: !Ref VpcLinkSubnetIds
+      SecurityGroupIds: [!GetAtt VpcLinkSecurityGroup.GroupId]
+
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Condition: ApiGwOn
+    Properties:
+      Name: !Sub "${AWS::StackName}-http"
+      ProtocolType: HTTP
+      Description: NadiSaathi API + PWA (HTTPS)
+
+  HttpApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Condition: ApiGwOn
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: HTTP_PROXY
+      IntegrationMethod: ANY
+      ConnectionType: VPC_LINK
+      ConnectionId: !Ref VpcLink
+      IntegrationUri: !GetAtt DiscoveryService.Arn
+      PayloadFormatVersion: "1.0"
+      TimeoutInMillis: 30000
+
+  HttpApiRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Condition: ApiGwOn
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: $default
+      Target: !Sub "integrations/${HttpApiIntegration}"
+
+  HttpApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Condition: ApiGwOn
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: $default
+      AutoDeploy: true
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 200
+        ThrottlingRateLimit: 100
+
+  # ---------------------------------------------------------- observability
+  StatusCheckRecoverAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-system-status-recover"
+      AlarmDescription: EC2 system status check failed - auto-recover the instance.
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed_System
+      Dimensions: [{ Name: InstanceId, Value: !Ref Instance }]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Sub "arn:aws:automate:${AWS::Region}:ec2:recover"
+        - !Ref Topic
+
+  InstanceStatusAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-instance-status-reboot"
+      AlarmDescription: EC2 instance status check failed - reboot the instance.
+      Namespace: AWS/EC2
+      MetricName: StatusCheckFailed_Instance
+      Dimensions: [{ Name: InstanceId, Value: !Ref Instance }]
+      Statistic: Maximum
+      Period: 60
+      EvaluationPeriods: 3
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Sub "arn:aws:automate:${AWS::Region}:ec2:reboot"
+        - !Ref Topic
+
+  Dashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Ref "AWS::StackName"
+      DashboardBody: !Sub |
+        {
+          "widgets": [
+            {"type": "metric", "x": 0, "y": 0, "width": 8, "height": 6,
+             "properties": {"title": "Health probe (keep-warm)", "region": "${AWS::Region}", "view": "timeSeries", "stat": "Minimum", "period": 300,
+               "metrics": [["NadiSaathi", "HealthOk"], [".", "HealthLatencyMs", {"yAxis": "right", "stat": "Average"}]]}},
+            {"type": "metric", "x": 8, "y": 0, "width": 8, "height": 6,
+             "properties": {"title": "CPU %", "region": "${AWS::Region}", "view": "timeSeries", "stat": "Average", "period": 60,
+               "metrics": [["AWS/EC2", "CPUUtilization", "InstanceId", "${Instance}"], ["CWAgent", "mem_used_percent", "InstanceId", "${Instance}"]]}},
+            {"type": "metric", "x": 16, "y": 0, "width": 8, "height": 6,
+             "properties": {"title": "Network bytes", "region": "${AWS::Region}", "view": "timeSeries", "stat": "Sum", "period": 300,
+               "metrics": [["AWS/EC2", "NetworkIn", "InstanceId", "${Instance}"], [".", "NetworkOut", ".", "."]]}},
+            {"type": "metric", "x": 0, "y": 6, "width": 8, "height": 6,
+             "properties": {"title": "FramesMeasured", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
+               "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"FramesMeasured\"', 'Sum', 300)", "id": "frames"}]]}},
+            {"type": "metric", "x": 8, "y": 6, "width": 8, "height": 6,
+             "properties": {"title": "StageMs (avg)", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
+               "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"StageMs\"', 'Average', 300)", "id": "stage"}]]}},
+            {"type": "metric", "x": 16, "y": 6, "width": 8, "height": 6,
+             "properties": {"title": "AgentCycles", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
+               "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"AgentCycles\"', 'Sum', 300)", "id": "cycles"}]]}},
+            {"type": "metric", "x": 0, "y": 12, "width": 12, "height": 6,
+             "properties": {"title": "ApprovalsPending", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
+               "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"ApprovalsPending\"', 'Maximum', 300)", "id": "pending"}]]}},
+            {"type": "metric", "x": 12, "y": 12, "width": 12, "height": 6,
+             "properties": {"title": "Escalations", "region": "${AWS::Region}", "view": "timeSeries", "period": 300,
+               "metrics": [[{"expression": "SEARCH('Namespace=\"NadiSaathi\" MetricName=\"Escalations\"', 'Sum', 300)", "id": "esc"}]]}},
+            {"type": "log", "x": 0, "y": 18, "width": 24, "height": 6,
+             "properties": {"title": "App log (latest)", "region": "${AWS::Region}", "view": "table",
+               "query": "SOURCE '${LogGroup}' | fields @timestamp, @logStream, @message | sort @timestamp desc | limit 50"}}
+          ]
+        }
+
+  # ------------------------------------------------------------------ budget
+  Budget:
+    Type: AWS::Budgets::Budget
+    Properties:
+      Budget:
+        BudgetName: !Sub "${AWS::StackName}-monthly"
+        BudgetType: COST
+        TimeUnit: MONTHLY
+        BudgetLimit: { Amount: !Ref BudgetLimitUsd, Unit: USD }
+      NotificationsWithSubscribers: !If
+        - HasBudgetEmail
+        - - Notification:
+              NotificationType: ACTUAL
+              ComparisonOperator: GREATER_THAN
+              Threshold: 80
+              ThresholdType: PERCENTAGE
+            Subscribers: [{ SubscriptionType: EMAIL, Address: !Ref BudgetEmail }]
+        - !Ref "AWS::NoValue"
+
+  # --------------------------------------------------------------- keep-warm
+  KeepWarmLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}-keepwarm"
+      RetentionInDays: 14
+
+  KeepWarmRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: keepwarm
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !Sub "${KeepWarmLogGroup.Arn}"
+              - Effect: Allow
+                Action: cloudwatch:PutMetricData
+                Resource: "*"
+                Condition: { StringEquals: { cloudwatch:namespace: NadiSaathi } }
+
+  KeepWarmFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: KeepWarmLogGroup
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-keepwarm"
+      Description: GET /api/health on the public URL every 5 minutes; emits NadiSaathi/HealthOk.
+      Runtime: python3.12
+      Architectures: [arm64]
+      Handler: index.handler
+      MemorySize: 128
+      Timeout: 20
+      Role: !GetAtt KeepWarmRole.Arn
+      Environment:
+        Variables:
+          HEALTH_URL: !If
+            - CloudFrontOn
+            - !Sub "https://${Distribution.DomainName}/api/health"
+            - !Sub "${HttpApi.ApiEndpoint}/api/health"
+      Code:
+        ZipFile: |
+          import json, os, time, urllib.request
+          import boto3
+
+          cw = boto3.client("cloudwatch")
+
+          def handler(event, context):
+              url = os.environ["HEALTH_URL"]
+              ok, started = 0, time.time()
+              try:
+                  req = urllib.request.Request(url, headers={"User-Agent": "nadisaathi-keepwarm"})
+                  with urllib.request.urlopen(req, timeout=10) as resp:
+                      body = json.loads(resp.read(65536) or b"{}")
+                      ok = int(resp.status == 200 and body.get("status") == "ok")
+              except Exception as exc:  # any failure counts as unhealthy
+                  print(f"health check failed: {exc!r}")
+              ms = (time.time() - started) * 1000.0
+              cw.put_metric_data(Namespace="NadiSaathi", MetricData=[
+                  {"MetricName": "HealthOk", "Value": ok, "Unit": "Count"},
+                  {"MetricName": "HealthLatencyMs", "Value": ms, "Unit": "Milliseconds"},
+              ])
+              print(json.dumps({"ok": ok, "ms": round(ms, 1)}))
+              return {"ok": ok, "ms": round(ms, 1)}
+
+  KeepWarmSchedule:
+    Type: AWS::Events::Rule
+    Properties:
+      Description: NadiSaathi keep-warm health probe
+      ScheduleExpression: rate(5 minutes)
+      State: ENABLED
+      Targets:
+        - Id: keepwarm
+          Arn: !GetAtt KeepWarmFunction.Arn
+
+  KeepWarmPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref KeepWarmFunction
+      Action: lambda:InvokeFunction
+      Principal: events.amazonaws.com
+      SourceArn: !GetAtt KeepWarmSchedule.Arn
+
+  # ------------------------------------------------- approval escalation (Step Functions)
+  # When the agent drafts a public alert, the backend starts this state machine:
+  # wait 15 min -> check the approval through the API -> if still pending, re-notify
+  # the operator topic -> repeat up to 3 times. A drafted cross-border alert cannot
+  # sit unseen in an inbox.
+  EscalationLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Delete
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}-escalation"
+      RetentionInDays: 14
+
+  EscalationRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: lambda.amazonaws.com }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: escalation
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: [logs:CreateLogStream, logs:PutLogEvents]
+                Resource: !Sub "${EscalationLogGroup.Arn}"
+              - Effect: Allow
+                Action: sns:Publish
+                Resource: !Ref Topic
+
+  EscalationFunction:
+    Type: AWS::Lambda::Function
+    DependsOn: EscalationLogGroup
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-escalation"
+      Description: Checks whether an approval is still pending; if so, re-notifies operators.
+      Runtime: python3.12
+      Architectures: [arm64]
+      Handler: index.handler
+      MemorySize: 128
+      Timeout: 20
+      Role: !GetAtt EscalationRole.Arn
+      Environment:
+        Variables:
+          TOPIC_ARN: !Ref Topic
+          API_BASE: !If
+            - CloudFrontOn
+            - !Sub "https://${Distribution.DomainName}/api"
+            - !Sub "${HttpApi.ApiEndpoint}/api"
+      Code:
+        ZipFile: |
+          import json, os, urllib.request
+          import boto3
+
+          sns = boto3.client("sns")
+
+          def handler(event, context):
+              aid = int(event["approval_id"])
+              attempt = int(event.get("attempt", 0)) + 1
+              status = "unknown"
+              try:
+                  with urllib.request.urlopen(f"{os.environ['API_BASE']}/approvals/{aid}", timeout=10) as r:
+                      status = json.loads(r.read()).get("status", "unknown")
+              except Exception as exc:
+                  print(f"approval lookup failed: {exc!r}")
+              if status == "pending":
+                  sns.publish(TopicArn=os.environ["TOPIC_ARN"], Subject=f"NadiSaathi escalation {attempt}: approval #{aid} still pending"[:99],
+                              Message=f"{event.get('title', '')}\nStill waiting for a decision after {attempt * int(event.get('wait_s', 900)) // 60} min.")
+              out = {**event, "attempt": attempt, "status": status}
+              print(json.dumps(out))
+              return out
+
+  EscalationStateRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: states.amazonaws.com }
+            Action: sts:AssumeRole
+      Policies:
+        - PolicyName: invoke
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: lambda:InvokeFunction
+                Resource: !GetAtt EscalationFunction.Arn
+
+  ApprovalEscalation:
+    Type: AWS::StepFunctions::StateMachine
+    Properties:
+      StateMachineName: !Sub "${AWS::StackName}-approval-escalation"
+      StateMachineType: STANDARD
+      RoleArn: !GetAtt EscalationStateRole.Arn
+      DefinitionString: !Sub |
+        {
+          "Comment": "Re-notify operators while a drafted public alert waits for a human decision",
+          "StartAt": "Wait",
+          "States": {
+            "Wait": {"Type": "Wait", "SecondsPath": "$.wait_s", "Next": "Check"},
+            "Check": {
+              "Type": "Task", "Resource": "arn:aws:states:::lambda:invoke",
+              "Parameters": {"FunctionName": "${EscalationFunction.Arn}", "Payload.$": "$"},
+              "OutputPath": "$.Payload",
+              "Retry": [{"ErrorEquals": ["States.ALL"], "IntervalSeconds": 10, "MaxAttempts": 2}],
+              "Next": "Decide"
+            },
+            "Decide": {
+              "Type": "Choice",
+              "Choices": [{"And": [{"Variable": "$.status", "StringEquals": "pending"},
+                                   {"Variable": "$.attempt", "NumericLessThan": 3}], "Next": "Wait"}],
+              "Default": "Done"
+            },
+            "Done": {"Type": "Succeed"}
+          }
+        }
+
+  HealthAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${AWS::StackName}-health"
+      AlarmDescription: Public /api/health failed 3 probes in a row.
+      Namespace: NadiSaathi
+      MetricName: HealthOk
+      Statistic: Minimum
+      Period: 300
+      EvaluationPeriods: 3
+      Threshold: 1
+      ComparisonOperator: LessThanThreshold
+      TreatMissingData: breaching
+      AlarmActions: [!Ref Topic]
+      OKActions: [!Ref Topic]
+
+Outputs:
+  PublicUrl:
+    Description: Public HTTPS URL (PWA at /, API at /api) - CloudFront when enabled, else API Gateway
+    Value: !If [CloudFrontOn, !Sub "https://${Distribution.DomainName}", !GetAtt HttpApi.ApiEndpoint]
+  CloudFrontUrl:
+    Condition: CloudFrontOn
+    Value: !Sub "https://${Distribution.DomainName}"
+  DistributionId:
+    Condition: CloudFrontOn
+    Value: !Ref Distribution
+  ApiGatewayUrl:
+    Condition: ApiGwOn
+    Value: !GetAtt HttpApi.ApiEndpoint
+  EscalationStateMachine:
+    Value: !Ref ApprovalEscalation
+  InstanceId:
+    Value: !Ref Instance
+  InstanceType:
+    Value: !Ref InstanceType
+  AmiId:
+    Value: !If [UseCool, !Ref CoolAmiId, !Ref ImageId]
+  OriginDns:
+    Value: !GetAtt Instance.PublicDnsName
+  ElasticIp:
+    Value: !GetAtt ElasticIp.PublicIp
+  BucketName:
+    Value: !Ref Bucket
+  TopicArn:
+    Value: !Ref Topic
+  LogGroupName:
+    Value: !Ref LogGroup
+  DashboardUrl:
+    Value: !Sub "https://${AWS::Region}.console.aws.amazon.com/cloudwatch/home?region=${AWS::Region}#dashboards:name=${AWS::StackName}"

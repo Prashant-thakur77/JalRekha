@@ -1,0 +1,64 @@
+{
+ "schema": "nadisaathi-leadtime-config-v2",
+ "frozen_at": "2026-10-25T11:56:20+00:00",
+ "note": "v2 rule: projected branch needs rate - z * rate_sigma >= R_FAST. z chosen on TRAIN only. Everything else is the v1 frozen config (hash below). TEST was already seen in v1.",
+ "v1_config": "eval/config.leadtime.frozen.json",
+ "v1_config_sha256": "ff20cf6597603da3042c7de5523afec288f0804e56e94d08233413e5ce04b7bf",
+ "z_grid": [
+  0.0,
+  0.5,
+  1.0,
+  1.5,
+  2.0,
+  3.0
+ ],
+ "z_rule": "smallest z in [0.0, 0.5, 1.0, 1.5, 2.0, 3.0] with TRAIN p95/camera_noise upstream false alerts <= 1.0 per 30 days per pair and TRAIN p95/gauge combined detection >= detection at z = 0 minus 0.05; if none meets both, the largest z that keeps the detection condition (the false-alert target is then reported as not met).",
+ "z": 1.5,
+ "false_alert_target_met": true,
+ "selection_table_train": [
+  {
+   "z": 0.0,
+   "camera_noise_false_alerts_per_30d": 13.579,
+   "gauge_detection_combined": 0.6282,
+   "detection_ok": true,
+   "meets": false
+  },
+  {
+   "z": 0.5,
+   "camera_noise_false_alerts_per_30d": 12.144,
+   "gauge_detection_combined": 0.6154,
+   "detection_ok": true,
+   "meets": false
+  },
+  {
+   "z": 1.0,
+   "camera_noise_false_alerts_per_30d": 2.185,
+   "gauge_detection_combined": 0.6154,
+   "detection_ok": true,
+   "meets": false
+  },
+  {
+   "z": 1.5,
+   "camera_noise_false_alerts_per_30d": 0.568,
+   "gauge_detection_combined": 0.6026,
+   "detection_ok": true,
+   "meets": true
+  },
+  {
+   "z": 2.0,
+   "camera_noise_false_alerts_per_30d": 0.438,
+   "gauge_detection_combined": 0.6026,
+   "detection_ok": true,
+   "meets": true
+  },
+  {
+   "z": 3.0,
+   "camera_noise_false_alerts_per_30d": 0.435,
+   "gauge_detection_combined": 0.5962,
+   "detection_ok": true,
+   "meets": true
+  }
+ ],
+ "policy_py_sha256": "dce92d5926751376b42fa442e7300d2c1c9a4bc16d6e55df4629ae14a3db6bbe",
+ "temporal_py_sha256": "49b2a5b503ebfa406957da08ed8cf5d96736e875f070467a7c59bd543096cf08"
+}

@@ -1,0 +1,35 @@
+warning: `VIRTUAL_ENV=/home/prashant/.pyenv/versions/3.10.13` does not match the project environment path `backend/.venv` and will be ignored; use `--active` to target the active environment instead
+[ WARN:0@25.004] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@25.311] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@27.240] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@27.548] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@29.340] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@29.652] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@46.623] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@46.926] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@49.484] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@49.804] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@51.835] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@52.158] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+wrote /home/prashant/projects/JalRekha/eval/results/stage_synth_test.json (17280 rows, 322.9 s)
+  B0_base_repo_firewall    MAE 2.04 cm  CI [1.31, 3.33]  cov 0.0014  usable_MAE None
+  B0r_base_repo_border_fixed MAE 74.74 cm  CI [70.34, 79.08]  cov 1.0  usable_MAE None
+  B1_naive_max_edge        MAE 102.31 cm  CI [98.63, 105.95]  cov 1.0  usable_MAE 102.73
+  E1_only                  MAE 18.41 cm  CI [16.93, 19.9]  cov 1.0  usable_MAE 18.99
+  E2_only                  MAE 33.91 cm  CI [30.62, 37.33]  cov 0.9218  usable_MAE 37.07
+  E3_only                  MAE 11.82 cm  CI [10.3, 13.41]  cov 1.0  usable_MAE 11.83
+  full                     MAE 8.03 cm  CI [6.87, 9.2]  cov 1.0  usable_MAE 7.98
+  full_no_registration     MAE 8.52 cm  CI [7.38, 9.7]  cov 1.0  usable_MAE 8.6
+[ WARN:0@328.632] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@328.933] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@329.152] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@329.424] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@329.778] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@330.234] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@336.064] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@336.513] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@336.622] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@336.992] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@343.970] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+[ WARN:0@344.487] global net_impl_backend.cpp:345 setPreferableTarget Targets are not supported by the new graph engine for now
+wrote /home/prashant/projects/JalRekha/eval/results/sweep_synth.json

@@ -1,0 +1,86 @@
+{
+  "NY_East_Branch_Delaware_River_at_Hancock_Staff": {
+    "nwis_site": "01421500",
+    "window_utc": [
+      "2026-07-26",
+      "2026-08-02"
+    ],
+    "images_listed": 121,
+    "dropped_night": 33,
+    "dropped_no_gauge_match": 0,
+    "kept": 88,
+    "stage_ft_min": 9.26,
+    "stage_ft_max": 18.08,
+    "gauge_points": 960
+  },
+  "NY_Genesee_River_at_Avon_Staff_Gage": {
+    "nwis_site": "04228500",
+    "window_utc": [
+      "2026-09-01",
+      "2026-09-08"
+    ],
+    "images_listed": 112,
+    "dropped_night": 24,
+    "dropped_no_gauge_match": 0,
+    "kept": 88,
+    "stage_ft_min": 14.45,
+    "stage_ft_max": 24.47,
+    "gauge_points": 960
+  },
+  "NY_Owasco_Inlet_below_Aurora_Street_at_Moravia_Staff": {
+    "nwis_site": "04235299",
+    "window_utc": [
+      "2026-08-31",
+      "2026-09-07"
+    ],
+    "images_listed": 91,
+    "dropped_night": 16,
+    "dropped_no_gauge_match": 0,
+    "kept": 75,
+    "stage_ft_min": 3.63,
+    "stage_ft_max": 8.68,
+    "gauge_points": 960
+  },
+  "IL_Vermilion_River_near_Danville": {
+    "nwis_site": "03339000",
+    "window_utc": [
+      "2026-08-12",
+      "2026-08-20"
+    ],
+    "images_listed": 98,
+    "dropped_night": 0,
+    "dropped_no_gauge_match": 1,
+    "kept": 97,
+    "stage_ft_min": 2.55,
+    "stage_ft_max": 24.99,
+    "gauge_points": 1042
+  },
+  "IN_White_River_at_Michigan_Street_at_Indianapolis": {
+    "nwis_site": "03352953",
+    "window_utc": [
+      "2026-08-12",
+      "2026-08-19"
+    ],
+    "images_listed": 104,
+    "dropped_night": 16,
+    "dropped_no_gauge_match": 0,
+    "kept": 88,
+    "stage_ft_min": 8.7,
+    "stage_ft_max": 18.36,
+    "gauge_points": 960
+  },
+  "TX_White_Rk_Ck_at_Greenville_Ave_Dallas": {
+    "nwis_site": "08057200",
+    "window_utc": [
+      "2026-09-28",
+      "2026-10-05"
+    ],
+    "images_listed": 192,
+    "dropped_night": 104,
+    "dropped_no_gauge_match": 0,
+    "kept": 88,
+    "stage_ft_min": 69.9,
+    "stage_ft_max": 87.32,
+    "gauge_points": 960
+  }
+}

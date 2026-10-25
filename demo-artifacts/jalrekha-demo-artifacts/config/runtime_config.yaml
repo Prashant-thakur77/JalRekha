@@ -1,0 +1,31 @@
+node:
+  id: node-pi-01
+  hardware: raspberry_pi_4_8gb
+  camera:
+    device: /dev/video0
+    resolution: [1280, 720]
+    fps: 5
+    reference_line_y_px: 410
+    critical_line_y_px: 260
+  capture_interval_sec: 60
+  offline_queue_path: /var/lib/node/queue.db
+
+backend:
+  host: 0.0.0.0
+  port: 8080
+  sqlite_pool_size: 16
+  asr:
+    engine: whisper.cpp
+    model: small
+    language: es
+
+volunteer_app:
+  channels:
+    - online
+    - local_radio
+    - offline_queue
+  retry_backoff_sec: [5, 30, 120, 600]
+
+logging:
+  level: INFO
+  jsonl_path: /var/log/node/node.jsonl

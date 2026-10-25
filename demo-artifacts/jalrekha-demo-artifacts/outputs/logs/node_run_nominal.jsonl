@@ -1,0 +1,3 @@
+{"timestamp":"2026-05-18T19:00:00-03:00","node_id":"node-pi-01","source":"camera","water_level_cm":42.1,"reference_line_cm":110.0,"critical_line_cm":160.0,"node_state":"nominal","evidence":["frame inputs/video/frames_nominal/00_nominal.png"],"cloud_required":false}
+{"timestamp":"2026-05-18T19:02:00-03:00","node_id":"node-pi-01","source":"camera","water_level_cm":43.8,"reference_line_cm":110.0,"critical_line_cm":160.0,"node_state":"nominal","evidence":["frame inputs/video/frames_nominal/01_nominal.png"],"cloud_required":false}
+{"timestamp":"2026-05-18T19:04:00-03:00","node_id":"node-pi-01","source":"camera","water_level_cm":44.2,"reference_line_cm":110.0,"critical_line_cm":160.0,"node_state":"nominal","evidence":["river_nominal.mp4#t=120"],"cloud_required":false}

@@ -1,0 +1,7 @@
+timestamp: 2026-05-18T19:12:01-03:00
+reporter: volunteer_user_b
+location: Puente Avellaneda, calle lateral
+language: es-AR
+
+El agua ya pasó el puente y está entrando por la calle lateral.
+Hay vecinos sacando cosas de las casas. Todavía no llegó la policía.

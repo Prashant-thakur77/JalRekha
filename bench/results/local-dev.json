@@ -1,0 +1,192 @@
+{
+ "schema": "nadisaathi-cool-bench-v1",
+ "label": "local-x86-dev",
+ "generated_at": "2026-10-25T11:06:34.284850+00:00",
+ "generated_by": "bench/cool_bench.py",
+ "host": {
+  "opencv_version": "5.0.0",
+  "cv2_file": "/home/prashant/projects/JalRekha/backend/.venv/lib/python3.13/site-packages/cv2/__init__.py",
+  "kleidicv_build_lines": [],
+  "kleidicv_present": false,
+  "build_info_sha256": "0ef08003c31127b3b5d34410ab13483c511e73b99e278b1a8abd6ddcb265699a",
+  "machine": "x86_64",
+  "cpu_model": "13th Gen Intel(R) Core(TM) i7-13650HX",
+  "cpu_count": 20,
+  "python": "3.13.12",
+  "numpy": "2.4.5",
+  "ec2_instance_id": null,
+  "ec2_instance_type": null,
+  "ec2_ami_id": null,
+  "ec2_region": null,
+  "cv_num_threads_default": 20,
+  "use_optimized": true
+ },
+ "workload": {
+  "bursts": 12,
+  "frames_per_burst": 5,
+  "resolution": [
+   960,
+   540
+  ],
+  "seeds": [
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111
+  ],
+  "conditions": [
+   "clean",
+   "rain",
+   "night",
+   "shake"
+  ],
+  "stage_fracs": [
+   0.25,
+   0.5,
+   0.8
+  ],
+  "heavy_registration": false,
+  "label": "SYNTHETIC staff-gauge bursts (identical on every host)"
+ },
+ "latency": {
+  "ms_per_burst_mean_of_repeats": 49.68,
+  "ms_per_burst_stdev": 0.31,
+  "repeats": [
+   49.37276591666281,
+   49.990217583323705
+  ],
+  "per_stage_ms": {
+   "E1_edge": {
+    "p50": 0.287,
+    "p95": 0.299
+   },
+   "E2_temporal": {
+    "p50": 3.101,
+    "p95": 3.269
+   },
+   "E3_colour": {
+    "p50": 0.375,
+    "p95": 0.392
+   },
+   "fuse": {
+    "p50": 0.151,
+    "p95": 0.175
+   },
+   "median": {
+    "p50": 1.255,
+    "p95": 1.814
+   },
+   "overlay": {
+    "p50": 0.808,
+    "p95": 0.837
+   },
+   "quality": {
+    "p50": 0.586,
+    "p95": 0.622
+   },
+   "redact": {
+    "p50": 14.643,
+    "p95": 15.93
+   },
+   "register": {
+    "p50": 12.957,
+    "p95": 15.179
+   },
+   "surface_motion": {
+    "p50": 9.779,
+    "p95": 12.242
+   },
+   "total": {
+    "p50": 49.513,
+    "p95": 52.762
+   },
+   "warp": {
+    "p50": 5.625,
+    "p95": 6.209
+   }
+  }
+ },
+ "thread_scaling": [
+  {
+   "threads": 1,
+   "ms_per_burst": 101.32
+  },
+  {
+   "threads": 4,
+   "ms_per_burst": 50.94
+  }
+ ],
+ "throughput": {
+  "processes": 20,
+  "bursts": 80,
+  "wall_s": 6.49,
+  "bursts_per_s": 72.42,
+  "frames_per_s": 362.1,
+  "cameras_at_10s_cadence": 724
+ },
+ "micro_ms": {
+  "orb_registration": {
+   "ms_p50": 11.68,
+   "ms_min": 11.56,
+   "n": 5
+  },
+  "aliked_lightglue_registration": {
+   "ms_p50": 758.31,
+   "ms_min": 741.6,
+   "n": 3
+  },
+  "dis_flow_960x540": {
+   "ms_p50": 13.05,
+   "ms_min": 12.54,
+   "n": 5
+  },
+  "yunet_redact_960x540": {
+   "ms_p50": 16.07,
+   "ms_min": 15.53,
+   "n": 5
+  },
+  "grabcut_photo_check": {
+   "ms_p50": 277.74,
+   "ms_min": 276.94,
+   "n": 3
+  },
+  "resize_gaussian_canny_1080p": {
+   "ms_p50": 0.62,
+   "ms_min": 0.59,
+   "n": 20
+  }
+ },
+ "cost": {
+  "usd_per_hour": 0.0,
+  "source": "command-line --price",
+  "software_fee_usd_per_hour": 0.0,
+  "usd_per_hour_total": 0.0,
+  "usd_per_million_frames": 0.0,
+  "note": "frames = 5-frame bursts x 5; cost uses the multi-process throughput"
+ },
+ "equivalence": {
+  "outputs_mm_sha256": "2c677ccc3887673225ec9802a06e9461b7cde210ce3a9f5d5b1e5d55f2cb9753",
+  "stage_m": [
+   1.057,
+   2.069,
+   3.245,
+   1.057,
+   2.069,
+   3.181,
+   1.013,
+   2.069,
+   3.245,
+   1.024,
+   2.026,
+   3.245
+  ]
+ }
+}

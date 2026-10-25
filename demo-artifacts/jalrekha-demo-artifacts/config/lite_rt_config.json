@@ -1,0 +1,15 @@
+{
+  "runtime": "LiteRT",
+  "model_path": "/opt/jalrekha/models/gemma-4-E4B-it-int4.litert",
+  "delegate": "xnnpack",
+  "num_threads": 4,
+  "quantization": "int4",
+  "max_input_tokens": 4096,
+  "max_output_tokens": 512,
+  "warmup_iters": 2,
+  "target": {
+    "device": "raspberry_pi_4",
+    "ram_gb": 8,
+    "thermal_throttle_c": 75
+  }
+}

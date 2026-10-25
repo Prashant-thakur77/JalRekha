@@ -1,0 +1,123 @@
+{
+  "id": "gandak",
+  "name": "Gandaki / Narayani / Gandak",
+  "countries": [
+    "NP",
+    "IN"
+  ],
+  "description": "The Narayani leaves the Chitwan valley, crosses the border at the Gandak barrage (Valmikinagar) and runs through the Champaran districts of Bihar.",
+  "nodes": [
+    {
+      "id": "devghat",
+      "name": "Devghat (Narayani)",
+      "country": "NP",
+      "region_id": "np",
+      "admin_unit": "Chitwan",
+      "lat": 27.8,
+      "lng": 84.41,
+      "kind": "camera",
+      "river": "Narayani",
+      "agency": "DHM",
+      "site_id": "gandak-devghat-cam",
+      "coord_source": "Wikipedia coordinates (place, not gauge)",
+      "alert_targets": [
+        {
+          "region_id": "np",
+          "role": "ward_focal",
+          "area": "Narayani riverside wards (Chitwan, Nawalparasi)"
+        }
+      ]
+    },
+    {
+      "id": "gandak_barrage",
+      "name": "Gandak Barrage (Valmikinagar)",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "West Champaran",
+      "lat": 27.45,
+      "lng": 83.91,
+      "kind": "barrage",
+      "river": "Gandak",
+      "agency": "Water Resources Department, Bihar",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "West Champaran: Bagaha, Valmikinagar"
+        }
+      ],
+      "warning_m": 108.67,
+      "danger_m": 109.67,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL (Triveni station)"
+    },
+    {
+      "id": "chatia",
+      "name": "Chatia",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "East Champaran",
+      "lat": 26.59,
+      "lng": 84.53,
+      "kind": "gauge",
+      "river": "Gandak",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "East Champaran riverside panchayats"
+        }
+      ],
+      "warning_m": 68.15,
+      "danger_m": 69.15,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    },
+    {
+      "id": "dumariaghat",
+      "name": "Dumariaghat",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Gopalganj",
+      "lat": 26.53,
+      "lng": 84.4,
+      "kind": "gauge",
+      "river": "Gandak",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Gopalganj embankment villages"
+        }
+      ],
+      "warning_m": 61.22,
+      "danger_m": 62.22,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "devghat",
+      "to": "gandak_barrage",
+      "distance_km": 80.0,
+      "travel_time_h": {
+        "min": 4.5,
+        "typ": 6.0,
+        "max": 8.0
+      },
+      "method": "reported expectation: 'about six hours' over ~80 km (band +/-25% added by us)",
+      "source": "Bihar Deputy CM quoted by ThePrint, Oct 2026 (secondary source)"
+    },
+    {
+      "from": "gandak_barrage",
+      "to": "chatia"
+    },
+    {
+      "from": "chatia",
+      "to": "dumariaghat"
+    }
+  ]
+}

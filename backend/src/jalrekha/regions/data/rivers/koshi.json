@@ -1,0 +1,144 @@
+{
+  "id": "koshi",
+  "name": "Koshi / Kosi",
+  "countries": [
+    "NP",
+    "IN"
+  ],
+  "description": "Sapta Koshi leaves Nepal's hills at Chatara, passes the Koshi Barrage on the border and floods the plains of north Bihar.",
+  "nodes": [
+    {
+      "id": "chatara",
+      "name": "Chatara",
+      "country": "NP",
+      "region_id": "np",
+      "admin_unit": "Sunsari",
+      "lat": 26.83,
+      "lng": 87.18,
+      "kind": "camera",
+      "river": "Sapta Koshi",
+      "agency": "DHM",
+      "site_id": "koshi-chatara-cam",
+      "coord_source": "Wikipedia coordinates (place, not gauge) (Baraha Kshetra, next to Chatara)",
+      "alert_targets": [
+        {
+          "region_id": "np",
+          "role": "ward_focal",
+          "area": "Barahachhetra and Koshi riverside wards (Sunsari)"
+        }
+      ],
+      "gauge_note": "Nearby official station Barahkshetra: warning 119.3 m, danger 120.3 m, HFL 132.18 m (WRD Bihar Kosi bulletin). The scenario camera uses its own site-relative staff gauge."
+    },
+    {
+      "id": "koshi_barrage",
+      "name": "Koshi Barrage (Bhimnagar)",
+      "country": "NP",
+      "region_id": "np",
+      "admin_unit": "Saptari",
+      "lat": 26.5263,
+      "lng": 86.9269,
+      "kind": "barrage",
+      "river": "Koshi",
+      "agency": "Water Resources Department, Bihar",
+      "coord_source": "Wikipedia coordinates (place, not gauge)",
+      "alert_targets": [
+        {
+          "region_id": "np",
+          "role": "municipal_eoc",
+          "area": "Saptari/Sunsari embankment wards"
+        }
+      ]
+    },
+    {
+      "id": "birpur",
+      "name": "Birpur",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Supaul",
+      "lat": 26.5156,
+      "lng": 87.0086,
+      "kind": "village",
+      "river": "Kosi",
+      "agency": "DDMA Supaul",
+      "coord_source": "Wikipedia coordinates (place, not gauge)",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Supaul: Basantpur, Birpur and embankment villages"
+        }
+      ],
+      "warning_m": 73.7,
+      "danger_m": 74.7,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL; WRD Bihar lists 75/76 m (sources disagree)"
+    },
+    {
+      "id": "basua",
+      "name": "Basua",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Supaul",
+      "lat": 26.3,
+      "lng": 86.8,
+      "kind": "gauge",
+      "river": "Kosi",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Supaul and Saharsa villages inside the embankments"
+        }
+      ],
+      "warning_m": 46.75,
+      "danger_m": 47.75,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    },
+    {
+      "id": "baltara",
+      "name": "Baltara",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Khagaria",
+      "lat": 25.57,
+      "lng": 86.72,
+      "kind": "gauge",
+      "river": "Kosi",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Khagaria and Saharsa low-lying panchayats"
+        }
+      ],
+      "warning_m": 32.85,
+      "danger_m": 33.85,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "chatara",
+      "to": "koshi_barrage",
+      "distance_km": 43.0,
+      "source": "distance: Chatara is 43 km from the Kosi barrage (ISPRS Archives XL-8, 2014); travel time is a celerity estimate"
+    },
+    {
+      "from": "koshi_barrage",
+      "to": "birpur"
+    },
+    {
+      "from": "birpur",
+      "to": "basua",
+      "distance_km": 64.25,
+      "source": "distance: Basua is 64.25 km downstream of Birpur (WRD Bihar Kosi bulletin); travel time is a celerity estimate"
+    },
+    {
+      "from": "basua",
+      "to": "baltara"
+    }
+  ]
+}

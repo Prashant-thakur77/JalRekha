@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>NadiSaathi architecture</title>
+<style>
+  body { margin: 0; font-family: "Segoe UI", system-ui, sans-serif; background: #fff; color: #0f172a; }
+  .wrap { width: 1500px; padding: 28px 32px; }
+  h1 { font-size: 26px; margin: 0 0 4px; } .sub { color: #475569; margin: 0 0 18px; font-size: 15px; }
+  .row { display: flex; gap: 14px; align-items: stretch; }
+  .box { border: 2px solid #94a3b8; border-radius: 10px; padding: 10px 12px; background: #f8fafc; font-size: 15px; }
+  .box b { display: block; font-size: 16px; margin-bottom: 3px; }
+  .field { background: #ecfdf5; border-color: #10b981; flex: 1; }
+  .gw { background: #eff6ff; border-color: #3b82f6; text-align: center; }
+  .ec2 { border: 3px solid #f59e0b; background: #fffbeb; border-radius: 14px; padding: 12px 14px; margin: 0; }
+  .ec2 > .t { font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+  .chain { display: flex; gap: 10px; align-items: center; }
+  .chain .box { flex: 1; background: #fff; }
+  .arrow { font-size: 26px; color: #64748b; padding: 0 2px; }
+  .down { text-align: center; color: #64748b; font-size: 14px; margin: 6px 0; }
+  .aws { border: 3px solid #8b5cf6; background: #f5f3ff; border-radius: 14px; padding: 12px 14px; }
+  .aws > .t { font-weight: 700; font-size: 17px; margin-bottom: 10px; }
+  .aws .box { flex: 1; background: #fff; border-color: #a78bfa; }
+  .note { font-size: 13px; color: #475569; margin-top: 3px; }
+  .agent { border-color: #ef4444; background: #fef2f2; }
+  .legend { margin-top: 14px; font-size: 13px; color: #475569; }
+</style></head>
+<body><div class="wrap">
+  <h1>NadiSaathi: camera → OpenCV 5 → agent → human approval, on AWS Graviton4</h1>
+  <p class="sub">Upstream camera in Nepal measures the river in metres; the agent warns downstream districts in India with ETA bands. Nothing public is sent without a named person's PIN.</p>
+
+  <div class="row">
+    <div class="box field"><b>Staff-gauge camera</b>burst of 5 frames, camera key<div class="note">Chatara (Koshi), Devghat, Chisapani, Karmaiya</div></div>
+    <div class="box field"><b>Volunteers</b>PWA / Android: text, voice, photo<div class="note">Hindi, Nepali, Maithili, Bhojpuri, English</div></div>
+    <div class="box field"><b>Operators</b>ward focal person (Nepal), DDMA control room (India)<div class="note">approve / edit / reject with PIN</div></div>
+    <div class="box field"><b>Local siren</b>autonomous only at danger level with good quality<div class="note">edge rule, works offline</div></div>
+  </div>
+  <div class="down">▼ HTTPS</div>
+  <div class="box gw"><b>Amazon API Gateway</b>HTTPS, throttling, VPC link to the instance (port 8000 not public)</div>
+  <div class="down">▼</div>
+
+  <div class="ec2">
+    <div class="t">EC2 c8g.xlarge · Graviton4 · Ubuntu 24.04 arm64 · OpenCV 5.0 (COOL AMI wired: USE_COOL_AMI=true)</div>
+    <div class="chain">
+      <div class="box"><b>Quality gate</b>blur, night, glare, fog</div><span class="arrow">→</span>
+      <div class="box"><b>Registration</b>ORB → ALIKED+LightGlue (DNN), keyframe chain</div><span class="arrow">→</span>
+      <div class="box"><b>3 waterline estimators</b>Sobel edges · DIS flow · Lab colour</div><span class="arrow">→</span>
+      <div class="box"><b>Fusion + Kalman</b>stage m ± σ, rise m/h</div><span class="arrow">→</span>
+      <div class="box"><b>YuNet blur</b>faces, plates</div>
+    </div>
+    <div class="down">▼ the measurement chooses the branch</div>
+    <div class="chain">
+      <div class="box agent"><b>Agent policy D1–D9</b>cadence, second opinion, ETA, drafts, siren, all-clear</div><span class="arrow">↔</span>
+      <div class="box"><b>Region profiles + river graphs</b>Nepal, India; CWC levels; ETA bands</div><span class="arrow">↔</span>
+      <div class="box"><b>Guard + traces</b>schema, bounds, rate limit, injection; every step logged</div><span class="arrow">↔</span>
+      <div class="box"><b>Approvals + relief</b>SQLite; PIN, lockout</div>
+    </div>
+  </div>
+  <div class="down">▼ AWS SDK (instance role, least privilege)</div>
+  <div class="aws">
+    <div class="t">Managed services</div>
+    <div class="row">
+      <div class="box"><b>Bedrock</b>VLM second opinion, only when estimators disagree</div>
+      <div class="box"><b>Polly</b>Hindi / English voice alerts</div>
+      <div class="box"><b>SNS</b>operator topic, SMS to verified numbers</div>
+      <div class="box"><b>Step Functions</b>re-notify while an approval waits (15 min × 3)</div>
+      <div class="box"><b>S3</b>CAP files, results, bundles</div>
+      <div class="box"><b>CloudWatch</b>logs, metrics, alarms, keep-warm Lambda</div>
+      <div class="box"><b>SSM · Budgets · CloudFormation</b>PIN, camera key, cost alarm, one-command deploy</div>
+    </div>
+  </div>
+  <div class="legend">Generated for the submission from docs/diagrams/architecture.html. Region us-east-1.</div>
+</div></body></html>

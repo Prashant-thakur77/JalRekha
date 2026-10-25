@@ -1,0 +1,88 @@
+{
+  "id": "bagmati",
+  "name": "Bagmati",
+  "countries": [
+    "NP",
+    "IN"
+  ],
+  "description": "The Bagmati drains the Kathmandu valley, crosses the Terai at Karmaiya and floods Sitamarhi and Muzaffarpur in Bihar.",
+  "nodes": [
+    {
+      "id": "karmaiya",
+      "name": "Karmaiya (Bagmati)",
+      "country": "NP",
+      "region_id": "np",
+      "admin_unit": "Sarlahi",
+      "lat": 27.12,
+      "lng": 85.47,
+      "kind": "camera",
+      "river": "Bagmati",
+      "agency": "DHM",
+      "site_id": "bagmati-karmaiya-cam",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "np",
+          "role": "ward_focal",
+          "area": "Sarlahi and Rautahat riverside wards"
+        }
+      ]
+    },
+    {
+      "id": "dheng_bridge",
+      "name": "Dheng Bridge",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Sitamarhi",
+      "lat": 26.71,
+      "lng": 85.44,
+      "kind": "gauge",
+      "river": "Bagmati",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Sitamarhi riverside panchayats"
+        }
+      ],
+      "warning_m": 70.0,
+      "danger_m": 71.0,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    },
+    {
+      "id": "benibad",
+      "name": "Benibad",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Muzaffarpur",
+      "lat": 26.1462,
+      "lng": 85.6911,
+      "kind": "gauge",
+      "river": "Bagmati",
+      "agency": "CWC",
+      "coord_source": "Wikipedia coordinates (place, not gauge)",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Muzaffarpur and Darbhanga low-lying villages"
+        }
+      ],
+      "warning_m": 47.68,
+      "danger_m": 48.68,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "karmaiya",
+      "to": "dheng_bridge"
+    },
+    {
+      "from": "dheng_bridge",
+      "to": "benibad"
+    }
+  ]
+}

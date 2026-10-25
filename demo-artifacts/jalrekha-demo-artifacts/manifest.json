@@ -1,0 +1,80 @@
+{
+  "name": "jalrekha-demo-artifacts",
+  "version": "0.1.0",
+  "submission": "jalrekha-demo-artifacts",
+  "generated_at": "2026-05-18T00:00:00-03:00",
+  "description": "Reproducible hardware-replay demo for JalRekha. Captured Raspberry Pi node inputs, citizen reports, telemetry logs, model/runtime config, and expected outputs.",
+  "inputs": {
+    "video": [
+      {"case": "nominal",  "path": "inputs/video/river_nominal.mp4",  "frames": "inputs/video/frames_nominal/"},
+      {"case": "warning",  "path": "inputs/video/river_warning.mp4"},
+      {"case": "critical", "path": "inputs/video/river_critical.mp4", "frames": "inputs/video/frames_critical/"}
+    ],
+    "audio": [
+      {"id": "report_bridge_water",     "path": "inputs/audio/report_bridge_water.wav",     "transcript": "inputs/reports/report_bridge_water.txt"},
+      {"id": "report_evacuation_water", "path": "inputs/audio/report_evacuation_water.wav", "transcript": "inputs/reports/report_evacuation_water.txt"}
+    ]
+  },
+  "outputs": {
+    "logs": [
+      "outputs/logs/node_run_nominal.jsonl",
+      "outputs/logs/node_run_warning.jsonl",
+      "outputs/logs/node_run_critical.jsonl",
+      "outputs/logs/volunteer_report_run.jsonl"
+    ],
+    "alerts": [
+      "outputs/alerts/alert_warning.json",
+      "outputs/alerts/alert_critical.json"
+    ],
+    "screenshots": [
+      "outputs/screenshots/dashboard_nominal.png",
+      "outputs/screenshots/dashboard_urgent.png",
+      "outputs/screenshots/mobile_queue.png"
+    ]
+  },
+  "app": {
+    "android_apk": "app/volunteer-demo.apk",
+    "dashboard_zip": "app/jalrekha-dashboard-demo.zip"
+  },
+  "config": {
+    "model": "config/model_config.json",
+    "thresholds": "config/thresholds.json",
+    "runtime": "config/runtime_config.yaml",
+    "lite_rt": "config/lite_rt_config.json",
+    "prompts": "config/prompt_templates.md"
+  },
+  "eval": {
+    "expected_outputs": "eval/expected_outputs.json",
+    "replay_results": "eval/replay_results.json"
+  },
+  "models": {
+    "weights_bundled": false,
+    "weights_source": "official Gemma release (huggingface.co/google)",
+    "tiers": [
+      {
+        "role": "node",
+        "deployment": "raspberry_pi_camera_node",
+        "name": "google/gemma-4-E4B-it",
+        "size": "Effective 4B",
+        "runtime": "LiteRT",
+        "task": "on-edge visual classification of river state from camera frames"
+      },
+      {
+        "role": "volunteer_app",
+        "deployment": "android_handset",
+        "name": "google/gemma-4-E2B-it",
+        "size": "Effective 2B",
+        "runtime": "LiteRT",
+        "task": "on-device fusion of citizen audio reports + transcript into structured evidence"
+      },
+      {
+        "role": "central_node",
+        "deployment": "server",
+        "name": "google/gemma-4-26B-A4B-it",
+        "size": "26B MoE (4B active)",
+        "runtime": "Ollama / llama.cpp",
+        "task": "cross-node fusion of telemetry + citizen evidence into final alert"
+      }
+    ]
+  }
+}

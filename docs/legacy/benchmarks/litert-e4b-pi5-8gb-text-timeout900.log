@@ -1,0 +1,775 @@
+WARNING: Logging before InitGoogle() is written to STDERR
+I0000 00:00:1778994437.577302    5550 litert_lm_loader.cc:183] LitertLmLoader::Initialize
+I0000 00:00:1778994437.577376    5550 litert_lm_loader.cc:206] mmap_status is ok
+I0000 00:00:1778994437.577402    5550 litert_lm_loader.cc:211] status: OK
+I0000 00:00:1778994437.577406    5550 litert_lm_loader.cc:212] major_version: 1
+I0000 00:00:1778994437.577416    5550 litert_lm_loader.cc:213] minor_version: 5
+I0000 00:00:1778994437.577418    5550 litert_lm_loader.cc:214] patch_version: 0
+I0000 00:00:1778994437.577425    5550 litert_lm_loader.cc:247] section_index: 0
+I0000 00:00:1778994437.577428    5550 litert_lm_loader.cc:248] section_data_type: LlmMetadataProto
+I0000 00:00:1778994437.577431    5550 litert_lm_loader.cc:250] section_begin_offset: 16384
+I0000 00:00:1778994437.577433    5550 litert_lm_loader.cc:251] section_end_offset: 28576
+I0000 00:00:1778994437.577435    5550 litert_lm_loader.cc:247] section_index: 1
+I0000 00:00:1778994437.577437    5550 litert_lm_loader.cc:248] section_data_type: SP_Tokenizer
+I0000 00:00:1778994437.577439    5550 litert_lm_loader.cc:250] section_begin_offset: 32768
+I0000 00:00:1778994437.577440    5550 litert_lm_loader.cc:251] section_end_offset: 4721781
+I0000 00:00:1778994437.577443    5550 litert_lm_loader.cc:100] model_type: tf_lite_embedder
+I0000 00:00:1778994437.577447    5550 litert_lm_loader.cc:247] section_index: 2
+I0000 00:00:1778994437.577450    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577453    5550 litert_lm_loader.cc:250] section_begin_offset: 4734976
+I0000 00:00:1778994437.577455    5550 litert_lm_loader.cc:251] section_end_offset: 175655560
+I0000 00:00:1778994437.577457    5550 litert_lm_loader.cc:100] model_type: tf_lite_per_layer_embedder
+I0000 00:00:1778994437.577459    5550 litert_lm_loader.cc:247] section_index: 3
+I0000 00:00:1778994437.577461    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577463    5550 litert_lm_loader.cc:250] section_begin_offset: 175669248
+I0000 00:00:1778994437.577465    5550 litert_lm_loader.cc:251] section_end_offset: 1012447760
+I0000 00:00:1778994437.577467    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_encoder_hw
+I0000 00:00:1778994437.577469    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577471    5550 litert_lm_loader.cc:247] section_index: 4
+I0000 00:00:1778994437.577473    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577474    5550 litert_lm_loader.cc:250] section_begin_offset: 1012449280
+I0000 00:00:1778994437.577476    5550 litert_lm_loader.cc:251] section_end_offset: 1106501560
+I0000 00:00:1778994437.577478    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_adapter
+I0000 00:00:1778994437.577480    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577482    5550 litert_lm_loader.cc:247] section_index: 5
+I0000 00:00:1778994437.577484    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577486    5550 litert_lm_loader.cc:250] section_begin_offset: 1106509824
+I0000 00:00:1778994437.577487    5550 litert_lm_loader.cc:251] section_end_offset: 1122242524
+I0000 00:00:1778994437.577489    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_audio
+I0000 00:00:1778994437.577491    5550 litert_lm_loader.cc:247] section_index: 6
+I0000 00:00:1778994437.577493    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577495    5550 litert_lm_loader.cc:250] section_begin_offset: 1122254848
+I0000 00:00:1778994437.577496    5550 litert_lm_loader.cc:251] section_end_offset: 1122265716
+I0000 00:00:1778994437.577498    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_encoder
+I0000 00:00:1778994437.577501    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994437.577503    5550 litert_lm_loader.cc:247] section_index: 7
+I0000 00:00:1778994437.577505    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577507    5550 litert_lm_loader.cc:250] section_begin_offset: 1122271232
+I0000 00:00:1778994437.577509    5550 litert_lm_loader.cc:251] section_end_offset: 1346409168
+I0000 00:00:1778994437.577511    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_adapter
+I0000 00:00:1778994437.577513    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577515    5550 litert_lm_loader.cc:247] section_index: 8
+I0000 00:00:1778994437.577517    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577519    5550 litert_lm_loader.cc:250] section_begin_offset: 1346420736
+I0000 00:00:1778994437.577520    5550 litert_lm_loader.cc:251] section_end_offset: 1354309392
+I0000 00:00:1778994437.577522    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_vision
+I0000 00:00:1778994437.577524    5550 litert_lm_loader.cc:247] section_index: 9
+I0000 00:00:1778994437.577526    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577528    5550 litert_lm_loader.cc:250] section_begin_offset: 1354317824
+I0000 00:00:1778994437.577529    5550 litert_lm_loader.cc:251] section_end_offset: 1354328692
+I0000 00:00:1778994437.577531    5550 litert_lm_loader.cc:100] model_type: tf_lite_prefill_decode
+I0000 00:00:1778994437.577533    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994437.577535    5550 litert_lm_loader.cc:247] section_index: 10
+I0000 00:00:1778994437.577537    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577538    5550 litert_lm_loader.cc:250] section_begin_offset: 1354334208
+I0000 00:00:1778994437.577540    5550 litert_lm_loader.cc:251] section_end_offset: 3614377584
+I0000 00:00:1778994437.577542    5550 litert_lm_loader.cc:100] model_type: tf_lite_mtp_drafter
+I0000 00:00:1778994437.577545    5550 litert_lm_loader.cc:247] section_index: 11
+I0000 00:00:1778994437.577547    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577549    5550 litert_lm_loader.cc:250] section_begin_offset: 3614392320
+I0000 00:00:1778994437.577551    5550 litert_lm_loader.cc:251] section_end_offset: 3659518480
+I0000 00:00:1778994437.577608    5550 litert_lm_loader.cc:183] LitertLmLoader::Initialize
+I0000 00:00:1778994437.577620    5550 litert_lm_loader.cc:206] mmap_status is ok
+I0000 00:00:1778994437.577625    5550 litert_lm_loader.cc:211] status: OK
+I0000 00:00:1778994437.577626    5550 litert_lm_loader.cc:212] major_version: 1
+I0000 00:00:1778994437.577629    5550 litert_lm_loader.cc:213] minor_version: 5
+I0000 00:00:1778994437.577630    5550 litert_lm_loader.cc:214] patch_version: 0
+I0000 00:00:1778994437.577633    5550 litert_lm_loader.cc:247] section_index: 0
+I0000 00:00:1778994437.577635    5550 litert_lm_loader.cc:248] section_data_type: LlmMetadataProto
+I0000 00:00:1778994437.577637    5550 litert_lm_loader.cc:250] section_begin_offset: 16384
+I0000 00:00:1778994437.577639    5550 litert_lm_loader.cc:251] section_end_offset: 28576
+I0000 00:00:1778994437.577641    5550 litert_lm_loader.cc:247] section_index: 1
+I0000 00:00:1778994437.577642    5550 litert_lm_loader.cc:248] section_data_type: SP_Tokenizer
+I0000 00:00:1778994437.577644    5550 litert_lm_loader.cc:250] section_begin_offset: 32768
+I0000 00:00:1778994437.577646    5550 litert_lm_loader.cc:251] section_end_offset: 4721781
+I0000 00:00:1778994437.577648    5550 litert_lm_loader.cc:100] model_type: tf_lite_embedder
+I0000 00:00:1778994437.577651    5550 litert_lm_loader.cc:247] section_index: 2
+I0000 00:00:1778994437.577653    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577655    5550 litert_lm_loader.cc:250] section_begin_offset: 4734976
+I0000 00:00:1778994437.577657    5550 litert_lm_loader.cc:251] section_end_offset: 175655560
+I0000 00:00:1778994437.577659    5550 litert_lm_loader.cc:100] model_type: tf_lite_per_layer_embedder
+I0000 00:00:1778994437.577661    5550 litert_lm_loader.cc:247] section_index: 3
+I0000 00:00:1778994437.577663    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577666    5550 litert_lm_loader.cc:250] section_begin_offset: 175669248
+I0000 00:00:1778994437.577668    5550 litert_lm_loader.cc:251] section_end_offset: 1012447760
+I0000 00:00:1778994437.577670    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_encoder_hw
+I0000 00:00:1778994437.577672    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577674    5550 litert_lm_loader.cc:247] section_index: 4
+I0000 00:00:1778994437.577675    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577677    5550 litert_lm_loader.cc:250] section_begin_offset: 1012449280
+I0000 00:00:1778994437.577679    5550 litert_lm_loader.cc:251] section_end_offset: 1106501560
+I0000 00:00:1778994437.577681    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_adapter
+I0000 00:00:1778994437.577683    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577685    5550 litert_lm_loader.cc:247] section_index: 5
+I0000 00:00:1778994437.577686    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577688    5550 litert_lm_loader.cc:250] section_begin_offset: 1106509824
+I0000 00:00:1778994437.577690    5550 litert_lm_loader.cc:251] section_end_offset: 1122242524
+I0000 00:00:1778994437.577691    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_audio
+I0000 00:00:1778994437.577693    5550 litert_lm_loader.cc:247] section_index: 6
+I0000 00:00:1778994437.577695    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577697    5550 litert_lm_loader.cc:250] section_begin_offset: 1122254848
+I0000 00:00:1778994437.577699    5550 litert_lm_loader.cc:251] section_end_offset: 1122265716
+I0000 00:00:1778994437.577701    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_encoder
+I0000 00:00:1778994437.577703    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994437.577704    5550 litert_lm_loader.cc:247] section_index: 7
+I0000 00:00:1778994437.577706    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577708    5550 litert_lm_loader.cc:250] section_begin_offset: 1122271232
+I0000 00:00:1778994437.577709    5550 litert_lm_loader.cc:251] section_end_offset: 1346409168
+I0000 00:00:1778994437.577711    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_adapter
+I0000 00:00:1778994437.577713    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994437.577715    5550 litert_lm_loader.cc:247] section_index: 8
+I0000 00:00:1778994437.577717    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577718    5550 litert_lm_loader.cc:250] section_begin_offset: 1346420736
+I0000 00:00:1778994437.577720    5550 litert_lm_loader.cc:251] section_end_offset: 1354309392
+I0000 00:00:1778994437.577722    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_vision
+I0000 00:00:1778994437.577724    5550 litert_lm_loader.cc:247] section_index: 9
+I0000 00:00:1778994437.577726    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577728    5550 litert_lm_loader.cc:250] section_begin_offset: 1354317824
+I0000 00:00:1778994437.577730    5550 litert_lm_loader.cc:251] section_end_offset: 1354328692
+I0000 00:00:1778994437.577731    5550 litert_lm_loader.cc:100] model_type: tf_lite_prefill_decode
+I0000 00:00:1778994437.577733    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994437.577735    5550 litert_lm_loader.cc:247] section_index: 10
+I0000 00:00:1778994437.577737    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577738    5550 litert_lm_loader.cc:250] section_begin_offset: 1354334208
+I0000 00:00:1778994437.577740    5550 litert_lm_loader.cc:251] section_end_offset: 3614377584
+I0000 00:00:1778994437.577742    5550 litert_lm_loader.cc:100] model_type: tf_lite_mtp_drafter
+I0000 00:00:1778994437.577744    5550 litert_lm_loader.cc:247] section_index: 11
+I0000 00:00:1778994437.577748    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994437.577750    5550 litert_lm_loader.cc:250] section_begin_offset: 3614392320
+I0000 00:00:1778994437.577752    5550 litert_lm_loader.cc:251] section_end_offset: 3659518480
+I0000 00:00:1778994437.577787    5550 engine_impl.cc:336] New model files have LlmModelType, loading tokenizer asynchronously
+I0000 00:00:1778994437.577852    5550 engine_settings.cc:101] The Main backend constraint is not set.
+I0000 00:00:1778994437.577857    5550 engine_settings.cc:433] The validated engine settings: EngineSettings: 
+  MainExecutorSettings: backend: GPU
+backend_config:
+max_top_k: 1
+
+max_tokens: 1024
+activation_data_type: FLOAT32
+max_num_images: 0
+lora_rank: 0
+cache_dir: /home/user/JalRekha-litert/backend/data/litert-cache
+cache_file: Not set
+litert_dispatch_lib_dir: Not set
+model_assets: model_path: backend/data/models/gemma-4-E4B-it.litertlm
+fake_weights_mode: FAKE_WEIGHTS_NONE
+
+advanced_settings: prefill_batch_sizes: []
+num_output_candidates: 1
+configure_magic_numbers: true
+verify_magic_numbers: false
+clear_kv_cache_before_prefill: true
+num_logits_to_print_after_decode: 0
+gpu_madvise_original_shared_tensors: true
+is_benchmark: false
+preferred_device_substr: 
+num_threads_to_upload: -1
+num_threads_to_compile: -1
+convert_weights_on_gpu: true
+wait_for_weights_conversion_complete_in_benchmark: true
+optimize_shader_compilation: true
+cache_compiled_shaders_only: false
+share_constant_tensors: true
+sampler_handles_input: true
+allow_src_quantized_fc_conv_ops: true
+hint_waiting_for_completion: false
+gpu_context_low_priority: Not set
+enable_speculative_decoding: true
+disable_delegate_clustering: true
+hint_kernel_batch_size: Not set
+
+  LlmMetadata: go/debugstr   
+start_token {
+  token_ids {
+    ids: 2
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 1
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 50
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 106
+  }
+}
+sampler_params {
+  type: TOP_P
+  k: 1
+  p: 0.95
+  temperature: 1
+  seed: 0
+}
+llm_model_type {
+  gemma4 {
+    start_of_image_token {
+      token_str: "<|image>"
+    }
+    end_of_image_token {
+      token_str: "<image|>"
+    }
+    start_of_audio_token {
+      token_str: "<|audio>"
+    }
+    end_of_audio_token {
+      token_str: "<audio|>"
+    }
+    code_fence_start: "<|tool_call>"
+    code_fence_end: "<tool_call|>"
+    open_quote: "<|\"|>"
+    close_quote: "<|\"|>"
+    function_response_start: "<|tool_response>"
+    use_template_for_fc_format: true
+    patch_width: 16
+    patch_height: 16
+    max_num_patches: 2520
+  }
+}
+jinja_prompt_template: "{%- macro format_parameters(properties, required) -%}\n    {%- set standard_keys = [\'description\', \'type\', \'properties\', \'required\', \'nullable\'] -%}\n    {%- set ns = namespace(found_first=false) -%}\n    {%- for key, value in properties | dictsort -%}\n        {%- set add_comma = false -%}\n        {%- if key not in standard_keys -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {{ key }}:{\n            {%- if value[\'description\'] -%}\n                description:<|\"|>{{ value[\'description\'] }}<|\"|>\n                {%- set add_comma = true -%}\n            {%- endif -%}\n            {%- if value[\'nullable\'] %}\n                {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                nullable:true\n            {%- endif -%}\n            {%- if value[\'type\'] | upper == \'STRING\' -%}\n                {%- if value[\'enum\'] -%}\n                    {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                    enum:{{ format_argument(value[\'enum\']) }}\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'OBJECT\' -%}\n                ,properties:{\n                {%- if value[\'properties\'] is defined and value[\'properties\'] is mapping -%}\n                    {{- format_parameters(value[\'properties\'], value[\'required\'] | default([])) -}}\n                {%- elif value is mapping -%}\n                    {{- format_parameters(value, value[\'required\'] | default([])) -}}\n                {%- endif -%}\n                }\n                {%- if value[\'required\'] -%}\n                    ,required:[\n                    {%- for item in value[\'required\'] | default([]) -%}\n                        <|\"|>{{- item -}}<|\"|>\n                        {%- if not loop.last %},{% endif -%}\n                    {%- endfor -%}\n                    ]\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'ARRAY\' -%}\n                {%- if value[\'items\'] is mapping and value[\'items\'] -%}\n                    ,items:{\n                    {%- set ns_items = namespace(found_first=false) -%}\n                    {%- for item_key, item_value in value[\'items\'] | dictsort -%}\n                        {%- if item_value is not none -%}\n                            {%- if ns_items.found_first %},{% endif -%}\n                            {%- set ns_items.found_first = true -%}\n                            {%- if item_key == \'properties\' -%}\n                                properties:{\n                                {%- if item_value is mapping -%}\n                                    {{- format_parameters(item_value, value[\'items\'][\'required\'] | default([])) -}}\n                                {%- endif -%}\n                                }\n                            {%- elif item_key == \'required\' -%}\n                                required:[\n                                {%- for req_item in item_value -%}\n                                    <|\"|>{{- req_item -}}<|\"|>\n                                    {%- if not loop.last %},{% endif -%}\n                                {%- endfor -%}\n                                ]\n                            {%- elif item_key == \'type\' -%}\n                                {%- if item_value is string -%}\n                                    type:{{ format_argument(item_value | upper) }}\n                                {%- else -%}\n                                    type:{{ format_argument(item_value | map(\'upper\') | list) }}\n                                {%- endif -%}\n                            {%- else -%}\n                                {{ item_key }}:{{ format_argument(item_value) }}\n                            {%- endif -%}\n                        {%- endif -%}\n                    {%- endfor -%}\n                    }\n                {%- endif -%}\n            {%- endif -%}\n            {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n            type:<|\"|>{{ value[\'type\'] | upper }}<|\"|>}\n        {%- endif -%}\n    {%- endfor -%}\n{%- endmacro -%}\n{%- macro format_function_declaration(tool_data) -%}\n    declaration:{{- tool_data[\'function\'][\'name\'] -}}{description:<|\"|>{{- tool_data[\'function\'][\'description\'] -}}<|\"|>\n    {%- set params = tool_data[\'function\'][\'parameters\'] -%}\n    {%- if params -%}\n        ,parameters:{\n        {%- if params[\'properties\'] -%}\n            properties:{ {{- format_parameters(params[\'properties\'], params[\'required\']) -}} },\n        {%- endif -%}\n        {%- if params[\'required\'] -%}\n            required:[\n            {%- for item in params[\'required\'] -%}\n                <|\"|>{{- item -}}<|\"|>\n                {{- \',\' if not loop.last -}}\n            {%- endfor -%}\n            ],\n        {%- endif -%}\n        {%- if params[\'type\'] -%}\n            type:<|\"|>{{- params[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    {%- if \'response\' in tool_data[\'function\'] -%}\n        {%- set response_declaration = tool_data[\'function\'][\'response\'] -%}\n        ,response:{\n        {%- if response_declaration[\'description\'] -%}\n            description:<|\"|>{{- response_declaration[\'description\'] -}}<|\"|>,\n        {%- endif -%}\n        {%- if response_declaration[\'type\'] | upper == \'OBJECT\' -%}\n            type:<|\"|>{{- response_declaration[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    }\n{%- endmacro -%}\n{%- macro format_argument(argument, escape_keys=True) -%}\n    {%- if argument is string -%}\n        {{- \'<|\"|>\' + argument + \'<|\"|>\' -}}\n    {%- elif argument is boolean -%}\n        {{- \'true\' if argument else \'false\' -}}\n    {%- elif argument is mapping -%}\n        {{- \'{\' -}}\n        {%- set ns = namespace(found_first=false) -%}\n        {%- for key, value in argument | dictsort -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {%- if escape_keys -%}\n                {{- \'<|\"|>\' + key + \'<|\"|>\' -}}\n            {%- else -%}\n                {{- key -}}\n            {%- endif -%}\n            :{{- format_argument(value, escape_keys=escape_keys) -}}\n        {%- endfor -%}\n        {{- \'}\' -}}\n    {%- elif argument is sequence -%}\n        {{- \'[\' -}}\n        {%- for item in argument -%}\n            {{- format_argument(item, escape_keys=escape_keys) -}}\n            {%- if not loop.last %},{% endif -%}\n        {%- endfor -%}\n        {{- \']\' -}}\n    {%- else -%}\n        {{- argument -}}\n    {%- endif -%}\n{%- endmacro -%}\n{%- macro strip_thinking(text) -%}\n    {%- set ns = namespace(result=\'\') -%}\n    {%- for part in text.split(\'<channel|>\') -%}\n        {%- if \'<|channel>\' in part -%}\n            {%- set ns.result = ns.result + part.split(\'<|channel>\')[0] -%}\n        {%- else -%}\n            {%- set ns.result = ns.result + part -%}\n        {%- endif -%}\n    {%- endfor -%}\n    {{- ns.result | trim -}}\n{%- endmacro -%}\n\n{%- set ns = namespace(prev_message_type=None) -%}\n{%- set loop_messages = messages -%}\n{{ bos_token }}\n{#- Handle System/Tool Definitions Block -#}\n{%- if (enable_thinking is defined and enable_thinking) or tools or messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n    {{- \'<|turn>system\\n\' -}}\n\n    {#- Inject Thinking token at the very top of the FIRST system turn -#}\n    {%- if enable_thinking is defined and enable_thinking -%}\n        {{- \'<|think|>\' -}}\n    {%- endif -%}\n\n    {%- if messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n        {%- if messages[0][\'content\'] is string -%}\n            {{- messages[0][\'content\'] | trim -}}\n        {%- elif messages[0][\'content\'] is sequence -%}\n            {%- for item in messages[0][\'content\'] -%}\n                {%- if item[\'type\'] == \'text\' -%}\n                    {{- item[\'text\'] | trim -}}\n                {%- endif -%}\n            {%- endfor -%}\n        {%- endif -%}\n        {%- set loop_messages = messages[1:] -%}\n    {%- endif -%}\n\n    {%- if tools -%}\n        {{- \'\\n\\n\' -}}\n        {%- for tool in tools %}\n            {{- \'<|tool>\' -}}\n            {{- format_function_declaration(tool) | trim -}}\n            {{- \'<tool|>\' -}}\n        {%- endfor %}\n    {%- endif -%}\n\n    {{- \'<turn|>\\n\' -}}\n{%- endif %}\n\n{#- Loop through messages -#}\n{%- for message in loop_messages -%}\n    {%- set role = \'model\' if message[\'role\'] == \'assistant\' else message[\'role\'] -%}\n        {%- if role != \'tool\' -%}\n            {{- \'<|turn>\' + role + \'\\n\' }}\n        {%- endif -%}\n\n            {%- if message[\'tool_calls\'] -%}\n                {%- for tool_call in message[\'tool_calls\'] -%}\n                    {%- set function = tool_call[\'function\'] -%}\n                    {{- \'<|tool_call>call:\' + function[\'name\'] + \'{\' -}}\n                    {%- if function[\'arguments\'] is mapping -%}\n                        {%- set ns_args = namespace(found_first=false) -%}\n                        {%- for key, value in function[\'arguments\'] | dictsort -%}\n                            {%- if ns_args.found_first %},{% endif -%}\n                            {%- set ns_args.found_first = true -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                        {%- endfor -%}\n                    {%- elif function[\'arguments\'] is string -%}\n                        {{- function[\'arguments\'] -}}\n                    {%- endif -%}\n                    {{- \'}<tool_call|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_call\' -%}\n            {%- endif -%}\n\n            {%- if role == \'tool\' and message[\'content\'] is sequence -%}\n                {#- Tool Response handling -#}\n                {%- for item in message[\'content\'] -%}\n                    {{- \'<|tool_response>\' -}}\n                    {%- if item[\'response\'] is mapping -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{\' -}}\n                        {%- for key, value in item[\'response\'] | dictsort -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                            {%- if not loop.last %},{% endif -%}\n                        {%- endfor -%}\n                        {{- \'}\' -}}\n                    {%- else -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{value:\' + format_argument(item[\'response\'], escape_keys=False) + \'}\' -}}\n                    {%- endif -%}\n                    {{- \'<tool_response|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_response\' -%}\n            {%- else -%}\n                {%- if message[\'content\'] is string -%}\n                    {%- if role == \'model\' -%}\n                        {{- strip_thinking(message[\'content\']) -}}\n                    {%- else -%}\n                        {{- message[\'content\'] | trim -}}\n                    {%- endif -%}\n                {%- elif message[\'content\'] is sequence -%}\n                    {%- for item in message[\'content\'] -%}\n                        {%- if item[\'type\'] == \'text\' -%}\n                            {%- if role == \'model\' -%}\n                                {{- strip_thinking(item[\'text\']) -}}\n                            {%- else -%}\n                                {{- item[\'text\'] | trim -}}\n                            {%- endif -%}\n                        {%- elif item[\'type\'] == \'image\' -%}\n                            {{- \'\\n\\n<|image|>\\n\\n\' -}}\n                        {%- elif item[\'type\'] == \'audio\' -%}\n                            {{- \'<|audio|>\' -}}\n                        {%- endif -%}\n                    {%- endfor -%}\n                {%- endif -%}\n                {%- set ns.prev_message_type = None -%} \n            {%- endif -%}\n        {%- if ns.prev_message_type == None -%}\n            {{- \'<turn|>\\n\' -}}\n        {%- endif -%}\n{%- endfor -%}\n\n{%- if add_generation_prompt -%}\n    {%- if ns.prev_message_type != \'tool_response\' -%}\n        {{- \'<|turn>model\\n\' -}}\n    {%- endif -%}\n{%- endif -%}"
+channels {
+  channel_name: "thought"
+  start: "<|channel>thought\n"
+  end: "<channel|>"
+}
+  BenchmarkParams: Not set
+  VisionExecutorSettings: Not set
+  AudioExecutorSettings: Not set
+  ParallelFileSectionLoading: true
+  SingleThreadedExecution: false
+I0000 00:00:1778994437.578573    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_PREFILL_DECODE
+I0000 00:00:1778994437.578577    5550 model_resources_litert_lm.cc:68] litert model size: 2260043376
+INFO: [environment.cc:30] Creating LiteRT environment with options
+WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered: kLiteRtStatusErrorInvalidArgument.
+INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x1a035f40, name=GPU WebGPU
+INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
+INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x1b7623f0, name=CpuAccelerator
+INFO: [cpu_registry.cc:42] CPU accelerator registered.
+I0000 00:00:1778994437.746757    5550 llm_executor_settings_utils.cc:178] Setting serialization dir: /home/user/JalRekha-litert/backend/data/litert-cache
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1340, num_signatures=4
+INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=0, num_tensors=3514, num_inputs=53, num_outputs=50, num_ops=2712
+INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=1, num_tensors=2309, num_inputs=53, num_outputs=48, num_ops=1773
+INFO: [magic_number_utils.cc:105]   signature=prefill_128, subgraph_index=2, num_tensors=2309, num_inputs=53, num_outputs=48, num_ops=1773
+INFO: [magic_number_utils.cc:105]   signature=verify, subgraph_index=3, num_tensors=3606, num_inputs=53, num_outputs=50, num_ops=2801
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [magic_number_utils.cc:425] 577 tensors of signature decode have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 426 tensors of signature prefill_1024 have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 426 tensors of signature prefill_128 have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 581 tensors of signature verify have been updated for magic number  32003 to target number 1024
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+I0000 00:00:1778994437.800597    5550 delegate_webgpu.cc:211] Create WebGPU environment with device substr: 
+Warning: Vulkan shaderUniform*ArrayDynamicIndexing required.
+ - While initializing adapter (backend=BackendType::Vulkan)
+    at InitializeImpl (third_party/dawn/src/dawn/native/vulkan/PhysicalDeviceVk.cpp:245)
+
+Warning: maxDynamicUniformBuffersPerPipelineLayout artificially reduced from 1000000 to 16 to fit dynamic offset allocation limit.
+Warning: maxDynamicStorageBuffersPerPipelineLayout artificially reduced from 1000000 to 16 to fit dynamic offset allocation limit.
+I0000 00:00:1778994437.833252    5550 environment.cc:523] Found 1 adapters
+I0000 00:00:1778994437.833266    5550 environment.cc:536] adapter: llvmpipe (LLVM 19.1.7, 128 bits), arch=software, vendor=mesa, backend=Vulkan, adapterType=CPU / Software
+I0000 00:00:1778994437.833304    5550 environment.cc:558] Selected adapter: llvmpipe (LLVM 19.1.7, 128 bits), arch=software, vendor=mesa, backend=Vulkan, adapterType=CPU / Software
+I0000 00:00:1778994437.858395    5550 delegate_webgpu.cc:238] Created a WebGPU environment.
+INFO: [environment.cc:41] Adding options to the existing LiteRT environment
+INFO: [gpu_environment.h:155] Created LiteRT GpuEnvironment.
+INFO: [environment.cc:41] Adding options to the existing LiteRT environment
+I0000 00:00:1778994437.858693    5550 delegate_webgpu.cc:624] # of threads to upload weights = 2
+I0000 00:00:1778994437.858792    5550 delegate_webgpu.cc:632] # of threads to compile kernels = 1
+E0000 00:00:1778994437.954006    5550 environment.cc:108] Validation error: Binding size (167772160) of [Buffer (unlabeled)] is larger than the maximum storage buffer binding size (134217728).
+ - While validating entries[0] against { binding: 1, visibility: ShaderStage::Compute, buffer: {type: BufferBindingType::ReadOnlyStorage, minBindingSize: 0, hasDynamicOffset: 0} }.
+ - While validating [BindGroupDescriptor] against [BindGroupLayout (unlabeled)]
+ - While calling [Device].CreateBindGroup([BindGroupDescriptor]).
+I0000 00:00:1778994437.967364    5550 delegate_kernel.cc:279] Total 50 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994437.967465    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994438.546660    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+I0000 00:00:1778994438.594191    5550 delegate_kernel.cc:279] Total 49 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994438.594230    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994438.733851    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+I0000 00:00:1778994438.780246    5550 delegate_kernel.cc:279] Total 49 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994438.780287    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994438.880007    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+I0000 00:00:1778994438.948649    5550 delegate_kernel.cc:279] Total 50 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994438.948690    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994439.073491    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+INFO: [environment.cc:30] Creating LiteRT environment with options
+WARNING: [npu_registry.cc:34] NPU accelerator could not be loaded and registered: kLiteRtStatusErrorInvalidArgument.
+INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x2a25d390, name=GPU WebGPU
+INFO: [gpu_registry.cc:87] Statically linked GPU accelerator registered.
+INFO: [accelerator_registry.cc:54] RegisterAccelerator: ptr=0x2a573af0, name=CpuAccelerator
+INFO: [cpu_registry.cc:42] CPU accelerator registered.
+I0000 00:00:1778994439.135826    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_END_OF_AUDIO
+I0000 00:00:1778994439.135854    5550 model_resources_litert_lm.cc:68] litert model size: 10868
+I0000 00:00:1778994439.135894    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_END_OF_VISION
+I0000 00:00:1778994439.135899    5550 model_resources_litert_lm.cc:68] litert model size: 10868
+I0000 00:00:1778994439.135929    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_EMBEDDER
+I0000 00:00:1778994439.135933    5550 model_resources_litert_lm.cc:68] litert model size: 170920584
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1, num_signatures=1
+INFO: [magic_number_utils.cc:105]   signature=embedder, subgraph_index=0, num_tensors=16, num_inputs=1, num_outputs=1, num_ops=8
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+INFO: Created TensorFlow Lite XNNPACK delegate for CPU.
+I0000 00:00:1778994439.137410    5550 embedding_lookup_text.cc:303] EmbeddingLookupText::Initialize Creating input buffers
+I0000 00:00:1778994439.137484    5550 embedding_lookup_text.cc:342] EmbeddingLookupText initialized: signature=embedder, rank=3, floats_per_token=2560
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1, num_signatures=1
+INFO: [magic_number_utils.cc:105]   signature=eoa, subgraph_index=0, num_tensors=1, num_inputs=0, num_outputs=1, num_ops=0
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+INFO: [compiled_model.cc:1491] Tracked constant output tensor eoa_embedding with locked address
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1, num_signatures=1
+INFO: [magic_number_utils.cc:105]   signature=eoi, subgraph_index=0, num_tensors=1, num_inputs=0, num_outputs=1, num_ops=0
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+INFO: [compiled_model.cc:1491] Tracked constant output tensor eoi_embedding with locked address
+I0000 00:00:1778994439.137874    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_PER_LAYER_EMBEDDER
+I0000 00:00:1778994439.137883    5550 model_resources_litert_lm.cc:68] litert model size: 836778512
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1, num_signatures=1
+INFO: [magic_number_utils.cc:105]   signature=per_layer_embedder, subgraph_index=0, num_tensors=97, num_inputs=1, num_outputs=1, num_ops=49
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+I0000 00:00:1778994439.198064    5550 embedding_lookup_text.cc:303] EmbeddingLookupText::Initialize Creating input buffers
+I0000 00:00:1778994439.198248    5550 embedding_lookup_text.cc:342] EmbeddingLookupText initialized: signature=per_layer_embedder, rank=4, floats_per_token=10752
+I0000 00:00:1778994439.198370    5550 llm_executor_settings_utils.cc:178] Setting serialization dir: /home/user/JalRekha-litert/backend/data/litert-cache
+I0000 00:00:1778994439.198418    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_MTP_DRAFTER
+I0000 00:00:1778994439.198422    5550 model_resources_litert_lm.cc:68] litert model size: 45126160
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=30, num_signatures=1
+INFO: [magic_number_utils.cc:105]   signature=mtp_drafter, subgraph_index=0, num_tensors=285, num_inputs=8, num_outputs=2, num_ops=206
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [magic_number_utils.cc:425] 57 tensors of signature mtp_drafter have been updated for magic number  32003 to target number 1024
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+INFO: [environment.cc:41] Adding options to the existing LiteRT environment
+I0000 00:00:1778994439.206021    5550 delegate_webgpu.cc:624] # of threads to upload weights = 2
+I0000 00:00:1778994439.206748    5550 delegate_webgpu.cc:632] # of threads to compile kernels = 1
+I0000 00:00:1778994439.234340    5550 delegate_kernel.cc:279] Total 6 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994439.234386    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994439.249311    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+W0000 00:00:1778994439.250922    5550 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
+└ Could not load shared library libLiteRtTopKWebGpuSampler.so: libLiteRtTopKWebGpuSampler.so: cannot open shared object file: No such file or directory.
+=== Source Location Trace: ===
+third_party/odml/litert/litert/cc/litert_macros.h:560
+I0000 00:00:1778994439.250958    5550 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
+W0000 00:00:1778994439.425321    5550 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
+└ Could not load shared library libLiteRtTopKWebGpuSampler.so: libLiteRtTopKWebGpuSampler.so: cannot open shared object file: No such file or directory.
+=== Source Location Trace: ===
+third_party/odml/litert/litert/cc/litert_macros.h:560
+I0000 00:00:1778994439.425387    5550 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
+I0000 00:00:1778994439.652499    5550 engine_settings.cc:101] The Main backend constraint is not set.
+I0000 00:00:1778994439.652531    5550 engine_settings.cc:433] The validated engine settings: EngineSettings: 
+  MainExecutorSettings: backend: GPU
+backend_config:
+max_top_k: 1
+
+max_tokens: 1024
+activation_data_type: FLOAT32
+max_num_images: 0
+lora_rank: 0
+cache_dir: /home/user/JalRekha-litert/backend/data/litert-cache
+cache_file: Not set
+litert_dispatch_lib_dir: Not set
+model_assets: model_path: backend/data/models/gemma-4-E4B-it.litertlm
+fake_weights_mode: FAKE_WEIGHTS_NONE
+
+advanced_settings: prefill_batch_sizes: []
+num_output_candidates: 1
+configure_magic_numbers: true
+verify_magic_numbers: false
+clear_kv_cache_before_prefill: true
+num_logits_to_print_after_decode: 0
+gpu_madvise_original_shared_tensors: true
+is_benchmark: false
+preferred_device_substr: 
+num_threads_to_upload: -1
+num_threads_to_compile: -1
+convert_weights_on_gpu: true
+wait_for_weights_conversion_complete_in_benchmark: true
+optimize_shader_compilation: true
+cache_compiled_shaders_only: false
+share_constant_tensors: true
+sampler_handles_input: true
+allow_src_quantized_fc_conv_ops: true
+hint_waiting_for_completion: false
+gpu_context_low_priority: Not set
+enable_speculative_decoding: true
+disable_delegate_clustering: true
+hint_kernel_batch_size: Not set
+
+  LlmMetadata: go/debugstr   
+start_token {
+  token_ids {
+    ids: 2
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 1
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 50
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 106
+  }
+}
+sampler_params {
+  type: TOP_P
+  k: 1
+  p: 0.95
+  temperature: 1
+  seed: 0
+}
+llm_model_type {
+  gemma4 {
+    start_of_image_token {
+      token_str: "<|image>"
+    }
+    end_of_image_token {
+      token_str: "<image|>"
+    }
+    start_of_audio_token {
+      token_str: "<|audio>"
+    }
+    end_of_audio_token {
+      token_str: "<audio|>"
+    }
+    code_fence_start: "<|tool_call>"
+    code_fence_end: "<tool_call|>"
+    open_quote: "<|\"|>"
+    close_quote: "<|\"|>"
+    function_response_start: "<|tool_response>"
+    use_template_for_fc_format: true
+    patch_width: 16
+    patch_height: 16
+    max_num_patches: 2520
+  }
+}
+jinja_prompt_template: "{%- macro format_parameters(properties, required) -%}\n    {%- set standard_keys = [\'description\', \'type\', \'properties\', \'required\', \'nullable\'] -%}\n    {%- set ns = namespace(found_first=false) -%}\n    {%- for key, value in properties | dictsort -%}\n        {%- set add_comma = false -%}\n        {%- if key not in standard_keys -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {{ key }}:{\n            {%- if value[\'description\'] -%}\n                description:<|\"|>{{ value[\'description\'] }}<|\"|>\n                {%- set add_comma = true -%}\n            {%- endif -%}\n            {%- if value[\'nullable\'] %}\n                {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                nullable:true\n            {%- endif -%}\n            {%- if value[\'type\'] | upper == \'STRING\' -%}\n                {%- if value[\'enum\'] -%}\n                    {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                    enum:{{ format_argument(value[\'enum\']) }}\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'OBJECT\' -%}\n                ,properties:{\n                {%- if value[\'properties\'] is defined and value[\'properties\'] is mapping -%}\n                    {{- format_parameters(value[\'properties\'], value[\'required\'] | default([])) -}}\n                {%- elif value is mapping -%}\n                    {{- format_parameters(value, value[\'required\'] | default([])) -}}\n                {%- endif -%}\n                }\n                {%- if value[\'required\'] -%}\n                    ,required:[\n                    {%- for item in value[\'required\'] | default([]) -%}\n                        <|\"|>{{- item -}}<|\"|>\n                        {%- if not loop.last %},{% endif -%}\n                    {%- endfor -%}\n                    ]\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'ARRAY\' -%}\n                {%- if value[\'items\'] is mapping and value[\'items\'] -%}\n                    ,items:{\n                    {%- set ns_items = namespace(found_first=false) -%}\n                    {%- for item_key, item_value in value[\'items\'] | dictsort -%}\n                        {%- if item_value is not none -%}\n                            {%- if ns_items.found_first %},{% endif -%}\n                            {%- set ns_items.found_first = true -%}\n                            {%- if item_key == \'properties\' -%}\n                                properties:{\n                                {%- if item_value is mapping -%}\n                                    {{- format_parameters(item_value, value[\'items\'][\'required\'] | default([])) -}}\n                                {%- endif -%}\n                                }\n                            {%- elif item_key == \'required\' -%}\n                                required:[\n                                {%- for req_item in item_value -%}\n                                    <|\"|>{{- req_item -}}<|\"|>\n                                    {%- if not loop.last %},{% endif -%}\n                                {%- endfor -%}\n                                ]\n                            {%- elif item_key == \'type\' -%}\n                                {%- if item_value is string -%}\n                                    type:{{ format_argument(item_value | upper) }}\n                                {%- else -%}\n                                    type:{{ format_argument(item_value | map(\'upper\') | list) }}\n                                {%- endif -%}\n                            {%- else -%}\n                                {{ item_key }}:{{ format_argument(item_value) }}\n                            {%- endif -%}\n                        {%- endif -%}\n                    {%- endfor -%}\n                    }\n                {%- endif -%}\n            {%- endif -%}\n            {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n            type:<|\"|>{{ value[\'type\'] | upper }}<|\"|>}\n        {%- endif -%}\n    {%- endfor -%}\n{%- endmacro -%}\n{%- macro format_function_declaration(tool_data) -%}\n    declaration:{{- tool_data[\'function\'][\'name\'] -}}{description:<|\"|>{{- tool_data[\'function\'][\'description\'] -}}<|\"|>\n    {%- set params = tool_data[\'function\'][\'parameters\'] -%}\n    {%- if params -%}\n        ,parameters:{\n        {%- if params[\'properties\'] -%}\n            properties:{ {{- format_parameters(params[\'properties\'], params[\'required\']) -}} },\n        {%- endif -%}\n        {%- if params[\'required\'] -%}\n            required:[\n            {%- for item in params[\'required\'] -%}\n                <|\"|>{{- item -}}<|\"|>\n                {{- \',\' if not loop.last -}}\n            {%- endfor -%}\n            ],\n        {%- endif -%}\n        {%- if params[\'type\'] -%}\n            type:<|\"|>{{- params[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    {%- if \'response\' in tool_data[\'function\'] -%}\n        {%- set response_declaration = tool_data[\'function\'][\'response\'] -%}\n        ,response:{\n        {%- if response_declaration[\'description\'] -%}\n            description:<|\"|>{{- response_declaration[\'description\'] -}}<|\"|>,\n        {%- endif -%}\n        {%- if response_declaration[\'type\'] | upper == \'OBJECT\' -%}\n            type:<|\"|>{{- response_declaration[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    }\n{%- endmacro -%}\n{%- macro format_argument(argument, escape_keys=True) -%}\n    {%- if argument is string -%}\n        {{- \'<|\"|>\' + argument + \'<|\"|>\' -}}\n    {%- elif argument is boolean -%}\n        {{- \'true\' if argument else \'false\' -}}\n    {%- elif argument is mapping -%}\n        {{- \'{\' -}}\n        {%- set ns = namespace(found_first=false) -%}\n        {%- for key, value in argument | dictsort -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {%- if escape_keys -%}\n                {{- \'<|\"|>\' + key + \'<|\"|>\' -}}\n            {%- else -%}\n                {{- key -}}\n            {%- endif -%}\n            :{{- format_argument(value, escape_keys=escape_keys) -}}\n        {%- endfor -%}\n        {{- \'}\' -}}\n    {%- elif argument is sequence -%}\n        {{- \'[\' -}}\n        {%- for item in argument -%}\n            {{- format_argument(item, escape_keys=escape_keys) -}}\n            {%- if not loop.last %},{% endif -%}\n        {%- endfor -%}\n        {{- \']\' -}}\n    {%- else -%}\n        {{- argument -}}\n    {%- endif -%}\n{%- endmacro -%}\n{%- macro strip_thinking(text) -%}\n    {%- set ns = namespace(result=\'\') -%}\n    {%- for part in text.split(\'<channel|>\') -%}\n        {%- if \'<|channel>\' in part -%}\n            {%- set ns.result = ns.result + part.split(\'<|channel>\')[0] -%}\n        {%- else -%}\n            {%- set ns.result = ns.result + part -%}\n        {%- endif -%}\n    {%- endfor -%}\n    {{- ns.result | trim -}}\n{%- endmacro -%}\n\n{%- set ns = namespace(prev_message_type=None) -%}\n{%- set loop_messages = messages -%}\n{{ bos_token }}\n{#- Handle System/Tool Definitions Block -#}\n{%- if (enable_thinking is defined and enable_thinking) or tools or messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n    {{- \'<|turn>system\\n\' -}}\n\n    {#- Inject Thinking token at the very top of the FIRST system turn -#}\n    {%- if enable_thinking is defined and enable_thinking -%}\n        {{- \'<|think|>\' -}}\n    {%- endif -%}\n\n    {%- if messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n        {%- if messages[0][\'content\'] is string -%}\n            {{- messages[0][\'content\'] | trim -}}\n        {%- elif messages[0][\'content\'] is sequence -%}\n            {%- for item in messages[0][\'content\'] -%}\n                {%- if item[\'type\'] == \'text\' -%}\n                    {{- item[\'text\'] | trim -}}\n                {%- endif -%}\n            {%- endfor -%}\n        {%- endif -%}\n        {%- set loop_messages = messages[1:] -%}\n    {%- endif -%}\n\n    {%- if tools -%}\n        {{- \'\\n\\n\' -}}\n        {%- for tool in tools %}\n            {{- \'<|tool>\' -}}\n            {{- format_function_declaration(tool) | trim -}}\n            {{- \'<tool|>\' -}}\n        {%- endfor %}\n    {%- endif -%}\n\n    {{- \'<turn|>\\n\' -}}\n{%- endif %}\n\n{#- Loop through messages -#}\n{%- for message in loop_messages -%}\n    {%- set role = \'model\' if message[\'role\'] == \'assistant\' else message[\'role\'] -%}\n        {%- if role != \'tool\' -%}\n            {{- \'<|turn>\' + role + \'\\n\' }}\n        {%- endif -%}\n\n            {%- if message[\'tool_calls\'] -%}\n                {%- for tool_call in message[\'tool_calls\'] -%}\n                    {%- set function = tool_call[\'function\'] -%}\n                    {{- \'<|tool_call>call:\' + function[\'name\'] + \'{\' -}}\n                    {%- if function[\'arguments\'] is mapping -%}\n                        {%- set ns_args = namespace(found_first=false) -%}\n                        {%- for key, value in function[\'arguments\'] | dictsort -%}\n                            {%- if ns_args.found_first %},{% endif -%}\n                            {%- set ns_args.found_first = true -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                        {%- endfor -%}\n                    {%- elif function[\'arguments\'] is string -%}\n                        {{- function[\'arguments\'] -}}\n                    {%- endif -%}\n                    {{- \'}<tool_call|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_call\' -%}\n            {%- endif -%}\n\n            {%- if role == \'tool\' and message[\'content\'] is sequence -%}\n                {#- Tool Response handling -#}\n                {%- for item in message[\'content\'] -%}\n                    {{- \'<|tool_response>\' -}}\n                    {%- if item[\'response\'] is mapping -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{\' -}}\n                        {%- for key, value in item[\'response\'] | dictsort -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                            {%- if not loop.last %},{% endif -%}\n                        {%- endfor -%}\n                        {{- \'}\' -}}\n                    {%- else -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{value:\' + format_argument(item[\'response\'], escape_keys=False) + \'}\' -}}\n                    {%- endif -%}\n                    {{- \'<tool_response|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_response\' -%}\n            {%- else -%}\n                {%- if message[\'content\'] is string -%}\n                    {%- if role == \'model\' -%}\n                        {{- strip_thinking(message[\'content\']) -}}\n                    {%- else -%}\n                        {{- message[\'content\'] | trim -}}\n                    {%- endif -%}\n                {%- elif message[\'content\'] is sequence -%}\n                    {%- for item in message[\'content\'] -%}\n                        {%- if item[\'type\'] == \'text\' -%}\n                            {%- if role == \'model\' -%}\n                                {{- strip_thinking(item[\'text\']) -}}\n                            {%- else -%}\n                                {{- item[\'text\'] | trim -}}\n                            {%- endif -%}\n                        {%- elif item[\'type\'] == \'image\' -%}\n                            {{- \'\\n\\n<|image|>\\n\\n\' -}}\n                        {%- elif item[\'type\'] == \'audio\' -%}\n                            {{- \'<|audio|>\' -}}\n                        {%- endif -%}\n                    {%- endfor -%}\n                {%- endif -%}\n                {%- set ns.prev_message_type = None -%} \n            {%- endif -%}\n        {%- if ns.prev_message_type == None -%}\n            {{- \'<turn|>\\n\' -}}\n        {%- endif -%}\n{%- endfor -%}\n\n{%- if add_generation_prompt -%}\n    {%- if ns.prev_message_type != \'tool_response\' -%}\n        {{- \'<|turn>model\\n\' -}}\n    {%- endif -%}\n{%- endif -%}"
+channels {
+  channel_name: "thought"
+  start: "<|channel>thought\n"
+  end: "<channel|>"
+}
+  BenchmarkParams: Not set
+  VisionExecutorSettings: Not set
+  AudioExecutorSettings: Not set
+  ParallelFileSectionLoading: true
+  SingleThreadedExecution: false
+I0000 00:00:1778994439.652629    5550 threadpool.cc:41] ThreadPool 'engine': Running up to 1 threads.
+I0000 00:00:1778994439.654665    5550 model_data_processor_factory.cc:430] Creating Gemma4DataProcessor
+W0000 00:00:1778994439.654692    5550 mel_filterbank.cc:137] Missing 10 bands  starting at 0 in mel-frequency design. Perhaps too many channels or not enough frequency resolution in spectrum. (fft_length: 257 sample_rate: 16000 mel_channel_count: 128 lower_frequency_limit: 0 upper_frequency_limit: 8000
+I0000 00:00:1778994439.655708    5550 threadpool.cc:96] ThreadPool 'engine': Created a worker thread since all 0 worker threads are (supposed to be) busy.
+E0000 00:00:1778994443.577241    5572 environment.cc:108] Validation error: [Invalid BindGroup (unlabeled)] is invalid due to a previous error.
+ - While encoding [ComputePassEncoder (unlabeled)].SetBindGroup(0, [Invalid BindGroup (unlabeled)], 0, ...).
+ - While finishing [CommandEncoder (unlabeled)].
+E0000 00:00:1778994443.577289    5572 environment.cc:108] Validation error: [Invalid CommandBuffer] is invalid due to a previous error.
+ - While calling [Queue].Submit([[Invalid CommandBuffer]])
+E0000 00:00:1778994445.164326    5605 environment.cc:108] Validation error: [Invalid BindGroup (unlabeled)] is invalid due to a previous error.
+ - While encoding [ComputePassEncoder (unlabeled)].SetBindGroup(0, [Invalid BindGroup (unlabeled)], 0, ...).
+ - While finishing [CommandEncoder (unlabeled)].
+I0000 00:00:1778994502.990907    5584 session_basic.cc:395] RunPrefillAsync status: OK
+I0000 00:00:1778994502.993318    5584 session_basic.cc:515] RunDecodeAsync
+W0000 00:00:1778994503.263408    5584 sampler_factory.cc:450] WebGPU sampler not available, falling back to statically linked C API: UNAVAILABLE: ERROR: [third_party/odml/litert_lm/runtime/components/sampler_factory.cc:294]
+└ Could not load shared library libLiteRtTopKWebGpuSampler.so: libLiteRtTopKWebGpuSampler.so: cannot open shared object file: No such file or directory.
+=== Source Location Trace: ===
+third_party/odml/litert/litert/cc/litert_macros.h:560
+I0000 00:00:1778994503.264130    5584 sampler_factory.cc:458] Statically linked LiteRtTopKWebGpuSampler C API.
+E0000 00:00:1778994629.435530    5550 engine.cc:946] Failed to send message: ABORTED: ABORTED: The timeout was reached while reading back data.
+=== Source Location Trace: ===
+third_party/odml/litert_lm/runtime/components/sampler_factory.cc:149
+third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1520
+third_party/odml/litert_lm/runtime/executor/llm_litert_compiled_model_executor.cc:1097
+third_party/odml/litert_lm/runtime/core/tasks.cc:357
+third_party/odml/litert_lm/runtime/core/tasks.cc:145
+LiteRT node message failed mode=text backend=gpu model=gemma-4-E4B-it.litertlm error=litert_lm_conversation_send_message failed
+I0000 00:00:1778994629.487640    5550 threadpool.cc:46] ThreadPool 'engine': Shutting down...
+I0000 00:00:1778994629.487721    5584 threadpool.cc:171] ThreadPool 'engine': Worker thread stopped.
+I0000 00:00:1778994629.487924    5550 threadpool.cc:75] ThreadPool 'engine': Shutdown complete.
+I0000 00:00:1778994629.488157    5550 llm_litert_mtp_drafter.cc:151] Num drafted tokens: 0
+I0000 00:00:1778994629.488170    5550 llm_litert_mtp_drafter.cc:152] Num verified tokens: 0
+I0000 00:00:1778994630.078934    5550 litert_lm_loader.cc:183] LitertLmLoader::Initialize
+I0000 00:00:1778994630.080708    5550 litert_lm_loader.cc:206] mmap_status is ok
+I0000 00:00:1778994630.080975    5550 litert_lm_loader.cc:211] status: OK
+I0000 00:00:1778994630.080981    5550 litert_lm_loader.cc:212] major_version: 1
+I0000 00:00:1778994630.080988    5550 litert_lm_loader.cc:213] minor_version: 5
+I0000 00:00:1778994630.080990    5550 litert_lm_loader.cc:214] patch_version: 0
+I0000 00:00:1778994630.081005    5550 litert_lm_loader.cc:247] section_index: 0
+I0000 00:00:1778994630.081008    5550 litert_lm_loader.cc:248] section_data_type: LlmMetadataProto
+I0000 00:00:1778994630.081012    5550 litert_lm_loader.cc:250] section_begin_offset: 16384
+I0000 00:00:1778994630.081015    5550 litert_lm_loader.cc:251] section_end_offset: 28576
+I0000 00:00:1778994630.081018    5550 litert_lm_loader.cc:247] section_index: 1
+I0000 00:00:1778994630.081021    5550 litert_lm_loader.cc:248] section_data_type: SP_Tokenizer
+I0000 00:00:1778994630.081024    5550 litert_lm_loader.cc:250] section_begin_offset: 32768
+I0000 00:00:1778994630.081026    5550 litert_lm_loader.cc:251] section_end_offset: 4721781
+I0000 00:00:1778994630.081030    5550 litert_lm_loader.cc:100] model_type: tf_lite_embedder
+I0000 00:00:1778994630.087294    5550 litert_lm_loader.cc:247] section_index: 2
+I0000 00:00:1778994630.087312    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087316    5550 litert_lm_loader.cc:250] section_begin_offset: 4734976
+I0000 00:00:1778994630.087318    5550 litert_lm_loader.cc:251] section_end_offset: 175655560
+I0000 00:00:1778994630.087322    5550 litert_lm_loader.cc:100] model_type: tf_lite_per_layer_embedder
+I0000 00:00:1778994630.087326    5550 litert_lm_loader.cc:247] section_index: 3
+I0000 00:00:1778994630.087330    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087333    5550 litert_lm_loader.cc:250] section_begin_offset: 175669248
+I0000 00:00:1778994630.087335    5550 litert_lm_loader.cc:251] section_end_offset: 1012447760
+I0000 00:00:1778994630.087338    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_encoder_hw
+I0000 00:00:1778994630.087341    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087344    5550 litert_lm_loader.cc:247] section_index: 4
+I0000 00:00:1778994630.087346    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087349    5550 litert_lm_loader.cc:250] section_begin_offset: 1012449280
+I0000 00:00:1778994630.087351    5550 litert_lm_loader.cc:251] section_end_offset: 1106501560
+I0000 00:00:1778994630.087354    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_adapter
+I0000 00:00:1778994630.087361    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087364    5550 litert_lm_loader.cc:247] section_index: 5
+I0000 00:00:1778994630.087366    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087368    5550 litert_lm_loader.cc:250] section_begin_offset: 1106509824
+I0000 00:00:1778994630.087370    5550 litert_lm_loader.cc:251] section_end_offset: 1122242524
+I0000 00:00:1778994630.087372    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_audio
+I0000 00:00:1778994630.087375    5550 litert_lm_loader.cc:247] section_index: 6
+I0000 00:00:1778994630.087377    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087379    5550 litert_lm_loader.cc:250] section_begin_offset: 1122254848
+I0000 00:00:1778994630.087381    5550 litert_lm_loader.cc:251] section_end_offset: 1122265716
+I0000 00:00:1778994630.087383    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_encoder
+I0000 00:00:1778994630.087387    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994630.087389    5550 litert_lm_loader.cc:247] section_index: 7
+I0000 00:00:1778994630.087390    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087392    5550 litert_lm_loader.cc:250] section_begin_offset: 1122271232
+I0000 00:00:1778994630.087394    5550 litert_lm_loader.cc:251] section_end_offset: 1346409168
+I0000 00:00:1778994630.087396    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_adapter
+I0000 00:00:1778994630.087398    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087400    5550 litert_lm_loader.cc:247] section_index: 8
+I0000 00:00:1778994630.087402    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087403    5550 litert_lm_loader.cc:250] section_begin_offset: 1346420736
+I0000 00:00:1778994630.087405    5550 litert_lm_loader.cc:251] section_end_offset: 1354309392
+I0000 00:00:1778994630.087407    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_vision
+I0000 00:00:1778994630.087409    5550 litert_lm_loader.cc:247] section_index: 9
+I0000 00:00:1778994630.087411    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087413    5550 litert_lm_loader.cc:250] section_begin_offset: 1354317824
+I0000 00:00:1778994630.087414    5550 litert_lm_loader.cc:251] section_end_offset: 1354328692
+I0000 00:00:1778994630.087417    5550 litert_lm_loader.cc:100] model_type: tf_lite_prefill_decode
+I0000 00:00:1778994630.087418    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994630.087420    5550 litert_lm_loader.cc:247] section_index: 10
+I0000 00:00:1778994630.087422    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087424    5550 litert_lm_loader.cc:250] section_begin_offset: 1354334208
+I0000 00:00:1778994630.087425    5550 litert_lm_loader.cc:251] section_end_offset: 3614377584
+I0000 00:00:1778994630.087427    5550 litert_lm_loader.cc:100] model_type: tf_lite_mtp_drafter
+I0000 00:00:1778994630.087431    5550 litert_lm_loader.cc:247] section_index: 11
+I0000 00:00:1778994630.087433    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087435    5550 litert_lm_loader.cc:250] section_begin_offset: 3614392320
+I0000 00:00:1778994630.087437    5550 litert_lm_loader.cc:251] section_end_offset: 3659518480
+I0000 00:00:1778994630.087766    5550 litert_lm_loader.cc:183] LitertLmLoader::Initialize
+I0000 00:00:1778994630.087839    5550 litert_lm_loader.cc:206] mmap_status is ok
+I0000 00:00:1778994630.087846    5550 litert_lm_loader.cc:211] status: OK
+I0000 00:00:1778994630.087848    5550 litert_lm_loader.cc:212] major_version: 1
+I0000 00:00:1778994630.087851    5550 litert_lm_loader.cc:213] minor_version: 5
+I0000 00:00:1778994630.087853    5550 litert_lm_loader.cc:214] patch_version: 0
+I0000 00:00:1778994630.087856    5550 litert_lm_loader.cc:247] section_index: 0
+I0000 00:00:1778994630.087864    5550 litert_lm_loader.cc:248] section_data_type: LlmMetadataProto
+I0000 00:00:1778994630.087866    5550 litert_lm_loader.cc:250] section_begin_offset: 16384
+I0000 00:00:1778994630.087868    5550 litert_lm_loader.cc:251] section_end_offset: 28576
+I0000 00:00:1778994630.087870    5550 litert_lm_loader.cc:247] section_index: 1
+I0000 00:00:1778994630.087872    5550 litert_lm_loader.cc:248] section_data_type: SP_Tokenizer
+I0000 00:00:1778994630.087874    5550 litert_lm_loader.cc:250] section_begin_offset: 32768
+I0000 00:00:1778994630.087876    5550 litert_lm_loader.cc:251] section_end_offset: 4721781
+I0000 00:00:1778994630.087878    5550 litert_lm_loader.cc:100] model_type: tf_lite_embedder
+I0000 00:00:1778994630.087882    5550 litert_lm_loader.cc:247] section_index: 2
+I0000 00:00:1778994630.087884    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087886    5550 litert_lm_loader.cc:250] section_begin_offset: 4734976
+I0000 00:00:1778994630.087888    5550 litert_lm_loader.cc:251] section_end_offset: 175655560
+I0000 00:00:1778994630.087890    5550 litert_lm_loader.cc:100] model_type: tf_lite_per_layer_embedder
+I0000 00:00:1778994630.087892    5550 litert_lm_loader.cc:247] section_index: 3
+I0000 00:00:1778994630.087894    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087896    5550 litert_lm_loader.cc:250] section_begin_offset: 175669248
+I0000 00:00:1778994630.087897    5550 litert_lm_loader.cc:251] section_end_offset: 1012447760
+I0000 00:00:1778994630.087900    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_encoder_hw
+I0000 00:00:1778994630.087901    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087903    5550 litert_lm_loader.cc:247] section_index: 4
+I0000 00:00:1778994630.087905    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087907    5550 litert_lm_loader.cc:250] section_begin_offset: 1012449280
+I0000 00:00:1778994630.087908    5550 litert_lm_loader.cc:251] section_end_offset: 1106501560
+I0000 00:00:1778994630.087911    5550 litert_lm_loader.cc:100] model_type: tf_lite_audio_adapter
+I0000 00:00:1778994630.087913    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087915    5550 litert_lm_loader.cc:247] section_index: 5
+I0000 00:00:1778994630.087917    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087918    5550 litert_lm_loader.cc:250] section_begin_offset: 1106509824
+I0000 00:00:1778994630.087920    5550 litert_lm_loader.cc:251] section_end_offset: 1122242524
+I0000 00:00:1778994630.087922    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_audio
+I0000 00:00:1778994630.087924    5550 litert_lm_loader.cc:247] section_index: 6
+I0000 00:00:1778994630.087926    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087928    5550 litert_lm_loader.cc:250] section_begin_offset: 1122254848
+I0000 00:00:1778994630.087929    5550 litert_lm_loader.cc:251] section_end_offset: 1122265716
+I0000 00:00:1778994630.087931    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_encoder
+I0000 00:00:1778994630.087935    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994630.087937    5550 litert_lm_loader.cc:247] section_index: 7
+I0000 00:00:1778994630.087939    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087940    5550 litert_lm_loader.cc:250] section_begin_offset: 1122271232
+I0000 00:00:1778994630.087942    5550 litert_lm_loader.cc:251] section_end_offset: 1346409168
+I0000 00:00:1778994630.087944    5550 litert_lm_loader.cc:100] model_type: tf_lite_vision_adapter
+I0000 00:00:1778994630.087946    5550 litert_lm_loader.cc:230] section_backend_constraint: cpu
+I0000 00:00:1778994630.087948    5550 litert_lm_loader.cc:247] section_index: 8
+I0000 00:00:1778994630.087949    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087952    5550 litert_lm_loader.cc:250] section_begin_offset: 1346420736
+I0000 00:00:1778994630.087954    5550 litert_lm_loader.cc:251] section_end_offset: 1354309392
+I0000 00:00:1778994630.087956    5550 litert_lm_loader.cc:100] model_type: tf_lite_end_of_vision
+I0000 00:00:1778994630.087958    5550 litert_lm_loader.cc:247] section_index: 9
+I0000 00:00:1778994630.087960    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087962    5550 litert_lm_loader.cc:250] section_begin_offset: 1354317824
+I0000 00:00:1778994630.087964    5550 litert_lm_loader.cc:251] section_end_offset: 1354328692
+I0000 00:00:1778994630.087966    5550 litert_lm_loader.cc:100] model_type: tf_lite_prefill_decode
+I0000 00:00:1778994630.087968    5550 litert_lm_loader.cc:234] section_prefer_activation_type: fp16
+I0000 00:00:1778994630.087971    5550 litert_lm_loader.cc:247] section_index: 10
+I0000 00:00:1778994630.087973    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087974    5550 litert_lm_loader.cc:250] section_begin_offset: 1354334208
+I0000 00:00:1778994630.087976    5550 litert_lm_loader.cc:251] section_end_offset: 3614377584
+I0000 00:00:1778994630.087978    5550 litert_lm_loader.cc:100] model_type: tf_lite_mtp_drafter
+I0000 00:00:1778994630.087981    5550 litert_lm_loader.cc:247] section_index: 11
+I0000 00:00:1778994630.087983    5550 litert_lm_loader.cc:248] section_data_type: TFLiteModel
+I0000 00:00:1778994630.087985    5550 litert_lm_loader.cc:250] section_begin_offset: 3614392320
+I0000 00:00:1778994630.087986    5550 litert_lm_loader.cc:251] section_end_offset: 3659518480
+I0000 00:00:1778994630.088400    5550 engine_impl.cc:336] New model files have LlmModelType, loading tokenizer asynchronously
+I0000 00:00:1778994630.088473    5550 engine_settings.cc:101] The Main backend constraint is not set.
+I0000 00:00:1778994630.088514    5550 engine_settings.cc:433] The validated engine settings: EngineSettings: 
+  MainExecutorSettings: backend: GPU
+backend_config:
+max_top_k: 1
+
+max_tokens: 1024
+activation_data_type: FLOAT32
+max_num_images: 0
+lora_rank: 0
+cache_dir: /home/user/JalRekha-litert/backend/data/litert-cache
+cache_file: Not set
+litert_dispatch_lib_dir: Not set
+model_assets: model_path: backend/data/models/gemma-4-E4B-it.litertlm
+fake_weights_mode: FAKE_WEIGHTS_NONE
+
+advanced_settings: prefill_batch_sizes: []
+num_output_candidates: 1
+configure_magic_numbers: true
+verify_magic_numbers: false
+clear_kv_cache_before_prefill: true
+num_logits_to_print_after_decode: 0
+gpu_madvise_original_shared_tensors: true
+is_benchmark: false
+preferred_device_substr: 
+num_threads_to_upload: -1
+num_threads_to_compile: -1
+convert_weights_on_gpu: true
+wait_for_weights_conversion_complete_in_benchmark: true
+optimize_shader_compilation: true
+cache_compiled_shaders_only: false
+share_constant_tensors: true
+sampler_handles_input: true
+allow_src_quantized_fc_conv_ops: true
+hint_waiting_for_completion: false
+gpu_context_low_priority: Not set
+enable_speculative_decoding: true
+disable_delegate_clustering: true
+hint_kernel_batch_size: Not set
+
+  LlmMetadata: go/debugstr   
+start_token {
+  token_ids {
+    ids: 2
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 1
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 50
+  }
+}
+stop_tokens {
+  token_ids {
+    ids: 106
+  }
+}
+sampler_params {
+  type: TOP_P
+  k: 1
+  p: 0.95
+  temperature: 1
+  seed: 0
+}
+llm_model_type {
+  gemma4 {
+    start_of_image_token {
+      token_str: "<|image>"
+    }
+    end_of_image_token {
+      token_str: "<image|>"
+    }
+    start_of_audio_token {
+      token_str: "<|audio>"
+    }
+    end_of_audio_token {
+      token_str: "<audio|>"
+    }
+    code_fence_start: "<|tool_call>"
+    code_fence_end: "<tool_call|>"
+    open_quote: "<|\"|>"
+    close_quote: "<|\"|>"
+    function_response_start: "<|tool_response>"
+    use_template_for_fc_format: true
+    patch_width: 16
+    patch_height: 16
+    max_num_patches: 2520
+  }
+}
+jinja_prompt_template: "{%- macro format_parameters(properties, required) -%}\n    {%- set standard_keys = [\'description\', \'type\', \'properties\', \'required\', \'nullable\'] -%}\n    {%- set ns = namespace(found_first=false) -%}\n    {%- for key, value in properties | dictsort -%}\n        {%- set add_comma = false -%}\n        {%- if key not in standard_keys -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {{ key }}:{\n            {%- if value[\'description\'] -%}\n                description:<|\"|>{{ value[\'description\'] }}<|\"|>\n                {%- set add_comma = true -%}\n            {%- endif -%}\n            {%- if value[\'nullable\'] %}\n                {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                nullable:true\n            {%- endif -%}\n            {%- if value[\'type\'] | upper == \'STRING\' -%}\n                {%- if value[\'enum\'] -%}\n                    {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n                    enum:{{ format_argument(value[\'enum\']) }}\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'OBJECT\' -%}\n                ,properties:{\n                {%- if value[\'properties\'] is defined and value[\'properties\'] is mapping -%}\n                    {{- format_parameters(value[\'properties\'], value[\'required\'] | default([])) -}}\n                {%- elif value is mapping -%}\n                    {{- format_parameters(value, value[\'required\'] | default([])) -}}\n                {%- endif -%}\n                }\n                {%- if value[\'required\'] -%}\n                    ,required:[\n                    {%- for item in value[\'required\'] | default([]) -%}\n                        <|\"|>{{- item -}}<|\"|>\n                        {%- if not loop.last %},{% endif -%}\n                    {%- endfor -%}\n                    ]\n                {%- endif -%}\n            {%- elif value[\'type\'] | upper == \'ARRAY\' -%}\n                {%- if value[\'items\'] is mapping and value[\'items\'] -%}\n                    ,items:{\n                    {%- set ns_items = namespace(found_first=false) -%}\n                    {%- for item_key, item_value in value[\'items\'] | dictsort -%}\n                        {%- if item_value is not none -%}\n                            {%- if ns_items.found_first %},{% endif -%}\n                            {%- set ns_items.found_first = true -%}\n                            {%- if item_key == \'properties\' -%}\n                                properties:{\n                                {%- if item_value is mapping -%}\n                                    {{- format_parameters(item_value, value[\'items\'][\'required\'] | default([])) -}}\n                                {%- endif -%}\n                                }\n                            {%- elif item_key == \'required\' -%}\n                                required:[\n                                {%- for req_item in item_value -%}\n                                    <|\"|>{{- req_item -}}<|\"|>\n                                    {%- if not loop.last %},{% endif -%}\n                                {%- endfor -%}\n                                ]\n                            {%- elif item_key == \'type\' -%}\n                                {%- if item_value is string -%}\n                                    type:{{ format_argument(item_value | upper) }}\n                                {%- else -%}\n                                    type:{{ format_argument(item_value | map(\'upper\') | list) }}\n                                {%- endif -%}\n                            {%- else -%}\n                                {{ item_key }}:{{ format_argument(item_value) }}\n                            {%- endif -%}\n                        {%- endif -%}\n                    {%- endfor -%}\n                    }\n                {%- endif -%}\n            {%- endif -%}\n            {%- if add_comma %},{%- else -%} {%- set add_comma = true -%} {% endif -%}\n            type:<|\"|>{{ value[\'type\'] | upper }}<|\"|>}\n        {%- endif -%}\n    {%- endfor -%}\n{%- endmacro -%}\n{%- macro format_function_declaration(tool_data) -%}\n    declaration:{{- tool_data[\'function\'][\'name\'] -}}{description:<|\"|>{{- tool_data[\'function\'][\'description\'] -}}<|\"|>\n    {%- set params = tool_data[\'function\'][\'parameters\'] -%}\n    {%- if params -%}\n        ,parameters:{\n        {%- if params[\'properties\'] -%}\n            properties:{ {{- format_parameters(params[\'properties\'], params[\'required\']) -}} },\n        {%- endif -%}\n        {%- if params[\'required\'] -%}\n            required:[\n            {%- for item in params[\'required\'] -%}\n                <|\"|>{{- item -}}<|\"|>\n                {{- \',\' if not loop.last -}}\n            {%- endfor -%}\n            ],\n        {%- endif -%}\n        {%- if params[\'type\'] -%}\n            type:<|\"|>{{- params[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    {%- if \'response\' in tool_data[\'function\'] -%}\n        {%- set response_declaration = tool_data[\'function\'][\'response\'] -%}\n        ,response:{\n        {%- if response_declaration[\'description\'] -%}\n            description:<|\"|>{{- response_declaration[\'description\'] -}}<|\"|>,\n        {%- endif -%}\n        {%- if response_declaration[\'type\'] | upper == \'OBJECT\' -%}\n            type:<|\"|>{{- response_declaration[\'type\'] | upper -}}<|\"|>}\n        {%- endif -%}\n    {%- endif -%}\n    }\n{%- endmacro -%}\n{%- macro format_argument(argument, escape_keys=True) -%}\n    {%- if argument is string -%}\n        {{- \'<|\"|>\' + argument + \'<|\"|>\' -}}\n    {%- elif argument is boolean -%}\n        {{- \'true\' if argument else \'false\' -}}\n    {%- elif argument is mapping -%}\n        {{- \'{\' -}}\n        {%- set ns = namespace(found_first=false) -%}\n        {%- for key, value in argument | dictsort -%}\n            {%- if ns.found_first %},{% endif -%}\n            {%- set ns.found_first = true -%}\n            {%- if escape_keys -%}\n                {{- \'<|\"|>\' + key + \'<|\"|>\' -}}\n            {%- else -%}\n                {{- key -}}\n            {%- endif -%}\n            :{{- format_argument(value, escape_keys=escape_keys) -}}\n        {%- endfor -%}\n        {{- \'}\' -}}\n    {%- elif argument is sequence -%}\n        {{- \'[\' -}}\n        {%- for item in argument -%}\n            {{- format_argument(item, escape_keys=escape_keys) -}}\n            {%- if not loop.last %},{% endif -%}\n        {%- endfor -%}\n        {{- \']\' -}}\n    {%- else -%}\n        {{- argument -}}\n    {%- endif -%}\n{%- endmacro -%}\n{%- macro strip_thinking(text) -%}\n    {%- set ns = namespace(result=\'\') -%}\n    {%- for part in text.split(\'<channel|>\') -%}\n        {%- if \'<|channel>\' in part -%}\n            {%- set ns.result = ns.result + part.split(\'<|channel>\')[0] -%}\n        {%- else -%}\n            {%- set ns.result = ns.result + part -%}\n        {%- endif -%}\n    {%- endfor -%}\n    {{- ns.result | trim -}}\n{%- endmacro -%}\n\n{%- set ns = namespace(prev_message_type=None) -%}\n{%- set loop_messages = messages -%}\n{{ bos_token }}\n{#- Handle System/Tool Definitions Block -#}\n{%- if (enable_thinking is defined and enable_thinking) or tools or messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n    {{- \'<|turn>system\\n\' -}}\n\n    {#- Inject Thinking token at the very top of the FIRST system turn -#}\n    {%- if enable_thinking is defined and enable_thinking -%}\n        {{- \'<|think|>\' -}}\n    {%- endif -%}\n\n    {%- if messages[0][\'role\'] in [\'system\', \'developer\'] -%}\n        {%- if messages[0][\'content\'] is string -%}\n            {{- messages[0][\'content\'] | trim -}}\n        {%- elif messages[0][\'content\'] is sequence -%}\n            {%- for item in messages[0][\'content\'] -%}\n                {%- if item[\'type\'] == \'text\' -%}\n                    {{- item[\'text\'] | trim -}}\n                {%- endif -%}\n            {%- endfor -%}\n        {%- endif -%}\n        {%- set loop_messages = messages[1:] -%}\n    {%- endif -%}\n\n    {%- if tools -%}\n        {{- \'\\n\\n\' -}}\n        {%- for tool in tools %}\n            {{- \'<|tool>\' -}}\n            {{- format_function_declaration(tool) | trim -}}\n            {{- \'<tool|>\' -}}\n        {%- endfor %}\n    {%- endif -%}\n\n    {{- \'<turn|>\\n\' -}}\n{%- endif %}\n\n{#- Loop through messages -#}\n{%- for message in loop_messages -%}\n    {%- set role = \'model\' if message[\'role\'] == \'assistant\' else message[\'role\'] -%}\n        {%- if role != \'tool\' -%}\n            {{- \'<|turn>\' + role + \'\\n\' }}\n        {%- endif -%}\n\n            {%- if message[\'tool_calls\'] -%}\n                {%- for tool_call in message[\'tool_calls\'] -%}\n                    {%- set function = tool_call[\'function\'] -%}\n                    {{- \'<|tool_call>call:\' + function[\'name\'] + \'{\' -}}\n                    {%- if function[\'arguments\'] is mapping -%}\n                        {%- set ns_args = namespace(found_first=false) -%}\n                        {%- for key, value in function[\'arguments\'] | dictsort -%}\n                            {%- if ns_args.found_first %},{% endif -%}\n                            {%- set ns_args.found_first = true -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                        {%- endfor -%}\n                    {%- elif function[\'arguments\'] is string -%}\n                        {{- function[\'arguments\'] -}}\n                    {%- endif -%}\n                    {{- \'}<tool_call|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_call\' -%}\n            {%- endif -%}\n\n            {%- if role == \'tool\' and message[\'content\'] is sequence -%}\n                {#- Tool Response handling -#}\n                {%- for item in message[\'content\'] -%}\n                    {{- \'<|tool_response>\' -}}\n                    {%- if item[\'response\'] is mapping -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{\' -}}\n                        {%- for key, value in item[\'response\'] | dictsort -%}\n                            {{- key -}}:{{- format_argument(value, escape_keys=False) -}}\n                            {%- if not loop.last %},{% endif -%}\n                        {%- endfor -%}\n                        {{- \'}\' -}}\n                    {%- else -%}\n                        {{- \'response:\' + item[\'name\'] | default(\'unknown\') + \'{value:\' + format_argument(item[\'response\'], escape_keys=False) + \'}\' -}}\n                    {%- endif -%}\n                    {{- \'<tool_response|>\' -}}\n                {%- endfor -%}\n                {%- set ns.prev_message_type = \'tool_response\' -%}\n            {%- else -%}\n                {%- if message[\'content\'] is string -%}\n                    {%- if role == \'model\' -%}\n                        {{- strip_thinking(message[\'content\']) -}}\n                    {%- else -%}\n                        {{- message[\'content\'] | trim -}}\n                    {%- endif -%}\n                {%- elif message[\'content\'] is sequence -%}\n                    {%- for item in message[\'content\'] -%}\n                        {%- if item[\'type\'] == \'text\' -%}\n                            {%- if role == \'model\' -%}\n                                {{- strip_thinking(item[\'text\']) -}}\n                            {%- else -%}\n                                {{- item[\'text\'] | trim -}}\n                            {%- endif -%}\n                        {%- elif item[\'type\'] == \'image\' -%}\n                            {{- \'\\n\\n<|image|>\\n\\n\' -}}\n                        {%- elif item[\'type\'] == \'audio\' -%}\n                            {{- \'<|audio|>\' -}}\n                        {%- endif -%}\n                    {%- endfor -%}\n                {%- endif -%}\n                {%- set ns.prev_message_type = None -%} \n            {%- endif -%}\n        {%- if ns.prev_message_type == None -%}\n            {{- \'<turn|>\\n\' -}}\n        {%- endif -%}\n{%- endfor -%}\n\n{%- if add_generation_prompt -%}\n    {%- if ns.prev_message_type != \'tool_response\' -%}\n        {{- \'<|turn>model\\n\' -}}\n    {%- endif -%}\n{%- endif -%}"
+channels {
+  channel_name: "thought"
+  start: "<|channel>thought\n"
+  end: "<channel|>"
+}
+  BenchmarkParams: Not set
+  VisionExecutorSettings: Not set
+  AudioExecutorSettings: Not set
+  ParallelFileSectionLoading: true
+  SingleThreadedExecution: false
+I0000 00:00:1778994630.105204    5550 model_resources_litert_lm.cc:67] model_type: TF_LITE_PREFILL_DECODE
+I0000 00:00:1778994630.105244    5550 model_resources_litert_lm.cc:68] litert model size: 2260043376
+I0000 00:00:1778994630.600256    5550 llm_executor_settings_utils.cc:178] Setting serialization dir: /home/user/JalRekha-litert/backend/data/litert-cache
+INFO: [magic_number_utils.cc:97] Loaded: num_subgraphs=1340, num_signatures=4
+INFO: [magic_number_utils.cc:105]   signature=decode, subgraph_index=0, num_tensors=3514, num_inputs=53, num_outputs=50, num_ops=2712
+INFO: [magic_number_utils.cc:105]   signature=prefill_1024, subgraph_index=1, num_tensors=2309, num_inputs=53, num_outputs=48, num_ops=1773
+INFO: [magic_number_utils.cc:105]   signature=prefill_128, subgraph_index=2, num_tensors=2309, num_inputs=53, num_outputs=48, num_ops=1773
+INFO: [magic_number_utils.cc:105]   signature=verify, subgraph_index=3, num_tensors=3606, num_inputs=53, num_outputs=50, num_ops=2801
+INFO: [magic_number_utils.cc:109] Magic number configs: num_configs=1
+INFO: [magic_number_utils.cc:116]   config[0]: magic_number=32003, target_number=1024, signature_prefix=null
+INFO: [magic_number_utils.cc:425] 577 tensors of signature decode have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 426 tensors of signature prefill_1024 have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 426 tensors of signature prefill_128 have been updated for magic number  32003 to target number 1024
+INFO: [magic_number_utils.cc:425] 581 tensors of signature verify have been updated for magic number  32003 to target number 1024
+INFO: [compiled_model.cc:719] Flatbuffer model initialized directly from incoming litert model.
+INFO: [environment.cc:41] Adding options to the existing LiteRT environment
+I0000 00:00:1778994630.988685    5550 delegate_webgpu.cc:624] # of threads to upload weights = 2
+I0000 00:00:1778994630.988776    5550 delegate_webgpu.cc:632] # of threads to compile kernels = 1
+E0000 00:00:1778994784.186344    5550 environment.cc:108] Validation error: Binding size (167772160) of [Buffer (unlabeled)] is larger than the maximum storage buffer binding size (134217728).
+ - While validating entries[0] against { binding: 1, visibility: ShaderStage::Compute, buffer: {type: BufferBindingType::ReadOnlyStorage, minBindingSize: 0, hasDynamicOffset: 0} }.
+ - While validating [BindGroupDescriptor] against [BindGroupLayout (unlabeled)]
+ - While calling [Device].CreateBindGroup([BindGroupDescriptor]).
+I0000 00:00:1778994784.198589    5550 delegate_kernel.cc:279] Total 50 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994784.198638    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994784.963058    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+I0000 00:00:1778994786.422301    5550 delegate_kernel.cc:279] Total 49 external tensors are used for delegate inputs and outputs
+I0000 00:00:1778994786.438018    5550 delegate_kernel.cc:784] Initializing WebGPU-based API from serialized data.
+I0000 00:00:1778994786.924584    5550 delegate_kernel.cc:684] Initialized InferenceContext from serialized data.
+E0000 00:00:1778994799.972063    6236 environment.cc:108] Validation error: [Invalid BindGroup (unlabeled)] is invalid due to a previous error.
+ - While encoding [ComputePassEncoder (unlabeled)].SetBindGroup(0, [Invalid BindGroup (unlabeled)], 0, ...).
+ - While finishing [CommandEncoder (unlabeled)].
+E0000 00:00:1778994800.005036    6236 environment.cc:108] Validation error: [Invalid CommandBuffer] is invalid due to a previous error.
+ - While calling [Queue].Submit([[Invalid CommandBuffer]])

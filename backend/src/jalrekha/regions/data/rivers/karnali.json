@@ -1,0 +1,86 @@
+{
+  "id": "karnali",
+  "name": "Karnali / Ghaghara",
+  "countries": [
+    "NP",
+    "IN"
+  ],
+  "description": "The Karnali leaves the hills at Chisapani, splits across the Bardiya plain and enters Uttar Pradesh as the Ghaghara.",
+  "nodes": [
+    {
+      "id": "chisapani",
+      "name": "Chisapani (Karnali)",
+      "country": "NP",
+      "region_id": "np",
+      "admin_unit": "Kailali",
+      "lat": 28.6415,
+      "lng": 81.2831,
+      "kind": "camera",
+      "river": "Karnali",
+      "agency": "DHM",
+      "site_id": "karnali-chisapani-cam",
+      "coord_source": "Wikipedia coordinates (place, not gauge) (Karnali Bridge)",
+      "alert_targets": [
+        {
+          "region_id": "np",
+          "role": "ward_focal",
+          "area": "Rajapur and Tikapur riverside wards (Bardiya, Kailali)"
+        }
+      ],
+      "gauge_note": "Official gauge: anticipatory warning 10 m, danger 10.8 m (Smith et al., NHESS 2017; secondary)"
+    },
+    {
+      "id": "girijapur",
+      "name": "Girijapur Barrage",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Bahraich",
+      "lat": 28.27,
+      "lng": 81.1,
+      "kind": "barrage",
+      "river": "Ghaghara",
+      "agency": "UP Irrigation",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Bahraich: Mihinpurwa and riverside villages"
+        }
+      ]
+    },
+    {
+      "id": "elgin_bridge",
+      "name": "Elgin Bridge",
+      "country": "IN",
+      "region_id": "in",
+      "admin_unit": "Barabanki",
+      "lat": 27.1,
+      "lng": 81.48,
+      "kind": "gauge",
+      "river": "Ghaghara",
+      "agency": "CWC",
+      "coord_source": "approximate",
+      "alert_targets": [
+        {
+          "region_id": "in",
+          "role": "ddma_control_room",
+          "area": "Barabanki and Gonda riverside villages"
+        }
+      ],
+      "warning_m": 105.07,
+      "danger_m": 106.07,
+      "level_source": "CWC Flood Forecasting SOP, April 2025 (cwc.gov.in/sites/default/files/sopapril2025.pdf), levels in m above MSL"
+    }
+  ],
+  "edges": [
+    {
+      "from": "chisapani",
+      "to": "girijapur"
+    },
+    {
+      "from": "girijapur",
+      "to": "elgin_bridge"
+    }
+  ]
+}

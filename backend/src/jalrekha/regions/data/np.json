@@ -1,0 +1,53 @@
+{
+  "id": "np",
+  "name": "Nepal",
+  "country_code": "NP",
+  "bounds": {"min_lon": 80.0, "max_lon": 88.3, "min_lat": 26.3, "max_lat": 30.5},
+  "timezone": "Asia/Kathmandu",
+  "languages": [
+    {"code": "ne", "name": "Nepali", "native_name": "नेपाली", "script": "Deva", "cap_language": "ne-NP",
+     "tts": {"provider": "espeak-ng", "voice": "ne", "note": "No Amazon Polly voice for Nepali; offline espeak-ng Nepali voice on the edge box and cloud host"},
+     "asr": {"provider": "whisper", "code": "ne", "note": "Whisper supports Nepali; WER is high, so voice reports are always shown with the transcript for review"}},
+    {"code": "mai", "name": "Maithili", "native_name": "मैथिली", "script": "Deva", "cap_language": "mai-NP",
+     "tts": {"provider": "espeak-ng", "voice": "ne", "note": "No Maithili TTS voice available; Nepali voice reads the Devanagari text (labelled fallback)"},
+     "asr": null, "needs_native_review": true},
+    {"code": "bho", "name": "Bhojpuri", "native_name": "भोजपुरी", "script": "Deva", "cap_language": "bho-NP",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "hi-IN", "note": "No Bhojpuri voice; Hindi voice reads the Devanagari text (labelled fallback)"},
+     "asr": null, "needs_native_review": true},
+    {"code": "en", "name": "English", "native_name": "English", "script": "Latn", "cap_language": "en-US",
+     "tts": {"provider": "polly", "voice": "Kajal", "engine": "neural", "language_code": "en-IN"},
+     "asr": {"provider": "whisper", "code": "en"}}
+  ],
+  "public_languages": ["ne", "mai", "en"],
+  "channels": ["sms", "voice", "cap", "siren", "telegram"],
+  "authority_roles": [
+    {"id": "ward_focal", "name": "Ward disaster focal person", "level": "ward", "approves": ["send_sms", "voice_call", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "municipal_eoc", "name": "Municipal Emergency Operation Centre", "level": "municipality", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "dhm_duty", "name": "DHM flood forecasting duty officer (informed, not an approver)", "level": "national", "approves": []},
+    {"id": "community_gauge_reader", "name": "Community gauge reader (CBEWS volunteer)", "level": "community", "approves": []}
+  ],
+  "levels": [
+    {"id": "normal", "legacy": "green", "color": "green", "label": {"en": "Normal", "hi": "सामान्य", "ne": "सामान्य"}},
+    {"id": "watch", "legacy": "yellow", "color": "yellow", "label": {"en": "Watch", "hi": "सतर्क", "ne": "सतर्क"}},
+    {"id": "warning", "legacy": "orange", "color": "orange", "label": {"en": "Warning", "hi": "चेतावनी", "ne": "चेतावनी"}},
+    {"id": "danger", "legacy": "red", "color": "red", "label": {"en": "Danger", "hi": "खतरा", "ne": "खतरा"}}
+  ],
+  "level_basis": "Station warning and danger levels as published by the national hydrology agency (DHM) where available; scenario sites use site-relative gauge levels and are labelled as such.",
+  "alert_format": {"cap_sender": "nadisaathi-np@alerts.invalid", "cap_web": "https://www.dhm.gov.np/", "sms_max_segments": 2, "sender_name": "NadiSaathi (pilot, unofficial)"},
+  "agencies": [
+    {"id": "dhm", "name": "Department of Hydrology and Meteorology", "role": "Official flood forecasting and warnings", "url": "https://www.dhm.gov.np/"},
+    {"id": "ndrrma", "name": "National Disaster Risk Reduction and Management Authority", "role": "National DRR coordination", "url": "https://bipad.gov.np/"}
+  ],
+  "admin_units": [
+    {"id": "np-sunsari", "name": "Sunsari", "type": "district"},
+    {"id": "np-saptari", "name": "Saptari", "type": "district"},
+    {"id": "np-udayapur", "name": "Udayapur", "type": "district"},
+    {"id": "np-chitwan", "name": "Chitwan", "type": "district"},
+    {"id": "np-nawalparasi-west", "name": "Nawalparasi (Bardaghat Susta West)", "type": "district"},
+    {"id": "np-kailali", "name": "Kailali", "type": "district"},
+    {"id": "np-bardiya", "name": "Bardiya", "type": "district"},
+    {"id": "np-sarlahi", "name": "Sarlahi", "type": "district"},
+    {"id": "np-rautahat", "name": "Rautahat", "type": "district"},
+    {"id": "np-kanchanpur", "name": "Kanchanpur", "type": "district"}
+  ]
+}

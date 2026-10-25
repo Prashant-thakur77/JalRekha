@@ -1,0 +1,12 @@
+{
+ "meta": {
+  "label": "REAL USGS HIVIS frames (same in-range frames as stage_real_physical.json)",
+  "model": "bedrock:us.amazon.nova-lite-v1:0",
+  "generated_by": "eval/run_vlm_baseline.py",
+  "generated_at": "2026-10-25T12:38:32.442367+00:00",
+  "wall_s": 9.6
+ },
+ "status": "unavailable",
+ "error": "bedrock call failed: ThrottlingException: An error occurred (ThrottlingException) when calling the Converse operation (reached max retries: 2): Too many tokens per day, please wait before trying again.",
+ "frames": 0
+}

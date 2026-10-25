@@ -1,0 +1,24 @@
+{
+  "case_id": "evacuation_route_critical",
+  "timestamp": "2026-05-18T19:18:55-03:00",
+  "source": "fusion_node_and_volunteer",
+  "input": {
+    "node_state": "critical",
+    "water_level_cm": 168.9,
+    "transcript": "Estamos cortando la ruta de evacuacion porque hay agua hasta las rodillas"
+  },
+  "gemma_output": {
+    "severity": "critical",
+    "evidence": [
+      "water above critical line",
+      "evacuation route flooded",
+      "resident report confirms street-level flooding",
+      "trend rising 6.2cm/min"
+    ],
+    "recommended_action": "escalate to municipal civil defense dashboard",
+    "uncertainty": 0.11
+  },
+  "final_state": "CRITICAL",
+  "cloud_required": false,
+  "auditable": true
+}

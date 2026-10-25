@@ -1,0 +1,23 @@
+{
+  "case_id": "bridge_water_warning",
+  "timestamp": "2026-05-18T19:12:06-03:00",
+  "source": "volunteer_mobile_report",
+  "input": {
+    "node_state": "vigilance",
+    "water_level_cm": 118.3,
+    "transcript": "El agua ya paso el puente y esta entrando por la calle lateral"
+  },
+  "gemma_output": {
+    "severity": "urgent",
+    "evidence": [
+      "water above bridge reference",
+      "resident report",
+      "rising trend"
+    ],
+    "recommended_action": "notify municipal operator",
+    "uncertainty": 0.18
+  },
+  "final_state": "URGENT",
+  "cloud_required": false,
+  "auditable": true
+}
