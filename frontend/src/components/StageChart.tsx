@@ -3,7 +3,7 @@ import type { SeriesPoint } from '../api';
 import { useI18n } from '../i18n';
 import { fmtNum, fmtTime } from '../lib/format';
 
-const H = 240;
+const H = 260;
 const PAD = { top: 16, right: 12, bottom: 28, left: 44 };
 
 /** Track the rendered width so SVG text stays at its real pixel size on phones. */
@@ -33,13 +33,17 @@ export default function StageChart({
   series,
   warning,
   danger,
+  live = false,
 }: {
   series: SeriesPoint[];
   warning?: number | null;
   danger?: number | null;
+  /** Pulse the newest point while a replay is running. */
+  live?: boolean;
 }) {
   const { t } = useI18n();
   const ids = useId();
+  const gradId = `g${ids.replace(/[^a-zA-Z0-9_-]/g, '')}-area`;
   const [hover, setHover] = useState<number | null>(null);
   const [figRef, W] = useWidth(640);
 
@@ -80,7 +84,9 @@ export default function StageChart({
       .reverse();
     const band = `${upper.join(' ')} ${lower.join(' ')}`;
     const ticks = Array.from({ length: 5 }, (_, i) => lo + ((hi - lo) * i) / 4);
-    return { x, y, xs, line, band, ticks, lo, hi };
+    const base = H - PAD.bottom;
+    const area = `${line} L${xs[xs.length - 1].toFixed(1)},${base} L${xs[0].toFixed(1)},${base} Z`;
+    return { x, y, xs, line, band, area, ticks, lo, hi };
   }, [points, warning, danger, W]);
 
   if (!geom) {
@@ -122,11 +128,20 @@ export default function StageChart({
     return (
       <g className={cls}>
         <line x1={PAD.left} x2={W - PAD.right} y1={yy} y2={yy} strokeDasharray="6 4" strokeWidth={1.5} />
-        <text x={W - PAD.right} y={yy - 5} textAnchor="end" className="ns-chart__thresh-label">
+        <text x={PAD.left + 6} y={yy - 5} textAnchor="start" className="ns-chart__thresh-label">
           {label} {fmtNum(value, 1)}
         </text>
       </g>
     );
+  };
+
+  /** Shaded band from `from` up to `to` (or the top of the chart): the warning and danger zones. */
+  const zone = (from: number | null | undefined, to: number | null | undefined, cls: string) => {
+    if (typeof from !== 'number' || from > geom.hi) return null;
+    const yBottom = geom.y(Math.max(from, geom.lo));
+    const yTop = typeof to === 'number' && to < geom.hi ? geom.y(to) : PAD.top;
+    if (yBottom <= yTop) return null;
+    return <rect x={PAD.left} y={yTop} width={W - PAD.left - PAD.right} height={yBottom - yTop} className={cls} aria-hidden="true" />;
   };
 
   return (
@@ -154,10 +169,20 @@ export default function StageChart({
         <text x={W - PAD.right} y={H - 8} textAnchor="end" className="ns-chart__axis">
           {fmtTime(last.t)}
         </text>
+        <defs>
+          <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" className="ns-chart__area-top" />
+            <stop offset="1" className="ns-chart__area-bottom" />
+          </linearGradient>
+        </defs>
+        {zone(warning, danger, 'ns-chart__zone--warn')}
+        {zone(danger, null, 'ns-chart__zone--danger')}
         {threshold(warning, t('live.warning'), 'ns-chart__warn')}
         {threshold(danger, t('live.danger'), 'ns-chart__danger')}
+        <path d={geom.area} className="ns-chart__area" fill={`url(#${gradId})`} />
         <polygon points={geom.band} className="ns-chart__band" />
         <path d={geom.line} className="ns-chart__line" />
+        {live && <circle cx={geom.xs[geom.xs.length - 1]} cy={geom.y(last.stage_m)} r={9} className="ns-chart__dot-halo" aria-hidden="true" />}
         <circle cx={geom.xs[geom.xs.length - 1]} cy={geom.y(last.stage_m)} r={5} className="ns-chart__dot" />
         {hp && hover !== null && (
           <g className="ns-chart__hover" aria-hidden="true">
@@ -182,6 +207,24 @@ export default function StageChart({
           onPointerLeave={() => setHover(null)}
         />
       </svg>
+      <ul className="ns-chart-legend" aria-hidden="true">
+        <li>
+          <span className="ns-chart-legend__line" /> {t('live.legendStage')}
+        </li>
+        <li>
+          <span className="ns-chart-legend__band" /> {t('live.legendSigma')}
+        </li>
+        {typeof warning === 'number' && (
+          <li>
+            <span className="ns-chart-legend__dash" style={{ ['--c' as string]: 'var(--warn)' }} /> {t('live.warning')} {fmtNum(warning, 1)} m
+          </li>
+        )}
+        {typeof danger === 'number' && (
+          <li>
+            <span className="ns-chart-legend__dash" style={{ ['--c' as string]: 'var(--danger)' }} /> {t('live.danger')} {fmtNum(danger, 1)} m
+          </li>
+        )}
+      </ul>
       <figcaption className="sr-only">
         <p>{summary}</p>
         <table>

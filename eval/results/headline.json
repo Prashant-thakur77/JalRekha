@@ -6,6 +6,7 @@
   "eval/results/guard_eval.json",
   "eval/results/real_replay.json",
   "eval/results/vlm_baseline.json",
+  "eval/results/photo_triage.json",
   "eval/results/soak.json",
   "eval/results/stage_real.json",
   "eval/results/leadtime.json",
@@ -24,7 +25,8 @@
     "value": 74.74
    },
    "dataset": "SYNTHETIC test seeds 100-129",
-   "file": "eval/results/stage_synth_test.json"
+   "file": "eval/results/stage_synth_test.json",
+   "note": null
   },
   {
    "key": "real_full_mae",
@@ -36,7 +38,8 @@
     "value": 99.25
    },
    "dataset": "REAL, 115 in-range frames, 2 sites",
-   "file": "eval/results/stage_real_physical.json"
+   "file": "eval/results/stage_real_physical.json",
+   "note": null
   },
   {
    "key": "guard_catch",
@@ -48,7 +51,8 @@
     "value": 1.0
    },
    "dataset": "SYNTHETIC danger-level burst + scripted VLM replies (40 cases, EN/HI/NE)",
-   "file": "eval/results/guard_eval.json"
+   "file": "eval/results/guard_eval.json",
+   "note": null
   },
   {
    "key": "real_replay_mae",
@@ -57,7 +61,8 @@
    "unit": "cm",
    "baseline": null,
    "dataset": "REAL CAMERA REPLAY (USGS HIVIS frames and gauge readings; illustrative warning/danger levels)",
-   "file": "eval/results/real_replay.json"
+   "file": "eval/results/real_replay.json",
+   "note": null
   },
   {
    "key": "leadtime_p95",
@@ -69,19 +74,21 @@
     "value": 0
    },
    "dataset": "REAL USGS gauge pairs, held-out 2024-2026",
-   "file": "eval/results/leadtime.json"
+   "file": "eval/results/leadtime.json",
+   "note": null
   },
   {
    "key": "leadtime_nws",
-   "label": "Median lead time gained downstream (official NWS action stages, pre-registered primary)",
-   "value": 0.0,
-   "unit": "min",
+   "label": "Floods flagged before the official NWS action stage (pre-registered primary)",
+   "value": 0.3088,
+   "unit": "fraction",
    "baseline": {
     "name": "downstream gauge only",
-    "value": 0
+    "value": 0.0735
    },
    "dataset": "REAL USGS gauge pairs, held-out 2024-2026",
-   "file": "eval/results/leadtime.json"
+   "file": "eval/results/leadtime.json",
+   "note": "Median lead time gained: 0 min; mean 4.1 h. Most events gain nothing; some gain hours."
   },
   {
    "key": "agent_success",
@@ -93,7 +100,8 @@
     "value": 35
    },
    "dataset": "SYNTHETIC scenario suite (procedural staff-gauge scenes, exact truth; held-out gauge seeds)",
-   "file": "eval/results/agent_suite.json"
+   "file": "eval/results/agent_suite.json",
+   "note": null
   },
   {
    "key": "graviton_cost",
@@ -105,7 +113,8 @@
     "value": 0.5314
    },
    "dataset": "SYNTHETIC benchmark workload",
-   "file": "bench/results/"
+   "file": "bench/results/",
+   "note": null
   }
  ],
  "keys": {
@@ -208,8 +217,26 @@
   "rr_siren_first": "yes",
   "rr_quiet_alerts": "0",
   "rr_all_clear": "yes",
-  "vlm_status": "not measured",
-  "vlm_sentence": "The planned vision-language baseline (a Bedrock model reading the gauge on every real frame, `eval/run_vlm_baseline.py`) could not run: the account's Bedrock quota is zero. No comparison is claimed.",
+  "vlm_status": "measured",
+  "vlm_mae_cm": "14.0",
+  "vlm_coverage": "72%",
+  "vlm_cost_1k": "$6.263",
+  "vlm_frames": "115",
+  "vlm_cv_same_mae_cm": "10.6",
+  "vlm_answered_n": "83",
+  "vlm_on_answered_cm": "14.0",
+  "cv_on_vlm_answered_cm": "10.0",
+  "vlm_median_cm": "8.4",
+  "vlm_latency_s": "2.5",
+  "vlm_model": "claude-opus-5-5",
+  "vlm_sentence": "A vision-language model (claude-opus-5-5) reading the gauge on the same 115 real frames, told the gauge span and that its numerals are in feet: it answered 72% of frames at 14.0 cm MAE (median 8.4 cm), about 2.5 s and $6.263 per 1,000 frames; on the 83 frames it answered, OpenCV's error is 10.0 cm vs the model's 14.0 cm.",
+  "pt_photos": "20",
+  "pt_road_pos": "8",
+  "pt_road_hit": "8",
+  "pt_others": "12",
+  "pt_others_flagged": "2",
+  "pt_latency_s": "3.8",
+  "pt_cost_photo": "$0.014",
   "soak_hours": "2.7",
   "soak_probes": "31",
   "soak_uptime": "100.0%",
@@ -373,6 +400,6 @@
   "cloud_usd_cam_month_10s": "$0.66",
   "cloud_cams_300s": "5,284",
   "cloud_usd_cam_month_300s": "$0.02",
-  "generated_at": "2026-10-25 15:32 UTC"
+  "generated_at": "2026-10-25 16:42 UTC"
  }
 }

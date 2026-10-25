@@ -41,7 +41,7 @@ The relief request form shows a consent note in English, Hindi and Nepali: their
 | Camera moved or gauge out of view | readings are not used; the site is marked degraded; automatic actions there stop; a recalibration request goes to a person |
 | Bad weather, night, glare | the frame cannot raise or lower an alert; the agent takes longer bursts and asks a gauge reader for a photo |
 | Estimators disagree, no second opinion | the reading is held; after three in a row a person is asked |
-| Cloud or Bedrock unavailable | rule fallback; the edge siren rule still works offline |
+| Cloud or the Claude API unavailable | rule fallback; the edge siren rule still works offline |
 | Nobody approves a drafted alert | Step Functions re-notifies the operators every 15 minutes, up to three times |
 | Wrong PIN attempts | five in ten minutes lock that client out for ten minutes |
 | Spoofed camera | frame uploads need the camera key |

@@ -168,9 +168,9 @@ export default function TraceDetail() {
 
           {m && (
             <section className="ns-card" aria-labelledby="trace-m-h">
-              <h3 id="trace-m-h" className="ns-h3">
+              <h2 id="trace-m-h" className="ns-h3">
                 <Camera className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('trace.measurement')}
-              </h3>
+              </h2>
               <div className="ns-measure">
                 {overlay && (
                   <figure className="ns-frame">
@@ -237,7 +237,7 @@ export default function TraceDetail() {
           )}
 
           <section aria-labelledby="trace-steps-h" className="ns-stack">
-            <h3 id="trace-steps-h" className="ns-h3">{t('trace.timeline')}</h3>
+            <h2 id="trace-steps-h" className="ns-h3">{t('trace.timeline')}</h2>
             <ol className="ns-timeline">
               {(trace.steps ?? []).map((step) => (
                 <StepItem key={step.i} step={step} />

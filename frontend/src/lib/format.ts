@@ -16,6 +16,14 @@ export function fmtTime(iso?: string | null): string {
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 }
 
+/** "14:05": hours and minutes only, for dense tables. */
+export function fmtClock(iso?: string | null): string {
+  if (!iso) return '–';
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
 export function fmtDateTime(iso?: string | null): string {
   if (!iso) return '–';
   const d = new Date(iso);
@@ -46,4 +54,16 @@ export function fmtValue(value: unknown, max = 80): string {
     text = String(value);
   }
   return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+}
+
+/**
+ * Label for a reasoning or narration model. Names the model the server reports;
+ * with no model reported, the cloud default (Claude) is meant.
+ */
+export function modelLabel(model?: string | null): string {
+  const m = (model ?? '').trim();
+  if (!m) return 'Claude';
+  if (/claude/i.test(m)) return `Claude · ${m}`;
+  if (/gemma/i.test(m)) return `Gemma · ${m}`;
+  return m;
 }

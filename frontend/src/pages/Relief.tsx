@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent, type MouseEvent } from 'react';
+import { Link } from 'react-router-dom';
 import { Camera, CheckCircle2, Copy, Crosshair, Home, LocateFixed, Route, Send, Truck, X } from 'lucide-react';
 import {
   createReliefRequest,
@@ -21,6 +22,8 @@ import { fmtDateTime, fmtNum } from '../lib/format';
 import { toast } from '../lib/toast';
 import { withOperatorPin } from '../lib/pinPrompt';
 import { Chip, PageHeader, StateNotice } from '../components/ui';
+import Photo from '../components/Photo';
+import { pickPhotos, usePhotos } from '../lib/photos';
 
 const NEEDS: ReliefNeed[] = ['rescue', 'food', 'water', 'medical', 'shelter', 'other'];
 const REQUEST_LANGS: ReliefRequestInput['lang'][] = ['hi', 'ne', 'mai', 'bho', 'en'];
@@ -139,9 +142,9 @@ function RequestsPanel() {
 
   return (
     <section className="ns-card ns-stack" aria-labelledby="relief-req-h">
-      <h3 id="relief-req-h" className="ns-h3">{t('relief.requests')}</h3>
+      <h2 id="relief-req-h" className="ns-h3">{t('relief.requests')}</h2>
       <form onSubmit={submit} className="ns-stack" noValidate>
-        <h4 className="ns-label">{t('relief.newRequest')}</h4>
+        <h3 className="ns-label">{t('relief.newRequest')}</h3>
         <div className="ns-field">
           <label htmlFor="rr-text">{t('relief.text')}</label>
           <textarea
@@ -206,7 +209,7 @@ function RequestsPanel() {
         </button>
       </form>
 
-      <h4 className="ns-label">{t('relief.list')}</h4>
+      <h3 className="ns-label">{t('relief.list')}</h3>
       {error && <StateNotice kind="error" message={t('relief.loadError')} detail={error} onRetry={() => void load()} />}
       {!error && items === null && <StateNotice kind="loading" message={t('common.loading')} />}
       {!error && items?.length === 0 && <StateNotice kind="empty" message={t('relief.empty')} />}
@@ -257,6 +260,23 @@ function RequestsPanel() {
 }
 
 // ── Photo check ───────────────────────────────────────────────────────────
+
+function RoadExamples() {
+  const { t } = useI18n();
+  const { photos } = usePhotos();
+  const examples = pickPhotos(photos, ['amritsar-flooded-road-2013', 'mathura-underpass-bus-2016']);
+  if (examples.length === 0) return null;
+  return (
+    <div className="ns-stack-sm">
+      <p className="ns-hint">{t('relief.examples')}</p>
+      <div className="ns-photo-pair">
+        {examples.map((p) => (
+          <Photo key={p.id} photo={p} credit="below" caption={<span lang="en">{p.title}. </span>} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 interface Pt {
   x: number;
@@ -340,10 +360,11 @@ function PhotoPanel() {
 
   return (
     <section className="ns-card ns-stack" aria-labelledby="relief-photo-h">
-      <h3 id="relief-photo-h" className="ns-h3">
+      <h2 id="relief-photo-h" className="ns-h3">
         <Camera className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('relief.photo')}
-      </h3>
+      </h2>
       <p className="ns-muted" id="photo-help">{t('relief.photoHelp')}</p>
+      <RoadExamples />
       <form onSubmit={submit} className="ns-stack">
         <div className="ns-field">
           <label htmlFor="pc-file">{t('relief.photoFile')}</label>
@@ -400,7 +421,7 @@ function PhotoPanel() {
         {error && <StateNotice kind="error" message={t('relief.photoError')} detail={error} />}
         {result && (
           <div className="ns-stack">
-            <h4 className="ns-label">{t('relief.result')}</h4>
+            <h3 className="ns-label">{t('relief.result')}</h3>
             {overlay && (
               <figure className="ns-frame">
                 <img src={overlay} alt={t('relief.overlayAlt')} className="ns-frame__img" />
@@ -429,7 +450,7 @@ function PhotoPanel() {
             {result.needs_review !== false && <p className="ns-callout ns-callout--warn">{t('relief.needsReview')}</p>}
             {typeof result.approval_id === 'number' && (
               <p className="ns-callout">
-                {t('relief.routeDrafted')} <a href="/approvals">#{result.approval_id}</a>
+                {t('relief.routeDrafted')} <Link to="/approvals">#{result.approval_id}</Link>
               </p>
             )}
             {typeof result.faces_blurred === 'number' && result.faces_blurred > 0 && (
@@ -486,45 +507,56 @@ function BoardPanel() {
   return (
     <div className="ns-stack">
       <section className="ns-card ns-stack" aria-labelledby="relief-routes-h">
-        <h3 id="relief-routes-h" className="ns-h3">
+        <h2 id="relief-routes-h" className="ns-h3">
           <Route className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('relief.routes')}
-        </h3>
+        </h2>
         {routesError && <StateNotice kind="error" message={t('relief.loadError')} detail={routesError} onRetry={() => void loadRoutes()} />}
         {!routesError && routes === null && <StateNotice kind="loading" message={t('common.loading')} />}
         {!routesError && routes?.length === 0 && <StateNotice kind="empty" message={t('relief.routesEmpty')} />}
         {routes && routes.length > 0 && (
-          <ul className="ns-list">
-            {routes.map((r) => {
-              const tone = r.status === 'passable' ? 'ok' : r.status === 'blocked' ? 'danger' : 'neutral';
-              return (
-                <li key={r.id} className="ns-list__item ns-stack-sm">
-                  <div className="ns-row ns-wrap">
-                    <span className="ns-strong">{r.name}</span>
-                    <Chip tone={tone}>{td(`route.${r.status}`, r.status)}</Chip>
-                    {r.verified ? (
-                      <Chip tone="ok">
-                        <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> {t('relief.verified')}
-                      </Chip>
-                    ) : (
-                      <Chip>{t('relief.unverified')}</Chip>
-                    )}
-                  </div>
-                  <p className="ns-hint">
-                    {fmtDateTime(r.updated_at)}
-                    {r.source ? ` · ${r.source}` : ''}
-                  </p>
-                </li>
-              );
-            })}
-          </ul>
+          <table className="ns-dtable ns-dtable--flat">
+            <thead>
+              <tr>
+                <th scope="col">{t('relief.colRoad')}</th>
+                <th scope="col">{t('relief.colStatus')}</th>
+                <th scope="col" className="ns-num">{t('relief.colUpdated')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {routes.map((r) => {
+                const tone = r.status === 'passable' ? 'ok' : r.status === 'blocked' ? 'danger' : 'neutral';
+                return (
+                  <tr key={r.id}>
+                    <td>
+                      <span className="ns-strong">{r.name}</span>
+                      {r.source && <span className="ns-hint ns-block">{r.source}</span>}
+                    </td>
+                    <td>
+                      <span className="ns-row ns-wrap ns-gap-sm">
+                        <Chip tone={tone}>{td(`route.${r.status}`, r.status)}</Chip>
+                        {r.verified ? (
+                          <Chip tone="ok">
+                            <CheckCircle2 className="w-4 h-4" aria-hidden="true" /> {t('relief.verified')}
+                          </Chip>
+                        ) : (
+                          <Chip>{t('relief.unverified')}</Chip>
+                        )}
+                      </span>
+                    </td>
+                    <td className="ns-num">{fmtDateTime(r.updated_at)}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </section>
 
       <section className="ns-card ns-stack" aria-labelledby="relief-shelters-h">
         <div className="ns-card__head">
-          <h3 id="relief-shelters-h" className="ns-h3">
+          <h2 id="relief-shelters-h" className="ns-h3">
             <Home className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('relief.shelters')}
-          </h3>
+          </h2>
           <div className="ns-field ns-field--inline">
             <label htmlFor="sh-region">{t('relief.region')}</label>
             <select id="sh-region" className="ns-input" value={region} onChange={(e) => setRegion(e.target.value)}>
@@ -538,35 +570,62 @@ function BoardPanel() {
         {!sheltersError && shelters === null && <StateNotice kind="loading" message={t('common.loading')} />}
         {!sheltersError && shelters?.length === 0 && <StateNotice kind="empty" message={t('relief.sheltersEmpty')} />}
         {shelters && shelters.length > 0 && (
-          <ul className="ns-list">
-            {shelters.map((s) => {
-              const cap = typeof s.capacity === 'number' ? s.capacity : null;
-              const occ = typeof s.occupancy === 'number' ? s.occupancy : null;
-              const pct = cap && occ !== null ? Math.min(100, Math.round((occ / cap) * 100)) : null;
-              return (
-                <li key={s.id} className="ns-list__item ns-stack-sm">
-                  <div className="ns-row ns-wrap">
-                    <span className="ns-strong">{s.name}</span>
-                    <span className="ns-hint">
-                      {s.admin_unit}
-                      {s.region_id ? ` · ${td(`country.${s.region_id.toUpperCase()}`, s.region_id)}` : ''}
-                    </span>
-                  </div>
-                  {cap !== null && occ !== null && (
-                    <>
-                      <p className="ns-hint">{t('relief.occupancy', { occ, cap })}</p>
-                      <meter className="ns-meter" min={0} max={cap} low={cap * 0.7} high={cap * 0.9} optimum={0} value={occ} aria-label={t('relief.occupancy', { occ, cap })}>
-                        {pct}%
-                      </meter>
-                    </>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
+          <table className="ns-dtable ns-dtable--flat">
+            <thead>
+              <tr>
+                <th scope="col">{t('relief.colShelter')}</th>
+                <th scope="col" className="ns-num">{t('relief.colPlaces')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {shelters.map((s) => {
+                const cap = typeof s.capacity === 'number' ? s.capacity : null;
+                const occ = typeof s.occupancy === 'number' ? s.occupancy : null;
+                const pct = cap && occ !== null ? Math.min(100, Math.round((occ / cap) * 100)) : null;
+                return (
+                  <tr key={s.id}>
+                    <td>
+                      <span className="ns-strong">{s.name}</span>
+                      <span className="ns-hint ns-block">
+                        {s.admin_unit}
+                        {s.region_id ? ` · ${td(`country.${s.region_id.toUpperCase()}`, s.region_id)}` : ''}
+                      </span>
+                    </td>
+                    <td className="ns-num">
+                      {cap !== null && occ !== null ? (
+                        <>
+                          {occ} / {cap}
+                          <meter className="ns-meter" min={0} max={cap} low={cap * 0.7} high={cap * 0.9} optimum={0} value={occ} aria-label={t('relief.occupancy', { occ, cap })}>
+                            {pct}%
+                          </meter>
+                        </>
+                      ) : (
+                        '–'
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         )}
       </section>
     </div>
+  );
+}
+
+function ReliefPhotos() {
+  const { t } = useI18n();
+  const { photos } = usePhotos();
+  const shown = pickPhotos(photos, ['bihar-ndrf-rescue-2008', 'kerala-rescue-boats-2018']);
+  if (shown.length === 0) return null;
+  return (
+    <section className="ns-relief-photos" aria-label={t('relief.inTheField')}>
+      {shown.map((p) => (
+        <Photo key={p.id} photo={p} credit="below" caption={<span lang="en">{p.title}{p.place ? `, ${p.place}` : ''}. </span>} />
+      ))}
+      <p className="ns-relief-photos__note">{t('relief.inTheField')}</p>
+    </section>
   );
 }
 
@@ -575,6 +634,7 @@ export default function Relief() {
   return (
     <div className="ns-page">
       <PageHeader title={t('relief.title')} subtitle={t('relief.subtitle')} />
+      <ReliefPhotos />
       <div className="ns-relief-grid">
         <RequestsPanel />
         <div className="ns-stack">

@@ -18,6 +18,8 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 
 - Real USGS staff-gauge cameras, physical calibration with nothing fitted: 10.6 cm mean error on 115 frames (median 4.1 cm), against 99.2 cm for the original method. On these hourly snapshots the colour estimator alone does as well as the fusion.
 - The same agent on a real USGS camera through a July 2026 flood: 6.5 cm error on the readings it used, siren on the first frame above danger, no alert drafts on quiet days. It gained no warning lead there: the rise came overnight, when that camera records nothing.
+- Claude (claude-opus-5-5) reading the same real gauges: 14.0 cm on the 72% of frames it answered, against OpenCV's 10.0 cm on those frames, at ~2.5 s and $6.263 per 1,000 frames. That is why the agent asks it only when the OpenCV estimators disagree.
+- Claude triaging 20 real flood photos from India and Nepal: 8/8 flooded roads flagged, plus 2 of 12 other scenes (small n, labels from the photo subject).
 - Real river gauge pairs (8, held-out 2024–2026): with official NWS action stages, our pre-registered primary, watching upstream gains a median 0 min (mean 4.1 h). With percentile warning levels it gains a median 8.5 h. We report both.
 - Agent suite (36 runs): alerts a median 62 min before the true warning crossing (-4 min for a threshold agent) with 0 false alerts; the same projection rule without the vision gates raised 2 false alerts when a knocked camera misread the river.
 - Guard: 32/32 lying, injected (English/Hindi/Nepali) or malformed vision-model replies caught; 8/8 honest ones accepted.
@@ -25,7 +27,7 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 
 ## How we built it
 
-OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Sobel, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Bedrock, CloudWatch, SSM, Budgets. React PWA in English, Hindi and Nepali.
+OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Sobel, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Step Functions, CloudWatch, SSM, Budgets; Claude through the Anthropic API for the second opinion, report and relief parsing, photo descriptions and summaries. React PWA in English, Hindi and Nepali.
 
 ## Challenges
 

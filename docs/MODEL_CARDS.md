@@ -20,10 +20,12 @@
 - Use: re-registration only when ORB fails (rain, high water hiding features, camera knock). About 1.2 s per call on Graviton4, so it is an escalation, not the default.
 - Weights: ALIKED (BSD-3-Clause), LightGlue (Apache-2.0), downloaded at runtime with SHA-1 checks.
 
-## Vision-language second opinion (Amazon Bedrock, Nova Lite by default)
+## Claude (Anthropic API): second opinion, text and photos
 
-- Use: only when fewer than two estimators agree, or before the first danger-level action. The reply must be one JSON object with `stage_m`, `confidence`, `visible`; anything else is reported and ignored. If it contradicts a confident OpenCV reading, the reading is kept and a person is asked.
-- Status: wired, but unavailable on the deployment account (Nova token quota is zero). The fallback path is what runs.
+- Model: `claude-opus-5-5` with server-side refusal fallbacks (`fallbacks: "default"`), low effort, JSON-schema-constrained outputs. Key in SSM Parameter Store; tests never call it.
+- Uses: (1) second opinion on a gauge reading, only when fewer than two OpenCV estimators agree or before the first danger-level action; its reply can confirm the reading or send it to a person, never lower the risk on its own; (2) structuring volunteer reports and relief requests in English, Hindi, Nepali, Maithili and Bhojpuri; (3) describing volunteer photos after faces and plates are blurred; (4) drafting situation summaries, checked by the numbers-from-tools guard.
+- Measured as a gauge reader on 115 real USGS frames (`eval/results/vlm_baseline.json`): less accurate than the OpenCV pipeline on the frames it answered, slower and far costlier per frame, and it abstains on about a quarter of frames. That is why it is a second opinion, not the gauge.
+- Fallbacks: rules parser, template summaries, hold-and-ask-a-person for the reading. Amazon Bedrock (Nova Lite) is wired as an alternative provider.
 
 ## Relief photo check (GrabCut)
 
@@ -31,10 +33,11 @@
 - Assumption: a depth of 0.30 m or more makes a road unsafe; configurable. The user taps the top and the base of the reference object.
 - Limits: water that looks like road (smooth asphalt in shadow), reflections, objects not vertical in the image. Tested on synthetic images only.
 
-## Relief request parser (rules)
+## Relief request parser (Claude, rules fallback)
 
-- Use: need (rescue, medical, water, food, shelter), number of people, urgency, from text in English, Hindi, Nepali, Maithili or Bhojpuri. Duplicates within 3 h and 500 m are merged.
-- Limits: keyword rules; unusual phrasing falls back to "other". People counts in words ("twelve", "बारह") are not parsed. Households are converted at 5 people each and the response says so.
+- Use: need (rescue, medical, water, food, shelter), number of people, urgency and vulnerable people, from text in English, Hindi, Nepali, Maithili or Bhojpuri. Duplicates within 3 h and 500 m are merged. Each request records `parsed_by` (`claude` or `rules`).
+- Claude reads counts written as words ("बारह लोग" → 12) and mixed-language phrasing; the request text is passed as data and the reply is schema-constrained.
+- Rules fallback (no key, API error): keyword rules; unusual phrasing falls back to "other", counts in words are not parsed, households are converted at 5 people each and the response says so.
 
 ## Speech (voice reports and alert audio)
 

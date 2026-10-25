@@ -26,7 +26,7 @@ from sqlmodel import Session, select
 from jalrekha.agent import cloud, guardrails, messages, policy
 from jalrekha.agent.models import AgentSiteState, AgentTrace, ApprovalRequest, StageReadingRow
 from jalrekha.models.domain import Site, SiteCalibration
-from jalrekha.regions import basin_for_site, region, region_for_point
+from jalrekha.regions import basin_for_site, region, region_for_point, role_label
 from jalrekha.services import action_guard
 from jalrekha.services.actuators import LoggingAlarmActuator
 from jalrekha.services.cap import build_cap_xml
@@ -275,13 +275,13 @@ def run_cycle(
         tr.step("decision", "register_keyframe_chain", output={**chained_from, "chained": reg}, decision={
             "branch": "D2", "reason": "no reliable match against the calibration reference; re-registered against the last good keyframe",
             "before": {"registration": "failed vs reference"}, "after": {"registration": f"{reg['method']} vs keyframe", "inliers": reg["inliers"]}})
-        tr.say("reference match lost: registration chained via the last good keyframe")
+        tr.say("view shifted: lined up against the last good frame instead")
     if "aliked_lightglue" in reg.get("tried", []):
         if reg["ok"]:
             tr.step("decision", "register_heavy", output=reg, decision={
                 "branch": "D2", "reason": "ORB could not align the frame to the calibration reference; ALIKED+LightGlue (OpenCV 5) re-registered it",
                 "before": {"registration": "orb"}, "after": {"registration": "aliked_lightglue", "inliers": reg["inliers"]}})
-            tr.say("ORB failed, ALIKED+LightGlue rescued registration")
+            tr.say("view shifted: re-aligned with the slower feature matcher")
     if not reg["ok"]:
         before = {"mode": state.mode}
         state.mode = "degraded"
@@ -295,7 +295,7 @@ def run_cycle(
                                 payload={"messages": []}, evidence=[{"label": "Registration", "value": f"failed after {reg['tried']}", "source": meas_ref}],
                                 trace_id=tr.trace_id, scenario_run_id=scenario_run_id)
         tr.step("approval", "request_approval", output={"approval_id": ap.id, "action": "recalibrate"})
-        tr.say("camera moved: site degraded, recalibration requested")
+        tr.say("camera moved off the gauge: readings paused, recalibration requested")
         return _finish(session, tr, state, md, None, scenario_run_id, ctx)
 
     # D1: quality gate ---------------------------------------------------------
@@ -319,7 +319,9 @@ def run_cycle(
                     output={"status": "requested", "channel": "app/sms"},
                     decision={"branch": "D1", "reason": f"{state.bad_quality_streak} bad frames in a row",
                               "before": {"human_eyes": False}, "after": {"human_eyes": "requested"}})
-        tr.say(f"bad frame ({', '.join(md['quality']['reasons'])}): no alert, burst {before['burst_frames']}→{state.burst_frames}")
+        why = ", ".join(QUALITY_WORDS.get(r, r.replace("_", " ")) for r in md["quality"]["reasons"])
+        more = f"; next burst {state.burst_frames} frames" if state.burst_frames != before["burst_frames"] else ""
+        tr.say(f"unusable frame ({why}): not used{more}")
         _record_reading(session, site_id, now, rd, False, tr)
         return _finish(session, tr, state, md, None, scenario_run_id, ctx)
     if state.bad_quality_streak:
@@ -384,7 +386,7 @@ def run_cycle(
 
     if not usable_for_alert:
         state.held_streak += 1
-        tr.say("reading held back pending human review")
+        tr.say("reading held for a person to check")
         if state.held_streak >= 3:
             # Do not stay blind silently: three uncertain readings in a row go to a person.
             ap, created = upsert_approval(
@@ -421,7 +423,7 @@ def run_cycle(
             tr.step("decision", "set_capture_cadence", decision={
                 "branch": "D4", "reason": f"rise {rate:.2f} m/h (lower bound {rate_sig:.2f}) ≥ {policy.R_FAST_M_PER_H} m/h",
                 "before": before, "after": {"cadence_s": state.cadence_s, "mode": state.mode}})
-            tr.say(f"rise {rate:.2f} m/h: cadence {before['cadence_s']}→{state.cadence_s} s")
+            tr.say(f"rising {rate:.2f} m/h: checks every {state.cadence_s // 60} min instead of {before['cadence_s'] // 60}")
         if ctx.basin is not None:
             t1 = time.perf_counter()
             eta_list = ctx.basin.downstream(ctx.node.id)
@@ -470,7 +472,7 @@ def run_cycle(
         tr.step("action", "trigger_siren", input=call["arguments"], output={"fired": g.accepted, "channel": "local siren (edge GPIO stub)"},
                 guard=guard, decision={"branch": "D6", "reason": "danger level, quality OK, estimators agree (2 of 3 within 10 cm)",
                                         "before": {"siren": "off"}, "after": {"siren": "on" if g.accepted else "blocked by guard"}})
-        tr.say(f"danger {f_stage:.2f} m: local siren {'ON' if g.accepted else 'blocked'}")
+        tr.say(f"danger level {f_stage:.2f} m: local siren {'on' if g.accepted else 'blocked by the guard'}")
 
     # D9: falling after a peak -> cadence down, all-clear proposal --------------------
     calm = rate is not None and (rate <= policy.R_FALL_M_PER_H or (state.mode == "watch" and rate < policy.R_FAST_M_PER_H / 2))
@@ -478,7 +480,8 @@ def run_cycle(
         state.falling_streak += 1
     peaked_high = warning is not None and (state.peak_stage_m or 0) >= warning
     below = warning is None or (f_stage is not None and f_stage < warning)
-    if state.falling_streak >= policy.FALLING_CYCLES and (state.cadence_s != state.normal_cadence_s or (state.mode == "alert" and below)):
+    # Act only on a cycle with a valid reading: a held reading (rate None) never lowers cadence or proposes an all-clear.
+    if calm and state.falling_streak >= policy.FALLING_CYCLES and (state.cadence_s != state.normal_cadence_s or (state.mode == "alert" and below)):
         before = {"cadence_s": state.cadence_s, "mode": state.mode}
         state.cadence_s = state.normal_cadence_s
         if peaked_high and below:
@@ -542,6 +545,15 @@ def _gauge_in_view(m, calib: GaugeCalibration, shape) -> bool:
     return True
 
 
+QUALITY_WORDS = {
+    "blurred": "blurred",
+    "exposure_clipped": "over- or under-exposed",
+    "glare_on_gauge": "glare on the gauge",
+    "low_contrast_fog_or_occlusion": "fog, rain or something in front of the lens",
+    "night_or_underexposed": "too dark",
+}
+
+
 def _approver(profile, action: str) -> str:
     if profile is None:
         return "operator"
@@ -589,9 +601,9 @@ def _second_opinion(tr: Trace, ctx: SiteContext, m, stage, rd, vlm, needs_second
         if needs_second:
             if held_before == 0:  # one photo request per run of held readings, not one per cycle
                 tr.step("tool", "request_volunteer_photo", input={"role": "community_gauge_reader"}, output={"status": "requested"})
-                tr.say("estimators disagree and no VLM: reading held, photo requested")
+                tr.say("readings disagree and no second opinion available: held, photo requested")
             else:
-                tr.say(f"estimators disagree and no VLM: reading held ({held_before + 1} in a row)")
+                tr.say(f"readings disagree and no second opinion available: held ({held_before + 1} in a row)")
             return False
         return True
     parsed = cloud.parse_gauge_answer(ans.raw_text)
@@ -612,7 +624,7 @@ def _second_opinion(tr: Trace, ctx: SiteContext, m, stage, rd, vlm, needs_second
     if guard_reason is None and v is not None and stage is not None and abs(v - stage) <= policy.VLM_CONFIRM_M:
         tr.step("guard", "compare_cv_vlm", output={"cv_m": stage, "vlm_m": v, "delta_m": round(v - stage, 3)},
                 guard={"accepted": True, "reason": "VLM confirms the CV reading"})
-        tr.say(f"VLM confirms {stage:.2f} m")
+        tr.say(f"second opinion agrees: {stage:.2f} m")
         return True
     contradiction = guard_reason is not None or (v is not None and stage is not None and abs(v - stage) > policy.VLM_CONTRADICTION_M)
     if contradiction and cv_confident:
@@ -630,18 +642,18 @@ def _second_opinion(tr: Trace, ctx: SiteContext, m, stage, rd, vlm, needs_second
                                           {"label": "VLM answer", "value": (str(v) if v is not None else "none"), "source": vref}],
                                 trace_id=tr.trace_id, scenario_run_id=scenario_run_id)
         tr.step("approval", "request_approval", output={"approval_id": ap.id, "action": "review_reading"})
-        tr.say("guard caught a contradicting/injected VLM reply: CV kept, human review requested")
+        tr.say("second opinion contradicted the camera or carried instructions: OpenCV reading kept, a person asked to check")
         return True
     if cv_confident and not needs_second:
         # Confident measurement, second opinion abstained or was unusable: an abstention is not a veto.
         tr.step("guard", "compare_cv_vlm", output={"cv_m": stage, "vlm_m": v},
                 guard={"accepted": False, "reason": guard_reason or "VLM gave no reading; confident OpenCV value kept"})
-        tr.say("VLM gave no usable reading; confident measurement kept")
+        tr.say("second opinion could not read the gauge: confident OpenCV reading kept")
         return True
     # CV itself was unsure and the VLM does not confirm: hold.
     tr.step("guard", "compare_cv_vlm", output={"cv_m": stage, "vlm_m": v}, guard={"accepted": False, "reason": guard_reason or "no confirmation"},
             decision={"branch": "D3", "reason": "uncertain CV and no confirmation", "before": {"use_reading": True}, "after": {"use_reading": False}})
-    tr.say("uncertain reading held back")
+    tr.say("uncertain reading held")
     return False
 
 
@@ -742,7 +754,7 @@ def _draft_downstream(session, tr: Trace, ctx: SiteContext, f_stage, rate, level
                 output={"approval_id": ap.id, "created": created, "cross_border": cross, "eta_h": first["eta_h"],
                         "langs": [m["lang"] for m in payload["messages"]]})
         if created:
-            tr.say(f"{'cross-border ' if cross else ''}alert drafted for {role} {admin_unit}: {first['name']} in {first['eta_h']['min']:.0f}-{first['eta_h']['max']:.0f} h")
+            tr.say(f"{'cross-border ' if cross else ''}alert drafted for {role_label(role)}, {admin_unit}: {first['name']} in {first['eta_h']['min']:.0f}-{first['eta_h']['max']:.0f} h")
             cloud.notify_operators(f"NadiSaathi approval needed: {ap.title}", ap.rationale)
             tr.step("tool", "start_escalation_timer", input={"approval_id": ap.id, "wait_s": 900},
                     output=cloud.start_escalation(ap.id, ap.title), model="aws-step-functions")

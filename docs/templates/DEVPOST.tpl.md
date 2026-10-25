@@ -18,6 +18,8 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 
 - Real USGS staff-gauge cameras, physical calibration with nothing fitted: {{real_full_mae_cm}} cm mean error on {{real_n}} frames (median {{real_full_median_cm}} cm), against {{real_b0_mae_cm}} cm for the original method. On these hourly snapshots the colour estimator alone does as well as the fusion.
 - The same agent on a real USGS camera through a July 2026 flood: {{rr_used_mae_cm}} cm error on the readings it used, siren on the first frame above danger, no alert drafts on quiet days. It gained no warning lead there: the rise came overnight, when that camera records nothing.
+- Claude ({{vlm_model}}) reading the same real gauges: {{vlm_on_answered_cm}} cm on the {{vlm_coverage}} of frames it answered, against OpenCV's {{cv_on_vlm_answered_cm}} cm on those frames, at ~{{vlm_latency_s}} s and {{vlm_cost_1k}} per 1,000 frames. That is why the agent asks it only when the OpenCV estimators disagree.
+- Claude triaging {{pt_photos}} real flood photos from India and Nepal: {{pt_road_hit}}/{{pt_road_pos}} flooded roads flagged, plus {{pt_others_flagged}} of {{pt_others}} other scenes (small n, labels from the photo subject).
 - Real river gauge pairs ({{lt_pairs}}, held-out 2024–2026): with official NWS action stages, our pre-registered primary, watching upstream gains a median {{lt_nws_gain_median_min}} min (mean {{lt_nws_gain_mean_h}} h). With percentile warning levels it gains a median {{lt_p95_gain_median_h}} h. We report both.
 - Agent suite ({{ag_runs}} runs): alerts a median {{ag_lead_median_min}} min before the true warning crossing ({{rb_lead_median_min}} min for a threshold agent) with {{ag_false_alert_runs}} false alerts; the same projection rule without the vision gates raised {{pj_false_alert_runs}} false alerts when a knocked camera misread the river.
 - Guard: {{guard_caught}}/{{guard_bad}} lying, injected (English/Hindi/Nepali) or malformed vision-model replies caught; {{guard_confirm_ok}} honest ones accepted.
@@ -25,7 +27,7 @@ Live: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com (open Live, run the
 
 ## How we built it
 
-OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Sobel, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Bedrock, CloudWatch, SSM, Budgets. React PWA in English, Hindi and Nepali.
+OpenCV 5: quality gate, ORB registration with ALIKED+LightGlue rescue through the new DNN engine, three waterline estimators (Sobel, DIS optical flow, Lab colour step), robust fusion, `cv2.KalmanFilter`, YuNet face and plate blur, GrabCut for flood photos. FastAPI and SQLModel on an EC2 c8g.xlarge (Graviton4) behind API Gateway, deployed by one CloudFormation stack; S3, Polly, SNS, Step Functions, CloudWatch, SSM, Budgets; Claude through the Anthropic API for the second opinion, report and relief parsing, photo descriptions and summaries. React PWA in English, Hindi and Nepali.
 
 ## Challenges
 

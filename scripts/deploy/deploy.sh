@@ -8,7 +8,7 @@
 #
 # Optional env:
 #   STACK_NAME (nadisaathi)  AWS_REGION (us-east-1)  INSTANCE_TYPE  USE_COOL_AMI=true|false
-#   ALERT_EMAIL  BUDGET_EMAIL  BUDGET_LIMIT_USD  SKIP_WEB=1 (API-only bundle)
+#   ALERT_EMAIL  BUDGET_EMAIL  BUDGET_LIMIT_USD  SKIP_WEB=1 (API-only bundle)  KEEP_WEB=1 (reuse last web build)
 #   ENABLE_CLOUDFRONT=true|false  ENABLE_APIGW=true|false   (public HTTPS front door(s))
 set -euo pipefail
 
@@ -65,7 +65,10 @@ build_web() {
   date -u +%FT%TZ >"$CACHE/web-dist.built"
 }
 
-if [ "${SKIP_WEB:-0}" = 1 ]; then
+if [ "${KEEP_WEB:-0}" = 1 ] && [ -f "$CACHE/web-dist/index.html" ]; then
+  WEB_STATUS="kept last deployed build $(cat "$CACHE/web-dist.built" 2>/dev/null) (KEEP_WEB=1)"
+  WEB_DIST=$CACHE/web-dist
+elif [ "${SKIP_WEB:-0}" = 1 ]; then
   WEB_STATUS="skipped (SKIP_WEB=1): API-only"
 elif build_web; then
   WEB_STATUS="fresh build $(cat "$CACHE/web-dist.built")"
@@ -87,7 +90,7 @@ mkdir -p "$STAGE"
 excludes=(
   --exclude=.git --exclude=node_modules --exclude=.venv --exclude=__pycache__ --exclude='*.pyc'
   --exclude=.pytest_cache --exclude=.ruff_cache --exclude=.mypy_cache --exclude=.uv-cache
-  --exclude=/demo-artifacts --exclude=/android
+  --exclude=/demo-artifacts --exclude=/android --exclude=/video-footage
   --exclude=/frontend  # sources stay local; the built PWA ships as web/dist
   --exclude=/ANALYSIS.md --exclude=/PLAN.md --exclude=/LOOP.md --exclude=/AGENTS.md --exclude=/.rtk
   --exclude='/backend/data/*.db' --exclude=/backend/data/models --exclude=/backend/data/litert-cache

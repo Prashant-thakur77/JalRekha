@@ -35,9 +35,9 @@ export default function RedTeam() {
 
   return (
     <section className="ns-card ns-stack" aria-labelledby="redteam-h">
-      <h3 id="redteam-h" className="ns-h3">
+      <h2 id="redteam-h" className="ns-h3">
         <ShieldAlert className="w-5 h-5 ns-inline-icon" aria-hidden="true" /> {t('redteam.title')}
-      </h3>
+      </h2>
       <p className="ns-muted" id="redteam-help">{t('redteam.help')}</p>
       <form onSubmit={submit} className="ns-stack">
         <div className="ns-field">

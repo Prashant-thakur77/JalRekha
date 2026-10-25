@@ -65,7 +65,7 @@ function MessageEditor({
 }
 
 function ApprovalCard({ item, onDecided }: { item: Approval; onDecided: () => void }) {
-  const { t } = useI18n();
+  const { t, td } = useI18n();
   const messages = item.payload?.messages ?? [];
   const [drafts, setDrafts] = useState<Record<string, string>>(() =>
     Object.fromEntries(messages.map((m) => [m.lang, m.text])),
@@ -118,17 +118,17 @@ function ApprovalCard({ item, onDecided }: { item: Approval; onDecided: () => vo
     item.status === 'approved' ? t('appr.approved') : item.status === 'rejected' ? t('appr.rejected') : t('appr.pending');
 
   return (
-    <article className="ns-card ns-approval" aria-labelledby={`appr-${item.id}-title`}>
+    <article className={`ns-card ns-approval${pending ? ' ns-approval--pending' : ''}`} aria-labelledby={`appr-${item.id}-title`}>
       <header className="ns-stack-sm">
         <div className="ns-row ns-wrap ns-hint">
           <Chip tone={statusTone}>{statusText}</Chip>
-          <Chip>{item.action}</Chip>
-          {item.role && <span>{item.role}</span>}
+          <Chip>{td(`appr.action.${item.action}`, item.action.replace(/_/g, ' '))}</Chip>
+          {(item.role_label || item.role) && <span>{item.role_label || item.role}</span>}
           <time dateTime={item.created_at}>{fmtDateTime(item.created_at)}</time>
         </div>
-        <h3 id={`appr-${item.id}-title`} className="ns-h3">
+        <h2 id={`appr-${item.id}-title`} className="ns-h3 ns-approval__title">
           {item.title}
-        </h3>
+        </h2>
       </header>
 
       {item.rationale && (
@@ -162,24 +162,30 @@ function ApprovalCard({ item, onDecided }: { item: Approval; onDecided: () => vo
       {(item.evidence ?? []).length > 0 && (
         <div>
           <span className="ns-label">{t('appr.evidence')}</span>
-          <ul className="ns-evidence">
-            {(item.evidence ?? []).map((ev, i) => {
-              const href = traceHref(ev.source);
-              return (
-                <li key={`${ev.label}-${i}`}>
-                  <span>{ev.label}</span>
-                  <strong className="ns-mono">{ev.value}</strong>
-                  {href ? (
-                    <Link to={href} className="ns-link ns-mono">
-                      {ev.source}
-                    </Link>
-                  ) : ev.source ? (
-                    <span className="ns-hint ns-mono">{ev.source}</span>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+          <table className="ns-dtable ns-dtable--flat ns-evidence">
+            <tbody>
+              {(item.evidence ?? []).map((ev, i) => {
+                const href = traceHref(ev.source);
+                return (
+                  <tr key={`${ev.label}-${i}`}>
+                    <th scope="row">
+                      {ev.label}
+                      {href ? (
+                        <span className="ns-block">
+                          <Link to={href} className="ns-link ns-mono">
+                            {ev.source}
+                          </Link>
+                        </span>
+                      ) : ev.source ? (
+                        <span className="ns-hint ns-mono ns-block">{ev.source}</span>
+                      ) : null}
+                    </th>
+                    <td className="ns-num">{ev.value}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
       )}
 

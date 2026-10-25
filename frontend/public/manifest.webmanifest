@@ -3,8 +3,8 @@
   "short_name": "NadiSaathi",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f8fafc",
-  "theme_color": "#2563eb",
+  "background_color": "#f3f2ee",
+  "theme_color": "#121211",
   "icons": [
     {
       "src": "/favicon.svg",
@@ -12,5 +12,6 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "description": "Flood early warning and relief for Nepal and India"
 }

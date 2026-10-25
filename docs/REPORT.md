@@ -1,6 +1,6 @@
 # NadiSaathi technical report
 
-OpenCV AI Competition 2026 entry. Numbers generated 2026-10-25 15:32 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
+OpenCV AI Competition 2026 entry. Numbers generated 2026-10-25 16:42 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
 
 One sentence: a camera on the Koshi at Chatara, Nepal, reads the river in metres with OpenCV 5 on AWS Graviton; when the water starts to climb, an agent looks more often, checks itself, works out when the wave reaches Birpur in Bihar, and drafts Hindi, Maithili and Nepali alerts that a named person approves with a PIN.
 
@@ -30,7 +30,7 @@ The personas in the demo (Sita, Rakesh) are illustrative composites, not real pe
                      │ JalRekha OpenCV 5 pipeline ─► agent loop (policy D1–D9) ─► guard ─► act / approval │
                      │ region profiles + river graphs     traces (SQLite, S3)     original fusion engine  │
                      └──┬───────────┬────────────┬───────────┬────────────┬───────────────────────────────┘
-                        S3       Bedrock       Polly        SNS        CloudWatch (logs, metrics, alarms)
+                        S3     Claude API      Polly        SNS        CloudWatch (logs, metrics, alarms)
  API Gateway HTTPS (VPC link) in front; EventBridge + Lambda keep-warm; SSM Parameter Store; AWS Budgets
 ```
 
@@ -67,7 +67,9 @@ One CloudFormation stack, `infra/nadisaathi.yaml`, deploys in about 5 minutes an
 - Least-privilege instance role: S3 on the stack bucket, metrics only in the `NadiSaathi` namespace, SNS on the stack topic.
 - Cost: c8g.xlarge on-demand is $0.1595/h (AWS Price List API); the judging window is an estimate of about $58 for the whole stack (`docs/DEPLOY.md`).
 
-Bedrock status, honestly: the account's Amazon Nova daily token quota is zero and Anthropic models need a use-case form, so every Bedrock call fails today and the agent takes its fallback (hold an uncertain reading and ask for a photo). The trace records it.
+Language and vision model: Claude (claude-opus-5-5) through the Anthropic API, with server-side refusal fallbacks, structured JSON outputs and a key held in SSM Parameter Store. It writes the second opinion on a gauge reading (D3/D7), structures volunteer reports and relief requests in five languages, describes volunteer photos after face/plate blur, and drafts situation summaries that the numbers-from-tools guard checks. Amazon Bedrock is wired as an alternative provider, but this account's Bedrock quota is zero, so it is not used. Every model call has a deterministic fallback.
+
+On 20 licensed flood photos from India and Nepal (`eval/run_photo_triage.py`, faces and plates blurred first), Claude marked 8 of 8 flooded roads and underpasses as flooded and 2 of the other 12 photos as well (a washed-out mountain bridge and an NDRF boat rescue in floodwater), at ~3.8 s and $0.014 per photo. The labels come from each photo's subject and n is small, so this is a sanity check on real Indian scenes, not an accuracy figure. The photo description never sets a road's status: D8 needs the GrabCut depth check and an operator's approval.
 
 ## 5. The agent
 
@@ -77,7 +79,7 @@ The agent (`backend/src/jalrekha/agent/runner.py`) runs one cycle per camera bur
 |---|---|---|
 | D1 | quality gate fails | no alert from this frame; burst 5 → 9 frames; photo request after two bad frames |
 | D2 | ORB registration fails | ALIKED+LightGlue or keyframe chain; if still lost or the gauge leaves the view, site degraded + recalibration request |
-| D3 | fewer than 2 of 3 estimators within 10 cm, or sigma > 8 cm | VLM second opinion (Bedrock); if unavailable, hold the reading; after 3 held readings in a row, ask a person |
+| D3 | fewer than 2 of 3 estimators within 10 cm, or sigma > 8 cm | VLM second opinion (Claude); if unavailable, hold the reading; after 3 held readings in a row, ask a person |
 | D4 | significant Kalman rise: rate − 1.5·σ_rate ≥ 0.30 m/h | capture cadence 600 → 300 s (scenario sites); downstream ETA bands |
 | D5 | stage ≥ warning, or projected to cross within 1.5 h (right after bad frames: only after 3 significant-rise cycles in a row) | local and cross-border drafts (SMS, voice, CAP) for the right authority role |
 | D6 | stage ≥ danger, quality OK, at least 2 of 3 estimators within 10 cm (sigma from the agreeing pair ≤ 8 cm; the trace records both this and the fused sigma) | local siren through the guard (schema, severity ≤ evidence, region bounds, 6/h rate limit) |
@@ -108,7 +110,7 @@ USGS HIVIS cameras at two staff-gauge sites (Hancock, NY on the East Branch Dela
 | E3 colour only | 10.6 (65% within 10 cm), identical to the full pipeline: on single snapshots E2 abstains and E1 is down-weighted |
 | Original PIL heuristic (B0) | 99.2 on the 38% of frames it answers; on those same 44 frames the full pipeline is 16.5 |
 
-Per site: Hancock 9.8 cm MAE, median 2.5 cm, 89% within 10 cm (55 frames); Moravia 11.3 cm (60 frames). Frames with the water below the gauge foot or the gauge submerged are scored separately: 19 of 33 (Hancock) and 13 of 15 (Moravia) were reported at the gauge end within 10 cm. The planned vision-language baseline (a Bedrock model reading the gauge on every real frame, `eval/run_vlm_baseline.py`) could not run: the account's Bedrock quota is zero. No comparison is claimed. A third staff-gauge site (Avon, NY) is out of scope: its plates use another datum and stay above the water for nearly the whole event. Caveat on the protocol: our first protocol (fit a line on each site's first frames) failed on these same frames (87.7 cm, no better than a constant at 90.6 cm); we switched to physical calibration and excluded Avon after seeing that. Nothing in the reported pipeline is fitted to gauge readings, but the choice of protocol was made after the first look. Registration hurt at Moravia (43% within 10 cm with it, 70% without); we report it rather than tune it on the test frames.
+Per site: Hancock 9.8 cm MAE, median 2.5 cm, 89% within 10 cm (55 frames); Moravia 11.3 cm (60 frames). Frames with the water below the gauge foot or the gauge submerged are scored separately: 19 of 33 (Hancock) and 13 of 15 (Moravia) were reported at the gauge end within 10 cm. A vision-language model (claude-opus-5-5) reading the gauge on the same 115 real frames, told the gauge span and that its numerals are in feet: it answered 72% of frames at 14.0 cm MAE (median 8.4 cm), about 2.5 s and $6.263 per 1,000 frames; on the 83 frames it answered, OpenCV's error is 10.0 cm vs the model's 14.0 cm. A third staff-gauge site (Avon, NY) is out of scope: its plates use another datum and stay above the water for nearly the whole event. Caveat on the protocol: our first protocol (fit a line on each site's first frames) failed on these same frames (87.7 cm, no better than a constant at 90.6 cm); we switched to physical calibration and excluded Avon after seeing that. Nothing in the reported pipeline is fitted to gauge readings, but the choice of protocol was made after the first look. Registration hurt at Moravia (43% within 10 cm with it, 70% without); we report it rather than tune it on the test frames.
 
 ### 6.1b The agent on a real camera (REAL)
 
@@ -170,7 +172,7 @@ Reading it honestly: the lead time comes from the Kalman projection, which the "
 - Lead-time gains depend on consistent warning levels along the river (6.3).
 - No Polly voice for Nepali, Maithili or Bhojpuri; Maithili and Bhojpuri texts need native review.
 - SMS to India needs TRAI DLT registration; Nepal bulk SMS goes through telecom operators. The pilot sends only to verified test numbers.
-- Bedrock is not usable on this account yet (section 4).
+- The language and vision model is a hosted API (Claude); the edge box falls back to rules (or an on-device Gemma model) when it is offline.
 - Face and plate redaction recall has not been measured on our own data; we rely on the detectors' published behaviour, and stored frames, approvals and traces are readable through the public demo API (they contain synthetic scenes and no personal data). A real deployment should restrict read access to operators.
 
 ## 9. Responsible use
@@ -186,7 +188,7 @@ The repository builds on an earlier open-source flood-alert stack. The table sep
 | Vision | PIL edge-row heuristic; a language model reading frames | OpenCV 5 metric pipeline (quality, ORB/ALIKED+LightGlue registration, three estimators, Kalman, DIS flow, YuNet redaction, relief photo check) |
 | Region | one country, Spanish | Nepal and India profiles, four basin graphs with CWC levels, five languages, voice |
 | Agent | language model chooses actuators; guard not wired | perception-driven policy D1–D9, approvals, wired guard, guardrails, traces, scenario replays |
-| Cloud | none | CloudFormation on Graviton, API Gateway, S3, Polly, SNS, Bedrock wiring, CloudWatch, Budgets, keep-warm |
+| Cloud | none | CloudFormation on Graviton, API Gateway, S3, Polly, SNS, Claude API (Bedrock wired as alternative), CloudWatch, Budgets, keep-warm |
 | Evaluation | parsing accuracy on authored sentences; Pi latency | real-camera stage accuracy, synthetic robustness, real lead time, agent suite, Graviton/x86 benchmark |
 | UI | dashboard, report, queue, calibration, settings | Live replay, traces, approvals, rivers, relief, story; EN/HI/NE; accessibility fixes |
 | Kept | all original API routes, fusion engine, incidents, sync, CAP, Android app, Pi scripts | still tested |

@@ -20,6 +20,7 @@ from sqlmodel import Session, select
 
 from jalrekha.agent import cloud, messages
 from jalrekha.agent.models import ApprovalRequest, ReliefRequest, RouteStatus
+from jalrekha.regions import role_label
 from jalrekha.services.storage import get_upload_dir
 
 
@@ -96,7 +97,7 @@ def camera_key_ok(key: str | None) -> bool:
 def approval_to_api(ap: ApprovalRequest) -> dict[str, Any]:
     return {
         "id": ap.id, "created_at": ap.created_at.isoformat() + "Z", "updated_at": ap.updated_at.isoformat() + "Z",
-        "status": ap.status, "action": ap.action, "site_id": ap.site_id, "region_id": ap.region_id, "role": ap.role,
+        "status": ap.status, "action": ap.action, "site_id": ap.site_id, "region_id": ap.region_id, "role": ap.role, "role_label": role_label(ap.role),
         "level": ap.level, "title": ap.title, "rationale": ap.rationale, "trace_id": ap.trace_id,
         "scenario_run_id": ap.scenario_run_id,
         "payload": json.loads(ap.payload_json or "{}"), "evidence": json.loads(ap.evidence_json or "[]"),

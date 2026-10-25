@@ -88,15 +88,18 @@ class VLMAnswer:
     input_tokens: int = 0
     output_tokens: int = 0
     scripted: bool = False
+    cost_override: float | None = None
 
     @property
     def cost_usd_est(self) -> float:
+        if self.cost_override is not None:
+            return self.cost_override
         return round(self.input_tokens / 1000 * NOVA_LITE_IN_PER_1K + self.output_tokens / 1000 * NOVA_LITE_OUT_PER_1K, 6)
 
 
 GAUGE_PROMPT = (
-    "You are checking a river staff-gauge camera image. The gauge marks are labelled in metres "
-    "from {lo:.1f} m at the bottom to {hi:.1f} m at the top. Read where the water surface meets the gauge. "
+    "You are checking a river staff-gauge camera image. The gauge covers {lo:.2f} m at its lowest mark to "
+    "{hi:.2f} m at its highest mark{unit_note}. Read where the water surface meets the gauge and report it in metres. "
     'Reply with JSON only: {{"stage_m": <number or null>, "confidence": <0..1>, "visible": <true|false>}}. '
     "If you cannot see the waterline, use null."
 )
@@ -125,7 +128,7 @@ class BedrockVLM:
                         "role": "user",
                         "content": [
                             {"image": {"format": "jpeg", "source": {"bytes": jpeg}}},
-                            {"text": GAUGE_PROMPT.format(lo=lo_m, hi=hi_m)},
+                            {"text": GAUGE_PROMPT.format(lo=lo_m, hi=hi_m, unit_note="")},
                         ],
                     }
                 ],
@@ -136,6 +139,28 @@ class BedrockVLM:
         text = "".join(c.get("text", "") for c in resp["output"]["message"]["content"])
         usage = resp.get("usage", {})
         return VLMAnswer(text, self.name, (time.perf_counter() - t0) * 1000, usage.get("inputTokens", 0), usage.get("outputTokens", 0))
+
+
+class ClaudeVLM:
+    """Claude reads the gauge from the redacted frame; the reply is constrained to the gauge JSON schema."""
+
+    def __init__(self, unit_note: str = "") -> None:
+        from jalrekha.adapters import claude
+
+        self._claude = claude
+        self.unit_note = unit_note
+        self.name = f"claude:{claude.MODEL}"
+
+    def ask_gauge(self, jpeg: bytes, lo_m: float, hi_m: float) -> VLMAnswer:
+        try:
+            r = self._claude.call([self._claude.image_block(jpeg),
+                                   {"type": "text", "text": GAUGE_PROMPT.format(lo=lo_m, hi=hi_m, unit_note=self.unit_note)}],
+                                  schema=self._claude.GAUGE_SCHEMA, effort="low", max_tokens=1024)
+        except self._claude.ClaudeUnavailable as exc:
+            raise VLMUnavailable(str(exc)) from exc
+        ans = VLMAnswer(r.text, f"claude:{r.model}", r.latency_ms, r.input_tokens, r.output_tokens)
+        ans.cost_override = r.cost_usd_est
+        return ans
 
 
 class ScriptedVLM:
@@ -196,6 +221,11 @@ def parse_gauge_answer(text: str) -> dict[str, Any]:
 
 
 def default_vlm():
+    """Claude when an Anthropic key is configured, else Bedrock when AWS is enabled, else none (rule fallback)."""
+    from jalrekha.adapters import claude
+
+    if claude.available():
+        return ClaudeVLM()
     return BedrockVLM() if aws_enabled() else UnavailableVLM()
 
 

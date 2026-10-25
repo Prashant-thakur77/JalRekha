@@ -1,6 +1,6 @@
 # Video script (4:50)
 
-Numbers generated 2026-10-25 15:32 UTC. Record the screen at 1080p from the live URL. Captions in English; the Hindi and Nepali alerts are shown and played as they are.
+Numbers generated 2026-10-25 16:42 UTC. Record the screen at 1080p from the live URL. Captions in English; the Hindi and Nepali alerts are shown and played as they are.
 
 | Time | Picture | Voice-over |
 |---|---|---|

@@ -30,7 +30,7 @@ The personas in the demo (Sita, Rakesh) are illustrative composites, not real pe
                      │ JalRekha OpenCV 5 pipeline ─► agent loop (policy D1–D9) ─► guard ─► act / approval │
                      │ region profiles + river graphs     traces (SQLite, S3)     original fusion engine  │
                      └──┬───────────┬────────────┬───────────┬────────────┬───────────────────────────────┘
-                        S3       Bedrock       Polly        SNS        CloudWatch (logs, metrics, alarms)
+                        S3     Claude API      Polly        SNS        CloudWatch (logs, metrics, alarms)
  API Gateway HTTPS (VPC link) in front; EventBridge + Lambda keep-warm; SSM Parameter Store; AWS Budgets
 ```
 
@@ -67,7 +67,9 @@ One CloudFormation stack, `infra/nadisaathi.yaml`, deploys in about 5 minutes an
 - Least-privilege instance role: S3 on the stack bucket, metrics only in the `NadiSaathi` namespace, SNS on the stack topic.
 - Cost: c8g.xlarge on-demand is {{B_usd_h}}/h (AWS Price List API); the judging window is an estimate of about $58 for the whole stack (`docs/DEPLOY.md`).
 
-Bedrock status, honestly: the account's Amazon Nova daily token quota is zero and Anthropic models need a use-case form, so every Bedrock call fails today and the agent takes its fallback (hold an uncertain reading and ask for a photo). The trace records it.
+Language and vision model: Claude ({{vlm_model}}) through the Anthropic API, with server-side refusal fallbacks, structured JSON outputs and a key held in SSM Parameter Store. It writes the second opinion on a gauge reading (D3/D7), structures volunteer reports and relief requests in five languages, describes volunteer photos after face/plate blur, and drafts situation summaries that the numbers-from-tools guard checks. Amazon Bedrock is wired as an alternative provider, but this account's Bedrock quota is zero, so it is not used. Every model call has a deterministic fallback.
+
+On {{pt_photos}} licensed flood photos from India and Nepal (`eval/run_photo_triage.py`, faces and plates blurred first), Claude marked {{pt_road_hit}} of {{pt_road_pos}} flooded roads and underpasses as flooded and {{pt_others_flagged}} of the other {{pt_others}} photos as well (a washed-out mountain bridge and an NDRF boat rescue in floodwater), at ~{{pt_latency_s}} s and {{pt_cost_photo}} per photo. The labels come from each photo's subject and n is small, so this is a sanity check on real Indian scenes, not an accuracy figure. The photo description never sets a road's status: D8 needs the GrabCut depth check and an operator's approval.
 
 ## 5. The agent
 
@@ -77,7 +79,7 @@ The agent (`backend/src/jalrekha/agent/runner.py`) runs one cycle per camera bur
 |---|---|---|
 | D1 | quality gate fails | no alert from this frame; burst 5 → 9 frames; photo request after two bad frames |
 | D2 | ORB registration fails | ALIKED+LightGlue or keyframe chain; if still lost or the gauge leaves the view, site degraded + recalibration request |
-| D3 | fewer than 2 of 3 estimators within 10 cm, or sigma > 8 cm | VLM second opinion (Bedrock); if unavailable, hold the reading; after 3 held readings in a row, ask a person |
+| D3 | fewer than 2 of 3 estimators within 10 cm, or sigma > 8 cm | VLM second opinion (Claude); if unavailable, hold the reading; after 3 held readings in a row, ask a person |
 | D4 | significant Kalman rise: rate − 1.5·σ_rate ≥ 0.30 m/h | capture cadence 600 → 300 s (scenario sites); downstream ETA bands |
 | D5 | stage ≥ warning, or projected to cross within 1.5 h (right after bad frames: only after 3 significant-rise cycles in a row) | local and cross-border drafts (SMS, voice, CAP) for the right authority role |
 | D6 | stage ≥ danger, quality OK, at least 2 of 3 estimators within 10 cm (sigma from the agreeing pair ≤ 8 cm; the trace records both this and the fused sigma) | local siren through the guard (schema, severity ≤ evidence, region bounds, 6/h rate limit) |
@@ -170,7 +172,7 @@ Reading it honestly: the lead time comes from the Kalman projection, which the "
 - Lead-time gains depend on consistent warning levels along the river (6.3).
 - No Polly voice for Nepali, Maithili or Bhojpuri; Maithili and Bhojpuri texts need native review.
 - SMS to India needs TRAI DLT registration; Nepal bulk SMS goes through telecom operators. The pilot sends only to verified test numbers.
-- Bedrock is not usable on this account yet (section 4).
+- The language and vision model is a hosted API (Claude); the edge box falls back to rules (or an on-device Gemma model) when it is offline.
 - Face and plate redaction recall has not been measured on our own data; we rely on the detectors' published behaviour, and stored frames, approvals and traces are readable through the public demo API (they contain synthetic scenes and no personal data). A real deployment should restrict read access to operators.
 
 ## 9. Responsible use
@@ -186,7 +188,7 @@ The repository builds on an earlier open-source flood-alert stack. The table sep
 | Vision | PIL edge-row heuristic; a language model reading frames | OpenCV 5 metric pipeline (quality, ORB/ALIKED+LightGlue registration, three estimators, Kalman, DIS flow, YuNet redaction, relief photo check) |
 | Region | one country, Spanish | Nepal and India profiles, four basin graphs with CWC levels, five languages, voice |
 | Agent | language model chooses actuators; guard not wired | perception-driven policy D1–D9, approvals, wired guard, guardrails, traces, scenario replays |
-| Cloud | none | CloudFormation on Graviton, API Gateway, S3, Polly, SNS, Bedrock wiring, CloudWatch, Budgets, keep-warm |
+| Cloud | none | CloudFormation on Graviton, API Gateway, S3, Polly, SNS, Claude API (Bedrock wired as alternative), CloudWatch, Budgets, keep-warm |
 | Evaluation | parsing accuracy on authored sentences; Pi latency | real-camera stage accuracy, synthetic robustness, real lead time, agent suite, Graviton/x86 benchmark |
 | UI | dashboard, report, queue, calibration, settings | Live replay, traces, approvals, rivers, relief, story; EN/HI/NE; accessibility fixes |
 | Kept | all original API routes, fusion engine, incidents, sync, CAP, Android app, Pi scripts | still tested |

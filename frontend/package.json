@@ -11,6 +11,9 @@
     "test": "vitest run --environment jsdom --pool threads"
   },
   "dependencies": {
+    "@fontsource-variable/anek-devanagari": "^5.3.0",
+    "@fontsource-variable/host-grotesk": "^5.3.0",
+    "@fontsource/fragment-mono": "^5.3.0",
     "@tailwindcss/vite": "^4.2.2",
     "idb": "^8.0.3",
     "lucide-react": "^1.8.0",

@@ -319,3 +319,32 @@ def test_snapshot_vote_needs_three_close_readings():
     assert ok is not None and ok["spread_m"] <= 0.10
     assert jump is None  # a jump is not confirmed by older frames
     assert stale is None  # frames older than the window do not vote
+
+
+def test_held_reading_after_a_fall_does_not_act_on_d9():
+    # Regression: a held reading (no rate) after several falling cycles crashed D9's rate format.
+    from jalrekha.agent.models import AgentSiteState
+
+    sc = scenarios.SCENARIOS["koshi-night-rise"]
+    with Session(edge_engine) as s:
+        scenarios.ensure_site(s, sc)
+        scenarios.reset_site(s, sc)
+    t = next(x / 2 for x in range(0, 960) if sc.stage(x / 2) >= 6.55)
+    frames, _, _, _ = scenarios.frames_at(sc, t, 5)
+    with Session(edge_engine) as s:
+        st = s.get(AgentSiteState, sc.site_id)
+        st.falling_streak, st.cadence_s, st.mode = 10, st.fast_cadence_s, "alert"
+        s.add(st)
+        s.commit()
+        tr = runner.run_cycle(s, sc.site_id, frames, vlm=cloud.ScriptedVLM('{"stage_m": 0.5, "confidence": 0.95, "visible": true}'))
+    assert "D9" not in tr["branches"], tr["summary"]
+
+
+def test_second_replay_on_a_busy_site_joins_the_running_one():
+    first, new1 = scenarios._claim_site("claim-test-site", "a", "label")
+    second, new2 = scenarios._claim_site("claim-test-site", "b", "label")
+    assert new1 and not new2 and second["run_id"] == first["run_id"]
+    with scenarios._LOCK:
+        scenarios.RUNS[first["run_id"]]["status"] = "done"
+    third, new3 = scenarios._claim_site("claim-test-site", "a", "label")
+    assert new3 and third["run_id"] != first["run_id"]

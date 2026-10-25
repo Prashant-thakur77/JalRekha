@@ -21,10 +21,10 @@
   "public_languages": ["ne", "mai", "en"],
   "channels": ["sms", "voice", "cap", "siren", "telegram"],
   "authority_roles": [
-    {"id": "ward_focal", "name": "Ward disaster focal person", "level": "ward", "approves": ["send_sms", "voice_call", "all_clear", "publish_route_status", "dispatch_relief"]},
-    {"id": "municipal_eoc", "name": "Municipal Emergency Operation Centre", "level": "municipality", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
-    {"id": "dhm_duty", "name": "DHM flood forecasting duty officer (informed, not an approver)", "level": "national", "approves": []},
-    {"id": "community_gauge_reader", "name": "Community gauge reader (CBEWS volunteer)", "level": "community", "approves": []}
+    {"id": "ward_focal", "short": "Ward focal person", "name": "Ward disaster focal person", "level": "ward", "approves": ["send_sms", "voice_call", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "municipal_eoc", "short": "Municipal EOC", "name": "Municipal Emergency Operation Centre", "level": "municipality", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "dhm_duty", "short": "DHM duty officer", "name": "DHM flood forecasting duty officer (informed, not an approver)", "level": "national", "approves": []},
+    {"id": "community_gauge_reader", "short": "Community gauge reader", "name": "Community gauge reader (CBEWS volunteer)", "level": "community", "approves": []}
   ],
   "levels": [
     {"id": "normal", "legacy": "green", "color": "green", "label": {"en": "Normal", "hi": "सामान्य", "ne": "सामान्य"}},

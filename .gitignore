@@ -114,3 +114,6 @@ scripts/send_*outreach*.py
 *Design System*.zip
 *Design System*.tar.gz
 eval/results/.tmp/
+
+# Re-download with scripts/fetch_india_flood_photos.py (SHA-1 checked)
+datasets/india_flood_photos/originals/

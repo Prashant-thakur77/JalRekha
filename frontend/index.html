@@ -4,13 +4,23 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="alternate icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="mask-icon" href="/favicon.svg" color="#2563eb">
+    <link rel="mask-icon" href="/favicon.svg" color="#121211">
     <link rel="manifest" href="/manifest.webmanifest" />
-    <meta name="theme-color" content="#2563eb" />
+    <meta name="theme-color" content="#f3f2ee" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="apple-touch-icon" href="/favicon.svg" sizes="192x192" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>NadiSaathi · नदी साथी</title>
-    <meta name="description" content="Flood early warning and relief for Nepal and India, with a person approving every alert">
+    <meta name="description" content="See the river rise upstream in Nepal, warn the villages downstream in India. Flood early warning and relief with a person approving every alert.">
+    <script>
+      // Apply a saved theme before first paint so the page does not flash.
+      (function () {
+        try {
+          var t = localStorage.getItem('nadisaathi.theme');
+          if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

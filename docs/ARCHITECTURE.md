@@ -19,7 +19,7 @@ flowchart TB
     DB[("SQLite: traces, approvals, relief")]
   end
   subgraph AWS["Managed AWS services"]
-    BR["Bedrock (VLM 2nd opinion)"]
+    BR["Claude API (VLM 2nd opinion, text)<br/>Bedrock as alternative"]
     PO["Polly (voice)"]
     SNS["SNS (operators, SMS)"]
     SFN["Step Functions (escalation timer)"]
@@ -55,7 +55,7 @@ flowchart TD
   R -- yes --> Q{"Quality gate OK?"}
   Q -- no --> D1["D1: no alert from this frame<br/>burst 5→9, photo request"]
   Q -- yes --> C{"2 of 3 estimators agree,<br/>sigma ≤ 8 cm?"}
-  C -- no --> V["D3: VLM second opinion (Bedrock)"]
+  C -- no --> V["D3: VLM second opinion (Claude)"]
   V -- "unavailable" --> HOLD["hold reading, ask for photo"]
   V -- "contradicts / injected text" --> D7["D7: keep CV value, human review"]
   V -- confirms --> K

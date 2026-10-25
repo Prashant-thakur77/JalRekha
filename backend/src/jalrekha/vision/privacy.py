@@ -10,6 +10,7 @@ which mode ran so the privacy audit counts it.
 
 from __future__ import annotations
 
+import threading
 from dataclasses import dataclass, field
 
 import cv2
@@ -19,6 +20,8 @@ from jalrekha.vision import models
 
 _FACE = None
 _PLATE = None
+# The detectors are shared and stateful (input size, set input), so concurrent requests take turns.
+_LOCK = threading.Lock()
 
 
 @dataclass
@@ -51,12 +54,13 @@ def _yunet(key: str, size: tuple[int, int], score: float):
 def _detect_faces(img: np.ndarray) -> tuple[list[list[int]] | None, str]:
     global _FACE
     h, w = img.shape[:2]
-    if _FACE is None:
-        _FACE = _yunet("face_yunet", (w, h), 0.6) or False
-    if not _FACE:
-        return None, "unavailable"
-    _FACE.setInputSize((w, h))
-    _, faces = _FACE.detect(img)
+    with _LOCK:
+        if _FACE is None:
+            _FACE = _yunet("face_yunet", (w, h), 0.6) or False
+        if not _FACE:
+            return None, "unavailable"
+        _FACE.setInputSize((w, h))
+        _, faces = _FACE.detect(img)
     boxes = [] if faces is None else [[int(v) for v in f[:4]] for f in faces]
     return boxes, "yunet"
 
@@ -67,16 +71,17 @@ def _detect_plates(img: np.ndarray) -> tuple[list[list[int]] | None, str]:
     path = models.model_path("plate_yunet")
     if path is None:
         return None, "unavailable"
-    if _PLATE is None:
-        _PLATE = cv2.dnn.readNet(str(path))
     # LPD-YuNet runs on a 320x240 BGR image (opencv_zoo lpd_yunet.py).
     h, w = img.shape[:2]
     blob = cv2.dnn.blobFromImage(cv2.resize(img, (320, 240)))
-    _PLATE.setInput(blob)
-    try:
-        outs = _PLATE.forward(["loc", "conf", "iou"])
-    except cv2.error:
-        return None, "lpd_yunet_error"
+    with _LOCK:
+        if _PLATE is None:
+            _PLATE = cv2.dnn.readNet(str(path))
+        _PLATE.setInput(blob)
+        try:
+            outs = _PLATE.forward(["loc", "conf", "iou"])
+        except cv2.error:
+            return None, "lpd_yunet_error"
     boxes = _decode_lpd(outs, w, h)
     return boxes, "lpd_yunet"
 

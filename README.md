@@ -14,18 +14,20 @@ Live demo: **https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com** (opens on 
 
 NadiSaathi is a flood early-warning and relief tool for the rivers that rise in Nepal and flood the plains of Bihar and Uttar Pradesh. Its measurement engine, JalRekha (जलरेखा, "waterline"), turns an ordinary camera pointed at a staff gauge into a calibrated river gauge. The agent around it uses each reading to decide what to do next, and the river graph turns an upstream rise into a downstream arrival window, across the border.
 
-Numbers generated 2026-10-25 15:32 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this file and the JSON disagree.
+Numbers generated 2026-10-25 16:42 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this file and the JSON disagree.
 
 ## Results
 
 | What | NadiSaathi | Baseline | Data |
 |---|---|---|---|
 | Stage error on real USGS staff-gauge cameras, physical calibration (gauge numerals clicked once, nothing fitted to gauge data) | **10.6 cm MAE** (95% CI 7.0–16.1), median 4.1 cm | original PIL edge heuristic: answers only 38% of frames; on those same 44 frames it is 99.2 cm vs 16.5 cm for ours; naive max-edge 120.5 cm | REAL, 115 in-range frames, 2 sites |
+| A vision-language model as the gauge reader (claude-opus-5-5 on the same real frames) | OpenCV: 10.0 cm on the frames the model answered, in ~0.09 s per burst on Graviton for $0.446 per million frames | claude-opus-5-5: 14.0 cm, answered 72% of frames, ~2.5 s and $6.263 per 1,000 frames | REAL, 115 frames, the model given the gauge span and units |
 | The agent on a real camera (USGS Hancock, July 2026 flood, 88 archived frames) | used 64 readings at **6.5 cm MAE** (median 4.0 cm), held 27% for review; siren on the first frame above the danger mark: yes; 0 alert drafts on the quiet days; all-clear proposed: yes. No warning lead on this camera: the rise happened overnight, when it records nothing | – | REAL, illustrative warning/danger marks (14 ft / 17 ft) |
 | Stage error, synthetic scenes, 9 conditions (rain, fog, night, shake, blur, glare, JPEG, still water) | **8.0 cm MAE** (CI 6.9–9.2), 83% within 5 cm | original heuristic, border-fixed 74.7 cm; as shipped it answers 0.1% of frames | SYNTHETIC, 2,160 frames, 30 scene seeds never used for tuning |
 | Lead time gained downstream by watching the upstream gauge | Official NWS action stages (pre-registered primary): median **0 min**, mean 4.1 h, detection before the crossing 7% → 31%. Percentile warning levels: median **8.5 h** (CI 330–630 min), detection 8% → 74% | same rule on the downstream gauge only | REAL USGS gauge pairs, 8 pairs, held-out 2024–2026 events |
 | Agent scenario suite | first alert a median **62 min before** the true warning crossing; 36/36 runs correct, 0 false-alert runs | same projection rule without the vision gates: 56 min, 34/36 correct, 2 false-alert runs; threshold agent: -4 min, 35/36 | SYNTHETIC, 9 flood + 27 no-flood runs incl. camera knocks near the warning level |
 | Guard against a lying or hijacked vision model | **32/32 bad replies caught** (contradictions, prompt injections in English/Hindi/Nepali, malformed), 8/8 honest confirmations accepted, danger siren never cancelled | – | SYNTHETIC danger-level burst, 40 scripted replies through the full agent cycle |
+| Volunteer photo triage on real Indian and Nepali flood photos (Claude, after face/plate blur) | flagged **8/8** flooded roads and underpasses; also flagged 2 of the other 12 photos (a washed-out bridge, a boat rescue); ~3.8 s and $0.014 per photo | – | REAL, 20 licensed Wikimedia Commons photos, labels from the photo subject; small n, a sanity check |
 | CV pipeline on Graviton4 vs x86 (same 4 vCPU, same frames, identical outputs) | c8g.xlarge **99.4 frames/s, $0.446 per 1M frames** | c7i.xlarge 93.3 frames/s, $0.531 per 1M frames (16% cheaper on Graviton) | benchmark workload, `bench/cool_bench.py` |
 | Deployed endpoint | 100.0% of 31 health probes OK over 2.7 h, p50 127 ms / p95 246 ms | – | REAL, CloudWatch (keep-warm probe every 5 min) |
 
@@ -37,7 +39,7 @@ What these numbers do not show, and the failures we found:
 - On the real Moravia camera, which was reframed after a flood, image registration made accuracy worse (43% within 10 cm with it, 70% without).
 - Our first real-camera protocol fitted a camera-to-stage line on each site's first frames and failed (87.7 cm, no better than a constant). We then switched to physical calibration on the same frames, and excluded a third site (Avon) after inspection because its staff plates use another datum and stay dry for most of the event. Nothing is fitted to gauge readings, but the protocol choice was made after seeing the first failure.
 - In the agent suite most of the lead time comes from the Kalman projection, which the "projection without gates" baseline shares. The vision gates show their value on the hard no-flood runs: when a knocked camera's misregistered frame reads high, the system without gates drafts alerts on a steady river (2 false-alert runs) while the agent's registration check marks the site degraded instead (moved-363, T+60 min: "camera moved: site degraded, recalibration requested"). Both of those runs come from scenes never used for development. The first run of the hard variants also found an agent failure (glare biasing readings, then a recovery jump read as a rise), fixed with a post-gap confirmation rule; the suite also caught a scenario-cache bug and drafts rewritten after the peak. All fixed and covered by tests.
-- The adversarial VLM replies are scripted test inputs; Bedrock is wired but the account's quota is zero, so no live model ever answers in the demo.
+- The adversarial replies in the guard evaluation are scripted test inputs. The live second opinion is Claude (claude-opus-5-5); as a gauge reader on its own it is slower, costlier and, on these frames, less accurate than the OpenCV pipeline, which is why the agent calls it only when its own estimators disagree.
 - Glare on the gauge is the worst synthetic condition (52.1 cm MAE), and it is a blind spot for the agent: in 11 of 90 strong-glare bursts (12%) the quality gate passed and two estimators agreed on a reading 0.7–2.5 m too low. Because the estimators agree, the agent does not ask for a second opinion, so the guard would keep the wrong value and an alert could come late. A glare-specific detector, or always confirming readings taken under glare, is the next fix.
 
 ## What happens in one cycle
@@ -52,7 +54,7 @@ camera burst ─► quality gate ─► registration ─► gauge strip ─► 3
      ▼
   D1 bad frame ─► no alert from it, longer burst, ask a volunteer for a photo after two in a row
   D2 camera moved ─► ALIKED+LightGlue, keyframe chain; if lost, site degraded + recalibration request
-  D3 estimators disagree ─► only now pay for a VLM second opinion (Bedrock), else hold the reading
+  D3 estimators disagree ─► only now pay for a VLM second opinion (Claude), else hold the reading
   D4 fast rise ─► capture every 5 min instead of 10, compute downstream ETA bands on the river graph
   D5 warning reached or projected ─► draft local + cross-border alerts (SMS, voice, CAP) for approval
   D6 danger level, estimators agree ─► local siren (the only public action it takes alone)
@@ -80,16 +82,16 @@ Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.m
  phone / browser ─► API Gateway HTTPS ─► (VPC link) ─► EC2 c8g.xlarge Graviton4, Ubuntu 24.04 arm64
                                                        FastAPI + PWA, OpenCV 5 worker, agent loop
                                                        │      │        │         │          │
-                                         S3 (CAP files,    Bedrock   Polly     SNS        CloudWatch logs,
-                                         deploy bundles,   (VLM 2nd  (Hindi/   (operator   metrics, dashboard,
-                                         bench results)    opinion)  English)  + SMS)      alarms
+                                         S3 (CAP files,    Claude    Polly     SNS        CloudWatch logs,
+                                         deploy bundles,   API (VLM  (Hindi/   (operator   metrics, dashboard,
+                                         bench results)    2nd op.)  English)  + SMS)      alarms
  EventBridge (5 min) ─► Lambda keep-warm ─► /api/health ─► alarm ─► SNS
  Step Functions: a drafted public alert starts a timer (wait 15 min ─► Lambda checks the approval ─► still pending? re-notify, up to 3×)
  SSM Parameter Store (operator PIN), least-privilege instance role, AWS Budgets
  CloudFormation: infra/nadisaathi.yaml   `make deploy` (about 60 s per update)   `make destroy`
 ```
 
-Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host (227 ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about 5,284 cameras at a 5-minute cadence, about $0.02 of compute per camera per month (the benchmark upper bound is 5,967; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. Bedrock is wired but the account's Nova quota is currently zero, so every second opinion takes the labelled fallback path: the trace shows `VLM unavailable: rule fallback`.
+Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host (227 ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about 5,284 cameras at a 5-minute cadence, about $0.02 of compute per camera per month (the benchmark upper bound is 5,967; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. The second opinion, report structuring, photo descriptions and situation summaries run on Claude (claude-opus-5-5) through the Anthropic API with server-side refusal fallbacks; Amazon Bedrock is wired as an alternative (its account quota is zero today). Without either, every second opinion takes the labelled rule fallback.
 
 ## Run it
 
@@ -122,3 +124,5 @@ android/                        volunteer app (unchanged)
 ## Data and model notices
 
 USGS HIVIS imagery and NWIS gauge data are U.S. public domain (credit: U.S. Geological Survey). Weather data by Open-Meteo.com (CC BY 4.0). OpenCV is Apache-2.0. YuNet face and plate detectors (opencv_zoo), ALIKED (BSD-3-Clause) and LightGlue (Apache-2.0) ONNX weights are downloaded at runtime with SHA-1 checks and are not redistributed here. Gemma model weights, used by the edge components, are under the Gemma Terms of Use and are fetched at runtime.
+
+The flood photos from India and Nepal in the app and in `datasets/india_flood_photos/` are from Wikimedia Commons under public domain, CC0, CC BY and CC BY-SA licences; each photo's author, licence and source are listed in `docs/PHOTO_CREDITS.md`, on the app's Credits page and next to the photo. The web copies are resized and re-encoded; CC BY-SA photos stay under CC BY-SA.

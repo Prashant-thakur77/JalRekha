@@ -422,9 +422,29 @@ def sitrep(region_id: str, session: Session = Depends(get_session)) -> dict[str,
     lines.append(f"Pending approvals: {len(pend)}. Open relief requests: {len(rel)}.")
     numbers += [{"value": str(len(pend)), "label": "Pending approvals", "source": "approvals table"},
                 {"value": str(len(rel)), "label": "Open relief requests", "source": "relief table"}]
-    return {"region_id": region_id, "generated_at": _iso(datetime.utcnow()), "text": "\n".join(lines) or "No active sites.",
-            "numbers": numbers, "model": "template", "fallback_used": False,
-            "note": "Deterministic summary; every number links to a trace, the river graph or a table."}
+    template_text = "\n".join(lines) or "No active sites."
+    out = {"region_id": region_id, "generated_at": _iso(datetime.utcnow()), "text": template_text,
+           "numbers": numbers, "model": "template", "fallback_used": False,
+           "note": "Every number links to a trace, the river graph or a table."}
+    from jalrekha.adapters import claude
+    from jalrekha.agent import guardrails
+
+    if claude.available() and numbers:
+        lang = {"in": "Hindi", "np": "Nepali"}.get(region_id, "English")
+        prompt = ("Write a situation summary for district disaster officials: three to five short sentences in English, "
+                  f"then the same in {lang}. Use only the facts and numbers below; do not add any number that is not listed. "
+                  "Plain words, no headings.\n" + json.dumps({"facts": lines, "numbers": numbers}, ensure_ascii=False))
+        try:
+            r = claude.call(prompt, effort="low", max_tokens=2048)
+            check = guardrails.numbers_from_tools(r.text, [numbers, lines])
+            if check["ok"]:
+                out.update(text=r.text, model=f"claude:{r.model}", guard=check)
+            else:
+                out.update(fallback_used=True, guard=check,
+                           note="Claude's draft contained numbers not found in the tool outputs; the template summary is shown.")
+        except claude.ClaudeUnavailable as exc:
+            out.update(fallback_used=True, note=f"Claude unavailable ({exc}); template summary shown.")
+    return out
 
 
 # ----------------------------------------------------------------- evidence

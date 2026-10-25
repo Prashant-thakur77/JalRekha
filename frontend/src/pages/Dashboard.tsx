@@ -38,7 +38,7 @@ import {
   SignalFusionRow,
 } from '../components/CommandCenter';
 
-const CENTRAL_NODE_MODEL = 'gemma4:e26b';
+const CENTRAL_NODE_MODEL = 'claude-opus-5-5';
 
 const EVIDENCE_BY_LEVEL: Record<FusedAlert['level'], { frameUrl: string; frameLabel: string; description: string; confidence: number }> = {
   green: {
@@ -101,7 +101,7 @@ const DEMO_SITE: Site = {
   lat: 33.74,
   lng: -117.65,
   description:
-    'Bundled repo site. Serves as E2E reference for the CV+Gemma pipeline on a real clip.',
+    'Bundled repo site. Serves as E2E reference for the OpenCV and agent pipeline on a real clip.',
   is_active: true,
 };
 
@@ -137,7 +137,7 @@ const DEMO_FUSION: SignalInput[] = [
 const DEMO_AUDIT: AuditEntry[] = [
   { rule: 'RULE_CRITICAL_LINE_CROSSED',     outcome: 'fired',     detail: 'CV node observation: waterline_ratio 0.42 crossed calibrated line y=120.' },
   { rule: 'RULE_RISE_VELOCITY',             outcome: 'fired',     detail: 'rise_velocity 0.0034/frame > threshold 0.0020/frame.' },
-  { rule: 'RULE_VOLUNTEER_CORROBORATION',   outcome: 'fired',     detail: '1 volunteer report classified by Gemma with urgency=high in last 5 min.' },
+  { rule: 'RULE_VOLUNTEER_CORROBORATION',   outcome: 'fired',     detail: '1 volunteer report classified by Claude with urgency=high in last 5 min.' },
   { rule: 'RULE_HYDROMET_AGREEMENT',        outcome: 'fired',     detail: 'Open-Meteo 12h probability 68% exceeds threshold 50%.' },
   { rule: 'RULE_DUPLICATE_SUPPRESSION',     outcome: 'not_fired', detail: 'No prior active alert found for this site in 30 min window.' },
   { rule: 'RULE_MANUAL_OVERRIDE',           outcome: 'not_fired', detail: 'Operator did not apply manual override.' },
@@ -476,7 +476,7 @@ export default function Dashboard() {
             settingsLoaded={Boolean(currentSettings)}
           />
 
-          <SectionPanel title="Evidence frame · Gemma narration" meta={CENTRAL_NODE_MODEL}>
+          <SectionPanel title="Evidence frame · Claude narration" meta={CENTRAL_NODE_MODEL}>
             <EvidencePanel
               frameUrl={EVIDENCE_BY_LEVEL[activeAlert.level].frameUrl}
               frameLabel={EVIDENCE_BY_LEVEL[activeAlert.level].frameLabel}

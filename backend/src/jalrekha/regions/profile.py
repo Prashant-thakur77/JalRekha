@@ -54,6 +54,7 @@ class Language(BaseModel):
 class AuthorityRole(BaseModel):
     id: str
     name: str
+    short: str | None = None
     level: str
     approves: list[str] = Field(default_factory=list)
 
@@ -226,6 +227,15 @@ def load_basins() -> dict[str, Basin]:
         basin = Basin.model_validate(json.loads(p.read_text(encoding="utf-8")))
         out[basin.id] = basin
     return out
+
+
+def role_label(role_id: str | None) -> str:
+    """Short human label for an authority role id ("ddma_control_room" -> "DDMA control room")."""
+    for prof in load_regions().values():
+        for r in prof.authority_roles:
+            if r.id == role_id:
+                return r.short or r.name
+    return (role_id or "operator").replace("_", " ")
 
 
 def region(region_id: str) -> RegionProfile | None:

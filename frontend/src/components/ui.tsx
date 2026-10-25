@@ -3,14 +3,28 @@ import { Link } from 'react-router-dom';
 import { AlertTriangle, Inbox, Loader2, RefreshCw } from 'lucide-react';
 import { useI18n } from '../i18n';
 
-export function PageHeader({ title, subtitle, actions }: { title: string; subtitle?: string; actions?: ReactNode }) {
+/** The page's one h1, with an optional eyebrow above it and actions to the right. */
+export function PageHeader({
+  title,
+  subtitle,
+  actions,
+  eyebrow,
+  align = 'center',
+}: {
+  title: string;
+  subtitle?: string;
+  actions?: ReactNode;
+  eyebrow?: string;
+  align?: 'center' | 'left';
+}) {
   return (
-    <div className="ns-page-header">
-      <div className="min-w-0">
-        <h2 className="ns-h2">{title}</h2>
-        {subtitle && <p className="ns-muted">{subtitle}</p>}
+    <div className={`ns-page-header ns-page-header--${align}`}>
+      <div className="ns-page-header__text">
+        {eyebrow && <p className={align === 'center' ? 'ns-kicker' : 'ns-eyebrow'}>{eyebrow}</p>}
+        <h1 className="ns-h1">{title}</h1>
+        {subtitle && <p className="ns-page-header__sub">{subtitle}</p>}
       </div>
-      {actions && <div className="ns-row">{actions}</div>}
+      {actions && <div className="ns-page-header__actions">{actions}</div>}
     </div>
   );
 }
@@ -46,7 +60,9 @@ export function StateNotice({
   );
 }
 
-export function Chip({ tone = 'neutral', children, title }: { tone?: 'neutral' | 'info' | 'ok' | 'warn' | 'danger' | 'replay'; children: ReactNode; title?: string }) {
+export type Tone = 'neutral' | 'info' | 'ok' | 'watch' | 'warn' | 'danger' | 'replay';
+
+export function Chip({ tone = 'neutral', children, title }: { tone?: Tone; children: ReactNode; title?: string }) {
   return (
     <span className={`ns-chip ns-chip--${tone}`} title={title}>
       {children}
@@ -54,11 +70,11 @@ export function Chip({ tone = 'neutral', children, title }: { tone?: 'neutral' |
   );
 }
 
-const BRANCH_TONE: Record<string, 'info' | 'ok' | 'warn' | 'danger'> = {
-  D1: 'warn',
+const BRANCH_TONE: Record<string, Tone> = {
+  D1: 'watch',
   D2: 'info',
   D3: 'info',
-  D4: 'warn',
+  D4: 'watch',
   D5: 'warn',
   D6: 'danger',
   D7: 'danger',
@@ -72,11 +88,12 @@ export function BranchChip({ branch, to, showName = false }: { branch: string; t
   const name = td(`branch.${branch}`, branch);
   const content = (
     <>
+      <span className={`ns-dot ns-dot--${BRANCH_TONE[branch] ?? 'neutral'}`} aria-hidden="true" />
       <span className="ns-branch__id">{branch}</span>
       {showName ? <span className="ns-branch__name">{name}</span> : <span className="sr-only">: {name}</span>}
     </>
   );
-  const className = `ns-branch ns-chip ns-chip--${BRANCH_TONE[branch] ?? 'neutral'}`;
+  const className = `ns-branch${showName ? ' ns-branch--named' : ''}`;
   if (to) {
     return (
       <Link to={to} className={className} title={name}>
@@ -94,6 +111,6 @@ export function BranchChip({ branch, to, showName = false }: { branch: string; t
 export function ModeChip({ mode }: { mode?: string | null }) {
   const { td, t } = useI18n();
   if (!mode) return <Chip>{t('common.unknown')}</Chip>;
-  const tone = mode === 'alert' ? 'danger' : mode === 'watch' ? 'warn' : mode === 'degraded' ? 'neutral' : 'ok';
+  const tone: Tone = mode === 'alert' ? 'danger' : mode === 'watch' ? 'watch' : mode === 'degraded' ? 'neutral' : 'ok';
   return <Chip tone={tone}>{td(`mode.${mode}`, mode)}</Chip>;
 }

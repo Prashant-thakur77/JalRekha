@@ -5,10 +5,11 @@ Moravia, in-range frames). The model gets the frame and the gauge range and
 must answer with the JSON schema the agent uses. Reports MAE, coverage,
 latency and estimated cost per frame next to the OpenCV pipeline.
 
-    cd backend && NADISAATHI_AWS_ENABLED=1 uv run python ../eval/run_vlm_baseline.py [--limit 40]
+    cd backend && uv run python ../eval/run_vlm_baseline.py [--limit 40]
 
-If Bedrock is not available on the account, the script writes the result
-file with status "unavailable" and the error, and claims nothing.
+Uses Claude when ANTHROPIC_API_KEY is set, else Amazon Bedrock. If neither
+answers, the script writes the result file with status "unavailable" and the
+error, and claims nothing.
 """
 
 from __future__ import annotations
@@ -42,7 +43,12 @@ def main() -> int:
     ap.add_argument("--model", default=os.environ.get("NADISAATHI_BEDROCK_MODEL", "us.amazon.nova-lite-v1:0"))
     a = ap.parse_args()
     phys = json.loads((ROOT / "eval" / "results" / "stage_real_physical.json").read_text())
-    vlm = cloud.BedrockVLM(a.model)
+    from jalrekha.adapters import claude as _claude
+
+    provider = "claude" if _claude.available() else "bedrock"
+    # Fairness: the model gets what our physical calibration gets, the gauge span and the printed unit.
+    unit_note = " (the numerals printed on these gauges are in feet; 1 ft = 0.3048 m)"
+    vlm = cloud.ClaudeVLM(unit_note=unit_note) if provider == "claude" else cloud.BedrockVLM(a.model)
     labels = {r["timestamp_utc"]: r for r in csv.DictReader((DATA / "labels.csv").open())}
     rows, errors = [], []
     t0 = time.perf_counter()
@@ -53,25 +59,34 @@ def main() -> int:
         frames = [f for f in site["frames"] if lo - 0.05 <= f["truth_m"] <= hi + 0.05]
         if a.limit:
             frames = frames[:: max(1, len(frames) // a.limit)][: a.limit]
-        for f in frames:
+        from concurrent.futures import ThreadPoolExecutor
+
+        def one(f):
             lab = labels.get(f["t"])
             if lab is None:
-                continue
+                return None
             img = cv2.imread(str(DATA / lab["image_path"]))
             ok, jpeg = cv2.imencode(".jpg", img, [cv2.IMWRITE_JPEG_QUALITY, 90])
             try:
                 ans = vlm.ask_gauge(jpeg.tobytes(), lo, hi)
             except cloud.VLMUnavailable as exc:
-                errors.append(str(exc))
-                if len(errors) >= 3 and not rows:
-                    break
-                continue
+                return {"error": str(exc)}
             parsed = cloud.parse_gauge_answer(ans.raw_text)
-            rows.append({"site": sid, "t": f["t"], "truth_m": f["truth_m"], "vlm_m": parsed.get("stage_m"), "cv_m": f.get("full"),
-                         "parsed_ok": parsed["ok"], "latency_ms": round(ans.latency_ms, 1), "cost_usd_est": ans.cost_usd_est})
+            return {"site": sid, "t": f["t"], "truth_m": f["truth_m"], "vlm_m": parsed.get("stage_m"), "cv_m": f.get("full"),
+                    "parsed_ok": parsed["ok"], "latency_ms": round(ans.latency_ms, 1), "cost_usd_est": ans.cost_usd_est}
+
+        with ThreadPoolExecutor(max_workers=6) as ex:
+            for res_ in ex.map(one, frames):
+                if res_ is None:
+                    continue
+                if "error" in res_:
+                    errors.append(res_["error"])
+                else:
+                    rows.append(res_)
         if len(errors) >= 3 and not rows:
             break
     res: dict = {"meta": {"label": "REAL USGS HIVIS frames (same in-range frames as stage_real_physical.json)", "model": vlm.name,
+                          "prompt_note": "model told the gauge span in metres and that the numerals are in feet",
                           "generated_by": "eval/run_vlm_baseline.py", "generated_at": datetime.now(timezone.utc).isoformat(),
                           "wall_s": round(time.perf_counter() - t0, 1)}}
     if not rows:

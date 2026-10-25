@@ -5,6 +5,7 @@ from datetime import datetime
 
 from sqlmodel import SQLModel, Session, select
 
+from jalrekha.adapters import claude as claude_adapter
 from jalrekha.adapters.asr import FasterWhisperASRAdapter
 from jalrekha.adapters.image_assessment import GemmaImageAssessmentAdapter
 from jalrekha.adapters.litert_node import LiteRTNodeRuntime
@@ -35,11 +36,13 @@ def _build_node_runtime_components() -> tuple[object, GemmaImageAssessmentAdapte
     )
 
 
-llm_client = OpenAICompatibleLLM()
+# Claude is the language/vision model whenever an Anthropic key is configured;
+# the Gemma (Ollama / LiteRT) path remains for the offline edge box.
+llm_client = claude_adapter.ClaudeLLM() if claude_adapter.available() else OpenAICompatibleLLM()
 node_runtime = LiteRTNodeRuntime()
-text_structurer = GemmaFewShotTextStructurer(llm_client)
+text_structurer = llm_client if claude_adapter.available() else GemmaFewShotTextStructurer(llm_client)
 node_runner, node_image_assessor = _build_node_runtime_components()
-image_assessor = GemmaImageAssessmentAdapter()
+image_assessor = claude_adapter.ClaudeImageAssessor() if claude_adapter.available() else GemmaImageAssessmentAdapter()
 asr_client = FasterWhisperASRAdapter()
 external_data_service = ExternalDataService()
 node_engine = NodeAssessmentEngine(

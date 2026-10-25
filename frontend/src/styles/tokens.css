@@ -1,0 +1,240 @@
+/*
+ * NadiSaathi design tokens: the one place for colour, type, spacing, radius
+ * and motion.
+ *
+ * Palette: graphite ink #121211 on warm paper #F3F2EE, cards #E8E7E1,
+ * hairlines #D6D4CC, one lime accent #C6FF3D used sparingly (never as text on
+ * paper). Flood levels: normal lime, watch #FFC21A, warning #FF7A1A, danger
+ * #F03A2E. The bright level colours are fills, dots and marks; on paper, text
+ * uses the darker "text" variants below so every pair meets WCAG AA:
+ *   muted #5F5E58 on card 5.3:1 · ink on lime 15.9:1 · ink on danger 4.8:1
+ *   #A3A29B on #1C1C1A 6.7:1 · lime on #1C1C1A 14.4:1 · #FF5A4F on #1C1C1A 5.6:1
+ *
+ * Theme selection:
+ *   - no data-theme attribute   -> follows prefers-color-scheme
+ *   - data-theme="light"/"dark" -> the person's explicit choice (lib/theme.ts)
+ *   - .ns-dark on any element    -> that subtree is always dark (control room, panels, footer)
+ */
+
+:root {
+  color-scheme: light;
+
+  /* ── Fixed values (same in both themes) ───────────────────── */
+  --graphite: #121211;
+  --graphite-2: #1c1c1a;
+  --paper-fixed: #f3f2ee;
+  --accent: #c6ff3d;
+  --on-accent: #121211;
+  --fill-ok: #c6ff3d;
+  --fill-watch: #ffc21a;
+  --fill-warn: #ff7a1a;
+  --fill-danger: #f03a2e;
+  --glow: radial-gradient(120% 90% at 100% 0%, rgba(198, 255, 61, 0.18), transparent 55%);
+  --photo-shade: linear-gradient(180deg, rgba(18, 18, 17, 0.1), rgba(18, 18, 17, 0.8));
+
+  /* ── Surfaces ─────────────────────────────────────────────── */
+  --bg: #f3f2ee;
+  --bg-2: #e8e7e1;
+  --bg-sunk: #e8e7e1;
+  --surface: #f3f2ee;
+  --surface-2: #e8e7e1;
+  --surface-raised: #f9f8f5;
+  --card: #e8e7e1;
+  --scrim: rgba(18, 18, 17, 0.72);
+
+  /* ── Ink and lines ────────────────────────────────────────── */
+  --ink: #121211;
+  --ink-2: #1c1c1a;
+  --muted: #5f5e58;
+  --line: #d6d4cc;
+  --line-strong: #85847d; /* 3.3:1, for input underlines and control borders */
+  --cross: #85847d;
+
+  /* ── Interactive (on paper: ink; primary actions use a lime fill) ── */
+  --primary: #121211;
+  --primary-strong: #121211;
+  --primary-soft: #e8e7e1;
+  --on-primary: #f3f2ee;
+  --link: #121211;
+
+  /* ── Flood levels: text colour, soft fill, ink on that fill ─ */
+  --ok: #3e6000;
+  --ok-soft: #e6f9c2;
+  --ok-ink: #121211;
+  --watch: #7a5600;
+  --watch-soft: #fcefc4;
+  --watch-ink: #121211;
+  --warn: #a84400;
+  --warn-soft: #fde0c8;
+  --warn-ink: #121211;
+  --danger: #b3231a;
+  --danger-soft: #fcdcd8;
+  --danger-ink: #121211;
+  --replay: #121211;
+  --replay-soft: #e8e7e1;
+  --silt: #5f5e58;
+  --silt-soft: #e8e7e1;
+  --water: #121211;
+  --water-2: #c6ff3d;
+
+  --zone-warn: rgba(255, 122, 26, 0.13);
+  --zone-danger: rgba(240, 58, 46, 0.13);
+
+  /* ── Type ─────────────────────────────────────────────────── */
+  --font-ui: "Host Grotesk Variable", "Anek Devanagari Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-deva: "Anek Devanagari Variable", "Host Grotesk Variable", system-ui, sans-serif;
+  --font-display: var(--font-ui);
+  --font-mono: "Fragment Mono", "Anek Devanagari Variable", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  --fs-label: 0.6875rem; /* 11px eyebrows and buttons */
+  --fs-xs: 0.75rem;
+  --fs-sm: 0.875rem;
+  --fs-base: 1.0625rem; /* 17px body */
+  --fs-md: 1.25rem; /* 20px lead, h3 */
+  --fs-lg: 1.5rem;
+  --fs-xl: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  --fs-2xl: clamp(2.125rem, 1.5rem + 2.1vw, 3rem); /* 48px h2 */
+  --fs-3xl: clamp(2.875rem, 1.5rem + 4.4vw, 5.25rem); /* 84px display */
+  --fs-statement: clamp(2rem, 1.2rem + 3vw, 3.5rem); /* 56px scroll statement */
+  --fs-figure: clamp(4rem, 2.8rem + 4vw, 6rem); /* 96px readout */
+
+  --track-display: -0.045em;
+  --track-h2: -0.03em;
+  --track-label: 0.16em;
+  --track-button: 0.14em;
+
+  /* ── Space ────────────────────────────────────────────────── */
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-5: 1.5rem;
+  --sp-6: 2rem;
+  --sp-7: 3rem;
+  --sp-8: 6rem;
+  --sp-9: 7.5rem;
+  --gutter: clamp(1rem, 0.2rem + 3.4vw, 6rem);
+  --content: 78rem;
+  --measure: 40rem;
+
+  /* ── Radius ───────────────────────────────────────────────── */
+  --r-sm: 6px;
+  --r-btn: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 22px;
+  --r-pill: 999px;
+
+  /* Flat fills and hairlines; shadows only for floating overlays. */
+  --sh-1: none;
+  --sh-2: none;
+  --sh-3: 0 30px 60px -20px rgba(18, 18, 17, 0.45);
+
+  /* ── Motion ───────────────────────────────────────────────── */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-1: 120ms;
+  --dur-2: 220ms;
+  --dur-3: 480ms;
+
+  /* Navigation glass: graphite-tinted so 14px white links stay >= 4.5:1 over paper and bright photos. */
+  --nav-glass: rgba(18, 18, 17, 0.62);
+}
+
+/* Dark: paper -> #121211, cards -> #1C1C1A, hairlines white 10 %.
+ * Keep the two blocks below identical (system preference / explicit choice and .ns-dark). */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #121211;
+    --bg-2: #1c1c1a;
+    --bg-sunk: #0b0b0a;
+    --surface: #121211;
+    --surface-2: #1c1c1a;
+    --surface-raised: #1c1c1a;
+    --card: #1c1c1a;
+    --ink: #f3f2ee;
+    --ink-2: #dcdbd5;
+    --muted: #a3a29b;
+    --line: rgba(255, 255, 255, 0.1);
+    --line-strong: rgba(255, 255, 255, 0.42);
+    --cross: rgba(255, 255, 255, 0.4);
+    --primary: #c6ff3d;
+    --primary-strong: #c6ff3d;
+    --primary-soft: rgba(198, 255, 61, 0.1);
+    --on-primary: #121211;
+    --link: #c6ff3d;
+    --ok: #c6ff3d;
+    --ok-soft: rgba(198, 255, 61, 0.12);
+    --ok-ink: #c6ff3d;
+    --watch: #ffc21a;
+    --watch-soft: rgba(255, 194, 26, 0.13);
+    --watch-ink: #ffc21a;
+    --warn: #ff7a1a;
+    --warn-soft: rgba(255, 122, 26, 0.14);
+    --warn-ink: #ff9a4d;
+    --danger: #ff5a4f;
+    --danger-soft: rgba(240, 58, 46, 0.16);
+    --danger-ink: #ff7c72;
+    --replay: #f3f2ee;
+    --replay-soft: rgba(255, 255, 255, 0.07);
+    --silt: #a3a29b;
+    --silt-soft: rgba(255, 255, 255, 0.06);
+    --water: #c6ff3d;
+    --water-2: #1c1c1a;
+    --zone-warn: rgba(255, 122, 26, 0.1);
+    --zone-danger: rgba(240, 58, 46, 0.14);
+    --nav-glass: rgba(48, 48, 44, 0.66);
+  }
+}
+
+:root[data-theme="dark"],
+.ns-dark {
+  color-scheme: dark;
+  --bg: #121211;
+  --bg-2: #1c1c1a;
+  --bg-sunk: #0b0b0a;
+  --surface: #121211;
+  --surface-2: #1c1c1a;
+  --surface-raised: #1c1c1a;
+  --card: #1c1c1a;
+  --ink: #f3f2ee;
+  --ink-2: #dcdbd5;
+  --muted: #a3a29b;
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.42);
+  --cross: rgba(255, 255, 255, 0.4);
+  --primary: #c6ff3d;
+  --primary-strong: #c6ff3d;
+  --primary-soft: rgba(198, 255, 61, 0.1);
+  --on-primary: #121211;
+  --link: #c6ff3d;
+  --ok: #c6ff3d;
+  --ok-soft: rgba(198, 255, 61, 0.12);
+  --ok-ink: #c6ff3d;
+  --watch: #ffc21a;
+  --watch-soft: rgba(255, 194, 26, 0.13);
+  --watch-ink: #ffc21a;
+  --warn: #ff7a1a;
+  --warn-soft: rgba(255, 122, 26, 0.14);
+  --warn-ink: #ff9a4d;
+  --danger: #ff5a4f;
+  --danger-soft: rgba(240, 58, 46, 0.16);
+  --danger-ink: #ff7c72;
+  --replay: #f3f2ee;
+  --replay-soft: rgba(255, 255, 255, 0.07);
+  --silt: #a3a29b;
+  --silt-soft: rgba(255, 255, 255, 0.06);
+  --water: #c6ff3d;
+  --water-2: #1c1c1a;
+  --zone-warn: rgba(255, 122, 26, 0.1);
+  --zone-danger: rgba(240, 58, 46, 0.14);
+  --nav-glass: rgba(48, 48, 44, 0.66);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-1: 0ms;
+    --dur-2: 0ms;
+    --dur-3: 0ms;
+  }
+}

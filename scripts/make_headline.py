@@ -51,8 +51,8 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
     items: list[dict] = []
     sources: list[str] = []
 
-    def item(key, label, value, unit, baseline=None, dataset="", file=""):
-        items.append({"key": key, "label": label, "value": value, "unit": unit, "baseline": baseline, "dataset": dataset, "file": file})
+    def item(key, label, value, unit, baseline=None, dataset="", file="", note=None):
+        items.append({"key": key, "label": label, "value": value, "unit": unit, "baseline": baseline, "dataset": dataset, "file": file, "note": note})
 
     # ---- synthetic held-out stage accuracy
     s = _load(RES / "stage_synth_test.json")
@@ -181,12 +181,33 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
             k["vlm_cost_1k"] = f"${vb['vlm']['cost_usd_per_1k_frames_est']:.3f}"
             k["vlm_frames"] = num(vb["frames"])
             k["vlm_cv_same_mae_cm"] = num(vb["opencv_same_frames"]["mae_cm"])
-            k["vlm_sentence"] = (f"A vision-language model ({vb['meta']['model']}) reading the gauge on the same {k['vlm_frames']} real frames: "
-                                 f"{k['vlm_mae_cm']} cm MAE ({k['vlm_coverage']} answered), about {k['vlm_cost_1k']} per 1,000 frames; OpenCV on the same frames {k['vlm_cv_same_mae_cm']} cm.")
+            ans = [r for r in vb.get("rows", []) if r.get("vlm_m") is not None and r.get("cv_m") is not None]
+            if ans:
+                k["vlm_answered_n"] = num(len(ans))
+                k["vlm_on_answered_cm"] = num(sum(abs(r["vlm_m"] - r["truth_m"]) for r in ans) / len(ans) * 100)
+                k["cv_on_vlm_answered_cm"] = num(sum(abs(r["cv_m"] - r["truth_m"]) for r in ans) / len(ans) * 100)
+            k["vlm_median_cm"] = num(vb["vlm"]["median_abs_cm"])
+            k["vlm_latency_s"] = num(vb["vlm"]["latency_ms_p50"] / 1000, 1)
+            k["vlm_model"] = vb["meta"]["model"].replace("claude:", "")
+            k["vlm_sentence"] = (f"A vision-language model ({k['vlm_model']}) reading the gauge on the same {k['vlm_frames']} real frames, told the gauge span and that its numerals are in feet: "
+                                 f"it answered {k['vlm_coverage']} of frames at {k['vlm_mae_cm']} cm MAE (median {k['vlm_median_cm']} cm), about {k['vlm_latency_s']} s and {k['vlm_cost_1k']} per 1,000 frames; "
+                                 f"on the {k.get('vlm_answered_n', 'n/a')} frames it answered, OpenCV's error is {k.get('cv_on_vlm_answered_cm', 'n/a')} cm vs the model's {k.get('vlm_on_answered_cm', 'n/a')} cm.")
         else:
             k["vlm_status"] = "not measured"
             k["vlm_sentence"] = ("The planned vision-language baseline (a Bedrock model reading the gauge on every real frame, `eval/run_vlm_baseline.py`) "
                                  "could not run: the account's Bedrock quota is zero. No comparison is claimed.")
+    pt = _load(RES / "photo_triage.json")
+    if pt:
+        sources.append("eval/results/photo_triage.json")
+        rows = [r for r in pt["rows"] if "error" not in r]
+        others = [r for r in rows if not r["road_flooded_expected"]]
+        k["pt_photos"] = num(pt["photos"])
+        k["pt_road_pos"] = num(pt["road_flooded_positives"])
+        k["pt_road_hit"] = num(sum(bool(r["road_or_bridge_flooded"]) for r in rows if r["road_flooded_expected"]))
+        k["pt_others"] = num(len(others))
+        k["pt_others_flagged"] = num(sum(bool(r["road_or_bridge_flooded"]) for r in others))
+        k["pt_latency_s"] = num(pt["latency_ms_p50"] / 1000, 1)
+        k["pt_cost_photo"] = f"${pt['cost_usd_per_photo_est']:.3f}"
     sk = _load(RES / "soak.json")
     if sk:
         sources.append("eval/results/soak.json")
@@ -222,8 +243,10 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
         k["lt_pairs"] = num(lt["pooled"]["nws_action/gauge"]["test"]["n_pairs"])
         item("leadtime_p95", "Median lead time gained downstream (real gauge pairs, percentile warning levels)", lt["pooled"]["p95/gauge"]["test"]["gain_median_min"], "min",
              {"name": "same rule at the downstream gauge only", "value": 0}, "REAL USGS gauge pairs, held-out 2024-2026", "eval/results/leadtime.json")
-        item("leadtime_nws", "Median lead time gained downstream (official NWS action stages, pre-registered primary)", lt["pooled"]["nws_action/gauge"]["test"]["gain_median_min"], "min",
-             {"name": "downstream gauge only", "value": 0}, "REAL USGS gauge pairs, held-out 2024-2026", "eval/results/leadtime.json")
+        nws = lt["pooled"]["nws_action/gauge"]["test"]
+        item("leadtime_nws", "Floods flagged before the official NWS action stage (pre-registered primary)", nws["detection_rate_combined"], "fraction",
+             {"name": "downstream gauge only", "value": nws["detection_rate_downstream_only"]}, "REAL USGS gauge pairs, held-out 2024-2026", "eval/results/leadtime.json",
+             note=f"Median lead time gained: {nws['gain_median_min']:.0f} min; mean {nws['gain_mean_min'] / 60:.1f} h. Most events gain nothing; some gain hours.")
 
     # ---- agent scenario suite
     ag = _load(RES / "agent_suite.json")

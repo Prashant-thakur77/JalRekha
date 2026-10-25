@@ -284,28 +284,32 @@ def run_scenario(scenario_id: str, *, delay_s: float = 0.6, session_factory=None
     return rec
 
 
+def _claim_site(site_id: str, scenario_id: str, label: str) -> tuple[dict[str, Any], bool]:
+    """Register a run on a site, or return the replay already running there (new requests join it
+    instead of mixing two runs into one site's state). Check and insert happen under one lock."""
+    with _LOCK:
+        busy = [r for r in RUNS.values() if r["status"] == "running" and r.get("site_id") == site_id]
+        if busy:
+            return dict(busy[0]), False
+        run_id = "run_" + uuid.uuid4().hex[:10]
+        RUNS[run_id] = {"run_id": run_id, "scenario_id": scenario_id, "status": "running", "step": 0, "total": None,
+                        "trace_ids": [], "approval_ids": [], "error": None, "site_id": site_id, "label": label}
+        return dict(RUNS[run_id]), True
+
+
 def start_scenario(scenario_id: str, delay_s: float = 0.6) -> dict[str, Any]:
     if scenario_id in REAL_REPLAYS:
-        rid = "run_" + uuid.uuid4().hex[:10]
-        threading.Thread(target=run_real_replay, args=(REAL_REPLAYS[scenario_id],), kwargs={"delay_s": delay_s, "run_id": rid}, daemon=True).start()
-        for _ in range(50):
-            with _LOCK:
-                if rid in RUNS:
-                    return dict(RUNS[rid])
-            time.sleep(0.01)
-        return {"run_id": rid, "scenario_id": scenario_id, "status": "running"}
+        rr = REAL_REPLAYS[scenario_id]
+        rec, new = _claim_site(rr.site_id, scenario_id, rr.label)
+        if new:
+            threading.Thread(target=run_real_replay, args=(rr,), kwargs={"delay_s": delay_s, "run_id": rec["run_id"]}, daemon=True).start()
+        return rec
     if scenario_id not in SCENARIOS:
         raise KeyError(scenario_id)
-    with _LOCK:
-        busy = [r for r in RUNS.values() if r["status"] == "running" and r["scenario_id"] == scenario_id]
-    if busy:
-        return busy[0]
-    run_id = "run_" + uuid.uuid4().hex[:10]
-    with _LOCK:
-        RUNS[run_id] = {"run_id": run_id, "scenario_id": scenario_id, "status": "running", "step": 0, "total": None,
-                        "trace_ids": [], "approval_ids": [], "error": None, "site_id": SCENARIOS[scenario_id].site_id, "label": LABEL}
-    threading.Thread(target=run_scenario, args=(scenario_id,), kwargs={"delay_s": delay_s, "run_id": run_id}, daemon=True).start()
-    return RUNS[run_id]
+    rec, new = _claim_site(SCENARIOS[scenario_id].site_id, scenario_id, LABEL)
+    if new:
+        threading.Thread(target=run_scenario, args=(scenario_id,), kwargs={"delay_s": delay_s, "run_id": rec["run_id"]}, daemon=True).start()
+    return rec
 
 
 def run_status(run_id: str) -> dict[str, Any] | None:

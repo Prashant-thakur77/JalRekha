@@ -15,3 +15,5 @@ os.environ.setdefault("JALREKHA_DATA_DIR", tempfile.mkdtemp(prefix="jalrekha-tes
 # No cloud calls from tests, even when AWS credentials exist on the machine.
 os.environ["NADISAATHI_AWS_ENABLED"] = "0"
 os.environ.setdefault("NADISAATHI_TTS_ENABLED", "0")
+# No Claude calls from the default test run (tests/test_claude_live.py opts in explicitly).
+os.environ["NADISAATHI_CLAUDE_ENABLED"] = "0"

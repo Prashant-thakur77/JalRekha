@@ -19,6 +19,7 @@
  *   - IncidentTimeline    horizontal timeline of the alert lifecycle
  */
 
+import { modelLabel } from '../lib/format';
 import type { ReactNode } from 'react';
 import {
   Activity,
@@ -267,7 +268,7 @@ export function EvidencePanel({ frameUrl, description, model, confidence, frameL
             <div className="px-4 py-2 text-white">
               <div className="flex items-center justify-between gap-3">
                 <span className="text-xs font-semibold uppercase tracking-wider text-amber-300">
-                  Gemma · {model ?? 'local'}
+                  {modelLabel(model)}
                 </span>
                 {typeof confidence === 'number' && (
                   <span className="text-xs font-mono text-amber-300">
@@ -298,9 +299,9 @@ export function GemmaReasoning({ summary, chain, model }: GemmaReasoningProps) {
     <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
       <div className="flex items-center justify-between mb-2">
         <div className="text-xs uppercase tracking-wider text-slate-400 font-semibold">
-          Gemma reasoning
+          Reasoning
         </div>
-        <span className="text-xs font-mono text-amber-300">{model ?? 'local'}</span>
+        <span className="text-xs font-mono text-amber-300">{modelLabel(model)}</span>
       </div>
       <p className="text-sm text-slate-300 leading-snug whitespace-pre-wrap">{summary}</p>
       {chain && chain.length > 0 && (

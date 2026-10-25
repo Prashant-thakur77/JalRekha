@@ -315,6 +315,7 @@ export interface Approval {
   site_id?: string | null;
   region_id?: string | null;
   role?: string | null;
+  role_label?: string | null;
   title: string;
   rationale?: string | null;
   trace_id?: string | null;
@@ -360,6 +361,11 @@ export interface Scenario {
   site_id?: string | null;
   warning_m?: number | null;
   danger_m?: number | null;
+  /** True for replays of real camera footage (e.g. USGS HIVIS frames). */
+  real?: boolean;
+  duration_min?: number;
+  /** Disturbances scripted into the replay (rain on the lens, camera knocked...). */
+  events?: Array<{ t_from_min: number; t_to_min: number; tag: string }>;
 }
 
 export interface ScenarioRun {
@@ -373,6 +379,8 @@ export interface ScenarioRun {
   error?: string | null;
   /** Optional; used when present. */
   site_id?: string | null;
+  label?: string;
+  sim_minutes?: number;
 }
 
 export interface SeriesPoint {
@@ -502,6 +510,7 @@ export interface EvidenceItem {
   baseline?: { name: string; value: number } | null;
   dataset?: string;
   file?: string;
+  note?: string | null;
 }
 
 export const createReliefRequest = (body: ReliefRequestInput) =>

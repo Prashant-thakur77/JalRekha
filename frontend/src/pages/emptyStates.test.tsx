@@ -38,8 +38,8 @@ describe('new pages degrade gracefully', () => {
     expect(await screen.findByText('Could not load scenarios.')).toBeTruthy();
     expect(screen.getByRole('button', { name: /try again/i })).toBeTruthy();
     // The rest of the page still renders its empty states.
-    expect(screen.getByText('No camera frame yet. Run a replay to start.')).toBeTruthy();
-    expect(screen.getByText('No decisions yet.')).toBeTruthy();
+    expect(screen.getByText('No replay running. Start one to see the agent work.')).toBeTruthy();
+    expect(screen.getByText('No decisions yet. Start a replay to see them here.')).toBeTruthy();
   });
 
   it('Live shows an empty state when there are no scenarios', async () => {

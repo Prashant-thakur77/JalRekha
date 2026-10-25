@@ -6,6 +6,7 @@ import {
   getEta,
   getRiver,
   getRivers,
+  getSiteLive,
   type AgentState,
   type EtaResult,
   type RiverGraph,
@@ -46,6 +47,7 @@ function Schematic({
 }) {
   const { t, td } = useI18n();
   const ids = useId();
+  const arrowId = `a${ids.replace(/[^a-zA-Z0-9_-]/g, '')}-arrow`;
   const [width, setWidth] = useState(480);
   const observer = useRef<ResizeObserver | null>(null);
   const figRef = useCallback((el: HTMLElement | null) => {
@@ -88,7 +90,7 @@ function Schematic({
       >
         <title id={`${ids}-t`}>{t('rivers.schematic', { name: graph.name })}</title>
         <defs>
-          <marker id={`${ids}-arrow`} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+          <marker id={arrowId} viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z" className="ns-river__arrow" />
           </marker>
         </defs>
@@ -122,11 +124,16 @@ function Schematic({
           const ly = a.y + dy * frac - 6;
           return (
             <g key={`${e.from}-${e.to}`} className={`ns-river__edge${onPath ? ' ns-river__edge--hot' : ''}`}>
-              <line x1={x1} x2={x2} y1={y1} y2={y2} markerEnd={`url(#${ids}-arrow)`} />
+              <line x1={x1} x2={x2} y1={y1} y2={y2} markerEnd={`url(#${arrowId})`} />
               {tt && (
-                <text x={lx} y={ly} textAnchor="end" className="ns-river__edge-label">
+                <>
+                  <text x={lx} y={ly} textAnchor="end" className="ns-river__halo" aria-hidden="true">
                   {fmtHours(tt.min)}–{fmtHours(tt.max)} h
                 </text>
+                  <text x={lx} y={ly} textAnchor="end" className="ns-river__edge-label">
+                  {fmtHours(tt.min)}–{fmtHours(tt.max)} h
+                </text>
+                </>
               )}
             </g>
           );
@@ -229,6 +236,20 @@ export default function Rivers() {
           setGraph(g);
           setGraphError(null);
           setFromNode((f) => (g.nodes?.some((n) => n.id === f) ? f : g.nodes?.[0]?.id ?? ''));
+          // Camera nodes may come without levels; the camera site knows its own warning/danger levels.
+          const missing = (g.nodes ?? []).filter((n) => n.site_id && n.warning_m == null && n.danger_m == null);
+          void Promise.allSettled(missing.map((n) => getSiteLive(n.site_id as string))).then((results) => {
+            const levels: Record<string, { warning_m?: number | null; danger_m?: number | null }> = {};
+            results.forEach((r, i) => {
+              if (r.status === 'fulfilled' && r.value) levels[missing[i].id] = { warning_m: r.value.warning_m, danger_m: r.value.danger_m };
+            });
+            if (Object.keys(levels).length === 0) return;
+            setGraph((cur) =>
+              cur && cur.id === g.id
+                ? { ...cur, nodes: cur.nodes.map((n) => (levels[n.id] ? { ...n, ...levels[n.id] } : n)) }
+                : cur,
+            );
+          });
         },
         (err: unknown) => setGraphError(errorMessage(err)),
       ),
@@ -270,7 +291,7 @@ export default function Rivers() {
       {rivers && rivers.length > 0 && (
         <div className="ns-river-grid">
           <section className="ns-card ns-stack" aria-labelledby="river-controls-h">
-            <h3 id="river-controls-h" className="sr-only">{t('rivers.basin')}</h3>
+            <h2 id="river-controls-h" className="sr-only">{t('rivers.basin')}</h2>
             <div className="ns-field">
               <label htmlFor="river-basin">{t('rivers.basin')}</label>
               <select
@@ -323,33 +344,42 @@ export default function Rivers() {
               {etaError && <StateNotice kind="error" message={t('rivers.etaError')} detail={etaError} />}
               {eta && (
                 <div className="ns-stack-sm">
-                  <h4 className="ns-label">{t('rivers.downstream', { name: fromName })}</h4>
+                  <h3 className="ns-label">{t('rivers.downstream', { name: fromName })}</h3>
                   {eta.downstream.length === 0 ? (
                     <p className="ns-muted">{t('rivers.noDownstream')}</p>
                   ) : (
-                    <ol className="ns-eta-list">
-                      {eta.downstream.map((d) => (
-                        <li key={d.node_id}>
-                          <span className="ns-strong">{d.name}</span>{' '}
-                          <span className="ns-hint">({td(`country.${d.country}`, d.country)})</span>
-                          <br />
-                          {t('common.etaBand', { min: fmtHours(d.eta_h.min), max: fmtHours(d.eta_h.max), typ: fmtHours(d.eta_h.typ) })}
-                          {d.crosses_border && (
-                            <>
-                              {' '}
-                              <Chip tone="info">{t('rivers.crossesBorder')}</Chip>
-                            </>
-                          )}
-                        </li>
-                      ))}
-                    </ol>
+                    <table className="ns-dtable ns-dtable--flat">
+                      <thead>
+                        <tr>
+                          <th scope="col">{t('home.etaPlace')}</th>
+                          <th scope="col" className="ns-num">{t('home.etaWindow')}</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {eta.downstream.map((d) => (
+                          <tr key={d.node_id}>
+                            <td>
+                              <span className="ns-row ns-gap-sm ns-wrap">
+                                <span className="ns-badge" title={td(`country.${d.country}`, d.country)}>{d.country}</span>
+                                <span className="ns-strong">{d.name}</span>
+                                {d.crosses_border && <Chip tone="info">{t('rivers.crossesBorder')}</Chip>}
+                              </span>
+                            </td>
+                            <td className="ns-num">
+                              {fmtHours(d.eta_h.min)}–{fmtHours(d.eta_h.max)} h
+                              <span className="ns-hint ns-block">≈ {fmtHours(d.eta_h.typ)} h</span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
                   )}
                 </div>
               )}
             </div>
           </section>
 
-          <section className="ns-card" aria-label={graph ? t('rivers.schematic', { name: graph.name }) : t('rivers.title')}>
+          <section className="ns-card ns-river-card ns-gridbg" aria-label={graph ? t('rivers.schematic', { name: graph.name }) : t('rivers.title')}>
             {graphError && <StateNotice kind="error" message={t('rivers.loadError')} detail={graphError} onRetry={() => void loadGraph(basin)} />}
             {!graphError && !graph && <StateNotice kind="loading" message={t('common.loading')} />}
             {graph && <Schematic graph={graph} states={states} eta={eta} onPick={(id) => void compute(id)} />}

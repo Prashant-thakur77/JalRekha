@@ -1,3 +1,4 @@
+import { modelLabel } from '../lib/format';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { API_BASE, useAppStore, type Site } from '../store';
@@ -487,7 +488,7 @@ export default function SiteDetail() {
                 {analysisResult.alert.reasoning_summary && (
                   <details className="mt-3 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
                     <summary className="cursor-pointer font-semibold text-blue-800">
-                      Gemma reasoning ({analysisResult.alert.reasoning_model ?? 'local'})
+                      Reasoning · {modelLabel(analysisResult.alert.reasoning_model)}
                     </summary>
                     <p className="mt-2 whitespace-pre-wrap">{analysisResult.alert.reasoning_summary}</p>
                     {parseChain(analysisResult.alert.reasoning_chain).length > 0 && (
@@ -514,7 +515,7 @@ export default function SiteDetail() {
                     <div className="absolute inset-x-0 bottom-0 bg-black/70 text-white text-xs px-3 py-2">
                       <div className="flex items-center justify-between gap-2">
                         <span className="font-semibold">
-                          Gemma ({analysisResult.observation.image_assessment_model ?? 'local'})
+                          {modelLabel(analysisResult.observation.image_assessment_model)}
                         </span>
                         {typeof analysisResult.observation.image_assessment_confidence === 'number' && (
                           <span>conf {formatPercent(analysisResult.observation.image_assessment_confidence)}</span>

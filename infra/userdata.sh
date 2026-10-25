@@ -71,6 +71,8 @@ if "$VENV/bin/python" -c "import faster_whisper" 2>/dev/null; then ASR=1; fi
 log "faster-whisper importable: $ASR"
 
 # --------------------------------------------------------------- env file
+ANTHROPIC_KEY=$(aws ssm get-parameter --name /nadisaathi/anthropic_api_key --with-decryption --query Parameter.Value --output text 2>/dev/null || true)
+[ "$ANTHROPIC_KEY" = "None" ] && ANTHROPIC_KEY=""
 OPPINS=$(aws ssm get-parameter --name /nadisaathi/operator_pins --with-decryption --query Parameter.Value --output text 2>/dev/null || true)
 [ "$OPPINS" = "None" ] && OPPINS=""
 CAMKEY=$(aws ssm get-parameter --name /nadisaathi/camera_key --with-decryption --query Parameter.Value --output text 2>/dev/null || true)
@@ -102,6 +104,8 @@ NADISAATHI_BEDROCK_MODEL=us.amazon.nova-lite-v1:0
 NADISAATHI_TTS_ENABLED=1
 NADISAATHI_AWS_ENABLED=1
 JALREKHA_PROTECT_WRITES=1
+JALREKHA_VOLUNTEER_IMAGE_ENABLED=1
+ANTHROPIC_API_KEY=$ANTHROPIC_KEY
 JALREKHA_NODE_PROFILE=aws-graviton-cloud
 AWS_REGION=$AWS_REGION
 AWS_DEFAULT_REGION=$AWS_REGION
@@ -112,6 +116,7 @@ EOF
 [ -n "$PIN" ] && [ "$PIN" != "None" ] || sed -i '/^JALREKHA_OPERATOR_PIN=/d' "$tmp"
 [ -n "$CAMKEY" ] || sed -i '/^NADISAATHI_CAMERA_KEY=/d' "$tmp"
 [ -n "$OPPINS" ] || sed -i '/^JALREKHA_OPERATOR_PINS=/d' "$tmp"
+[ -n "$ANTHROPIC_KEY" ] || sed -i '/^ANTHROPIC_API_KEY=/d' "$tmp"
 install -m 0640 -o root -g "$SVC" "$tmp" /etc/nadisaathi.env
 rm -f "$tmp"
 

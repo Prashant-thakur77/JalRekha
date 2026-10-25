@@ -91,10 +91,13 @@ if _web_dist and Path(_web_dist, "index.html").is_file():
             from fastapi import HTTPException
 
             raise HTTPException(status_code=404)
+        # Hashed files under /assets may be cached; the page, service worker and manifest must be
+        # revalidated so a new deploy reaches browsers that already installed the PWA.
+        revalidate = {"Cache-Control": "no-cache"}
         candidate = Path(_web_dist, path)
         if path and candidate.is_file() and Path(_web_dist).resolve() in candidate.resolve().parents:
-            return FileResponse(candidate)
-        return FileResponse(Path(_web_dist, "index.html"))
+            return FileResponse(candidate, headers=revalidate)
+        return FileResponse(Path(_web_dist, "index.html"), headers=revalidate)
 
 
 # Backward-compatible aliases for older tests/scripts that import from main.py.

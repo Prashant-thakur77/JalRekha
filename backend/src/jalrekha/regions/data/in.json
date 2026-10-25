@@ -21,11 +21,11 @@
   "public_languages": ["hi", "mai", "en"],
   "channels": ["sms", "voice", "cap", "siren", "telegram"],
   "authority_roles": [
-    {"id": "ddma_control_room", "name": "District Disaster Management Authority control room (District EOC)", "level": "district", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
-    {"id": "sdma_eoc", "name": "State Emergency Operation Centre (SDMA)", "level": "state", "approves": ["publish_cap", "all_clear"]},
-    {"id": "panchayat_volunteer", "name": "Panchayat volunteer", "level": "village", "approves": []},
-    {"id": "ngo_relief_team", "name": "NGO relief team lead", "level": "field", "approves": ["dispatch_relief"]},
-    {"id": "cwc_division", "name": "CWC flood forecasting division (informed, not an approver)", "level": "national", "approves": []}
+    {"id": "ddma_control_room", "short": "DDMA control room", "name": "District Disaster Management Authority control room (District EOC)", "level": "district", "approves": ["send_sms", "voice_call", "publish_cap", "cross_border_notify", "all_clear", "publish_route_status", "dispatch_relief"]},
+    {"id": "sdma_eoc", "short": "State EOC", "name": "State Emergency Operation Centre (SDMA)", "level": "state", "approves": ["publish_cap", "all_clear"]},
+    {"id": "panchayat_volunteer", "short": "Panchayat volunteer", "name": "Panchayat volunteer", "level": "village", "approves": []},
+    {"id": "ngo_relief_team", "short": "NGO relief team", "name": "NGO relief team lead", "level": "field", "approves": ["dispatch_relief"]},
+    {"id": "cwc_division", "short": "CWC division", "name": "CWC flood forecasting division (informed, not an approver)", "level": "national", "approves": []}
   ],
   "levels": [
     {"id": "normal", "legacy": "green", "color": "green", "label": {"en": "Normal", "hi": "सामान्य", "ne": "सामान्य"}},
