@@ -1,6 +1,6 @@
 # OpenCV 5 on AWS Graviton: benchmark and COOL status
 
-Numbers generated 2026-10-25 18:48 UTC from `bench/results/*.json`.
+Numbers generated 2026-10-25 19:28 UTC from `bench/results/*.json`.
 
 The core workload is the JalRekha measurement on a 5-frame camera burst: quality gate, ORB registration, burst alignment, gauge strip, three waterline estimators (Scharr edges, DIS optical flow, Lab colour step), fusion, DIS surface motion, YuNet face/plate redaction and the overlay. It is what every agent cycle runs (`backend/src/jalrekha/vision/pipeline.py`).
 
@@ -43,7 +43,7 @@ Per-stage p50 on Graviton4: registration 22.2 ms, redaction 33.9 ms, E2 temporal
 
 ## What this means for the deployment
 
-One c8g.xlarge costs $116 a month on demand. Two capacity figures, both estimates. Upper bound from this benchmark (measurement only, one process per vCPU): about 198 cameras at a 10-second cadence (the default fast cadence for real camera sites) or 5,967 at a 5-minute cadence. Conservative, from the OpenCV pipeline time measured on the deployed host (227 ms per cycle, CloudWatch `StageMs`, which includes the occasional ALIKED+LightGlue call but not database writes, voice or drafting; the agent suite's full-cycle median is 266 ms on a laptop): about 176 cameras at 10 s or 5,284 at 5 minutes, roughly $0.66 or $0.02 of compute per camera per month. Both figures assume one vision worker per vCPU; the current deployment runs a single API worker process, so its real capacity is lower until vision runs in a worker pool (storage, transfer and SMS not included). The expensive OpenCV 5 pieces (ALIKED+LightGlue, DIS flow) gain the most on Graviton4, and the agent only calls ALIKED+LightGlue when ORB fails.
+One c8g.xlarge costs $116 a month on demand. Two capacity figures, both estimates. Upper bound from this benchmark (measurement only, one process per vCPU): about 198 cameras at a 10-second cadence (the default fast cadence for real camera sites) or 5,967 at a 5-minute cadence. Conservative, from the OpenCV pipeline time measured on the deployed host (165 ms per cycle, CloudWatch `StageMs`, which includes the occasional ALIKED+LightGlue call but not database writes, voice or drafting; the agent suite's full-cycle median is 266 ms on a laptop): about 242 cameras at 10 s or 7,277 at 5 minutes, roughly $0.48 or $0.02 of compute per camera per month. Both figures assume one vision worker per vCPU; the current deployment runs a single API worker process, so its real capacity is lower until vision runs in a worker pool (storage, transfer and SMS not included). The expensive OpenCV 5 pieces (ALIKED+LightGlue, DIS flow) gain the most on Graviton4, and the agent only calls ALIKED+LightGlue when ORB fails.
 
 ## COOL (config A)
 

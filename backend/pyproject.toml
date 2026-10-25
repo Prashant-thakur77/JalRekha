@@ -21,6 +21,7 @@ dependencies = [
     "numpy>=1.26,<3",
     "boto3>=1.35",
     "anthropic>=1.0",
+    "mcp>=2.3,<3",
 ]
 
 [project.optional-dependencies]

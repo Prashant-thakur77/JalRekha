@@ -2,7 +2,7 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-.PHONY: help smoke deploy destroy status logs setup test test-backend test-frontend eval eval-quick bench bench-cloud check-numbers docs dev traces
+.PHONY: help smoke deploy destroy status logs setup test test-backend test-frontend eval eval-quick bench bench-cloud check-numbers docs dev traces mcp ops-report
 
 help: ## List targets
 	@grep -hE '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -58,8 +58,9 @@ bench-cloud: ## Benchmark configs on temporary EC2 instances (CFG=A|B|C, default
 	@for c in $(or $(CFG),B C); do scripts/bench/cloud_bench.sh $$c; done
 	$(MAKE) docs
 
-docs: ## Regenerate README, report, Devpost text, video script and COOL page from the JSON
+docs: ## Regenerate README, report (and its PDF), Devpost text, video script and COOL page from the JSON
 	python3 scripts/make_headline.py
+	python3 scripts/report_pdf.py
 
 check-numbers: ## Fail if any document disagrees with eval/bench JSON
 	python3 scripts/make_headline.py --check
@@ -72,3 +73,9 @@ smoke: ## Every original and new API route against URL (default: the deployed st
 
 dev: ## API on :8000 and PWA on :5173
 	scripts/dev.sh
+
+mcp: ## NadiSaathi tools over MCP (stdio), pointed at the AWS deployment; NADISAATHI_API overrides
+	cd backend && uv run python -m jalrekha.mcp_server
+
+ops-report: ## Production numbers from CloudWatch Logs Insights -> eval/results/cloud_ops.json
+	cd backend && uv run python ../scripts/cloud_ops_report.py --days 7

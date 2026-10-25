@@ -14,7 +14,7 @@ Live demo: **https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com** (opens on 
 
 NadiSaathi is a flood early-warning and relief tool for the rivers that rise in Nepal and flood the plains of Bihar and Uttar Pradesh. Its measurement engine, JalRekha (जलरेखा, "waterline"), turns an ordinary camera pointed at a staff gauge into a calibrated river gauge. The agent around it uses each reading to decide what to do next, and the river graph turns an upstream rise into a downstream arrival window, across the border.
 
-Numbers generated 2026-10-25 18:48 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this file and the JSON disagree.
+Numbers generated 2026-10-25 19:28 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this file and the JSON disagree.
 
 ## Results
 
@@ -29,7 +29,7 @@ Numbers generated 2026-10-25 18:48 UTC by `scripts/make_headline.py` from `eval/
 | Guard against a lying or hijacked vision model | **32/32 bad replies caught** (contradictions, prompt injections in English/Hindi/Nepali, malformed), 8/8 honest confirmations accepted, danger siren never cancelled | – | SYNTHETIC danger-level burst, 40 scripted replies through the full agent cycle |
 | Volunteer photo triage on real Indian and Nepali flood photos (Claude, after face/plate blur) | flagged **8/8** flooded roads and underpasses; also flagged 2 of the other 12 photos (a washed-out bridge, a boat rescue); ~3.8 s and $0.014 per photo | – | REAL, 20 licensed Wikimedia Commons photos, labels from the photo subject; small n, a sanity check |
 | CV pipeline on Graviton4 vs x86 (same 4 vCPU, same frames, identical outputs) | c8g.xlarge **99.4 frames/s, $0.446 per 1M frames** | c7i.xlarge 93.3 frames/s, $0.531 per 1M frames (16% cheaper on Graviton) | benchmark workload, `bench/cool_bench.py` |
-| Deployed endpoint | 100.0% of 31 health probes OK over 2.7 h, p50 127 ms / p95 246 ms | – | REAL, CloudWatch (keep-warm probe every 5 min) |
+| Deployed endpoint | 100.0% of 101 health probes OK over 8.5 h, p50 118 ms / p95 156 ms | – | REAL, CloudWatch (keep-warm probe every 5 min) |
 
 What these numbers do not show, and the failures we found:
 
@@ -91,7 +91,7 @@ Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.m
  CloudFormation: infra/nadisaathi.yaml   `make deploy` (about 60 s per update)   `make destroy`
 ```
 
-Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host (227 ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about 5,284 cameras at a 5-minute cadence, about $0.02 of compute per camera per month (the benchmark upper bound is 5,967; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. The second opinion, report structuring, photo descriptions and situation summaries run on Claude (claude-opus-5-5) through the Anthropic API with server-side refusal fallbacks; Amazon Bedrock is wired as an alternative (its account quota is zero today). Without either, every second opinion takes the labelled rule fallback.
+Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host (165 ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about 7,277 cameras at a 5-minute cadence, about $0.02 of compute per camera per month (the benchmark upper bound is 5,967; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. The second opinion, report structuring, photo descriptions and situation summaries run on Claude (claude-opus-5-5) through the Anthropic API with server-side refusal fallbacks; Amazon Bedrock is wired as an alternative (its account quota is zero today). Without either, every second opinion takes the labelled rule fallback.
 
 ### What the deployment records
 
@@ -111,6 +111,10 @@ make deploy         # AWS (see docs/DEPLOY.md); make destroy removes everything
 ```
 
 Scenario replays run without any hardware: `POST /api/scenarios/koshi-night-rise/run`. API reference: `docs/API_AGENT.md`.
+
+### Use it from another agent (MCP)
+
+`make mcp` starts an MCP server (`backend/src/jalrekha/mcp_server.py`) that talks to the AWS deployment. The repository's `.mcp.json` registers it for Claude Code. Ten tools: `list_sites`, `river_status`, `downstream_eta`, `explain_reading` (what OpenCV did in a cycle), `agent_trace`, `pending_alerts`, `situation_report`, `run_replay`, `replay_status` and `cloud_insights`. Nine are read-only; `run_replay` starts a replay. No tool approves, edits or sends an alert: that stays with a named operator and a PIN in the app, and a test checks it.
 
 ## Responsible use
 

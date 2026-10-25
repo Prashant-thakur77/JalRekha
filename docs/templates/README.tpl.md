@@ -112,6 +112,10 @@ make deploy         # AWS (see docs/DEPLOY.md); make destroy removes everything
 
 Scenario replays run without any hardware: `POST /api/scenarios/koshi-night-rise/run`. API reference: `docs/API_AGENT.md`.
 
+### Use it from another agent (MCP)
+
+`make mcp` starts an MCP server (`backend/src/jalrekha/mcp_server.py`) that talks to the AWS deployment. The repository's `.mcp.json` registers it for Claude Code. Ten tools: `list_sites`, `river_status`, `downstream_eta`, `explain_reading` (what OpenCV did in a cycle), `agent_trace`, `pending_alerts`, `situation_report`, `run_replay`, `replay_status` and `cloud_insights`. Nine are read-only; `run_replay` starts a replay. No tool approves, edits or sends an alert: that stays with a named operator and a PIN in the app, and a test checks it.
+
 ## Responsible use
 
 NadiSaathi is decision support. It does not replace DHM, CWC, IMD or NDMA warnings, and every public message needs a named person's approval. Faces and number plates are blurred with YuNet before any frame is stored; relief requests keep no names or phone numbers. When a frame is too poor to read, the system says "unknown", never "safe". Details: `docs/RESPONSIBLE_USE.md` (consent, signage text in three languages, retention, failure behaviour), `docs/REPORT.md` (sections 8 and 9) and `docs/MODEL_CARDS.md`.
