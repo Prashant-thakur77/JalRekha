@@ -2,17 +2,17 @@
  "meta": {
   "label": "REAL deployed endpoint (API Gateway -> EC2 c8g.xlarge), CloudWatch metrics",
   "generated_by": "scripts/soak_report.py",
-  "generated_at": "2026-10-25T19:17:04.454483+00:00",
+  "generated_at": "2026-10-26T09:46:52.081897+00:00",
   "stack_created": "2026-10-25T10:45:30.778000+00:00",
   "probe": "keep-warm Lambda GET /api/health every 5 min (min of HealthOk per 5-min period)"
  },
- "hours_observed": 8.5,
- "health_probes": 101,
- "health_probes_ok": 101,
+ "hours_observed": 23.0,
+ "health_probes": 275,
+ "health_probes_ok": 275,
  "uptime": 1.0,
- "health_latency_ms_p50": 117.5,
- "health_latency_ms_p95": 155.7,
- "agent_cycles_total": 1826,
- "stage_ms_mean_of_5min_means": 164.9,
+ "health_latency_ms_p50": 125.1,
+ "health_latency_ms_p95": 232.4,
+ "agent_cycles_total": 1870,
+ "stage_ms_mean_of_5min_means": 162.6,
  "failed_probe_times": []
 }

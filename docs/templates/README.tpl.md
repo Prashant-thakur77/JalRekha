@@ -1,82 +1,242 @@
-# NadiSaathi (नदी साथी, "river friend")
+<div align="center">
 
-> A camera on the Koshi at Chatara, Nepal, reads the river in metres with OpenCV 5 on AWS Graviton; when the water starts to climb, an agent looks more often, checks itself, works out when the wave reaches Birpur in Bihar, and drafts Hindi, Maithili and Nepali alerts that a named person approves with a PIN.
+# NadiSaathi
 
-Live demo: **https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com** (opens on **Live**; press *Run replay*, then open **Approvals**). The operator PIN for approvals is in the Devpost testing instructions.
+**नदी साथी, "river friend": a camera reads the river in metres with OpenCV 5 on AWS Graviton4, and an agent warns the next country downstream.**
 
-![The agent on a real USGS camera during the July 2026 Hancock flood: OpenCV reads 5.25 m off the staff gauge (gauge: 5.31 m) and the agent sounds the danger siren](docs/screenshots/real_camera_d6.png)
+[![OpenCV {{B_cv2}}](https://img.shields.io/badge/OpenCV-{{B_cv2}}-5C3EE8?logo=opencv&logoColor=white)](#opencv-5)
+[![AWS Graviton4](https://img.shields.io/badge/AWS-Graviton4%20{{B_type}}-FF9900)](#aws)
+[![Claude](https://img.shields.io/badge/Claude-second%20opinion-D97757?logo=anthropic&logoColor=white)](#agentic-vision)
+[![MCP](https://img.shields.io/badge/MCP-{{mcp_tools}}%20tools-1F1F1F?logo=modelcontextprotocol&logoColor=white)](#mcp-server)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![CI](https://github.com/Prashant-thakur77/JalRekha/actions/workflows/ci.yml/badge.svg)](https://github.com/Prashant-thakur77/JalRekha/actions/workflows/ci.yml)
+[![pytest](https://img.shields.io/badge/pytest-{{tests_backend_passed}}%20passed-{{tests_badge_color}})](#built-and-tested)
+[![vitest](https://img.shields.io/badge/vitest-{{tests_frontend_passed}}%20passed-{{tests_badge_color}})](#built-and-tested)
+[![Live demo](https://img.shields.io/badge/live%20demo-AWS%20us--east--1-2EA44F)](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com)
 
-| Live replay: OpenCV reads 6.02 m rising 1.2 m/h, the agent checks every 300 s and four alerts wait for a person | Trace: the vision model claims 3.1 m and tells the agent to cancel alerts; the guard keeps OpenCV's 6.40 m and the siren fires | Approvals on a phone: Hindi, Maithili and English drafts with SMS segment counts and voice |
+![NadiSaathi home page: the Koshi reaches Bihar hours after Nepal sees it rise](docs/screenshots/readme/hero.jpg)
+
+### [Live demo](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com) · Video: link added at submission · [Report PDF](docs/REPORT.pdf) · [Judges' guide: proof for every track](docs/JUDGES.md)
+
+</div>
+
+## In one minute
+
+**What it does.** A fixed camera looks at a river staff gauge. OpenCV 5 turns each burst of frames into a river level in metres with an error bar. An agent reads that number and decides what to do next: look more often, ask Claude for a second opinion only when its own estimators disagree, work out when the wave reaches each town downstream, and draft short alerts with a voice version and a CAP file. A named person approves every public message with a PIN.
+
+**For whom.** The rivers that rise in Nepal and flood the plains of Bihar and Uttar Pradesh: the Koshi, Gandak, Karnali and Bagmati. A camera at Chatara on the Koshi in Nepal sees the rise first; NadiSaathi turns it into arrival windows for Birpur, Basua and Baltara in Bihar. It is built for a ward disaster focal person on the Nepal side, a district (DDMA) control-room operator on the India side, and the panchayat volunteers and relief teams who work after the water arrives. Alerts are drafted in Nepali, Hindi, Maithili, Bhojpuri and English.
+
+**The demo in one sentence.** Open the [live demo](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com), press *Run replay* on "Koshi: rise to the peak", watch OpenCV read the river and the agent tighten its checks as the water climbs, then open **Approvals** to find the Hindi and Maithili drafts waiting for a person. The operator PIN is in the submission's testing instructions.
+
+| | |
+|---|---|
+| Measurement | **{{real_full_mae_cm}} cm** mean error on real USGS staff-gauge cameras, nothing fitted to gauge data |
+| Agent | **{{ag_success}}** scenario runs correct, first alert a median **{{ag_lead_median_min}} min** before the warning crossing, {{ag_false_alert_runs}} false-alert runs |
+| Guard | **{{guard_caught}}/{{guard_bad}}** lying, injected or malformed model replies caught |
+| Graviton4 | **{{B_fps}} frames/s**, **{{B_usd_1m}}** per million frames, outputs {{BC_equal}} to x86 |
+| Production | **{{ops_cycles}}** agent cycles in CloudWatch, OpenCV **{{ops_total_p50_ms}} ms** per cycle (median) on the c8g host |
+
+## Contents
+
+[Judges' guide](docs/JUDGES.md) · [Sponsor tracks](#sponsor-tracks) · [Screens](#screens) · [Results](#results) · [Built and tested](#built-and-tested) · [Architecture](#architecture) · [Run it](#run-it) · [Versions](#versions) · [Notices and license](#data-and-model-notices)
+
+## Sponsor tracks
+
+| Prize | What it asks for | Where NadiSaathi delivers it |
 |---|---|---|
-| ![Live page](docs/screenshots/live_rising.png) | ![D7 trace](docs/screenshots/trace_d7.png) | ![Approvals](docs/screenshots/approvals_phone.png) |
-| **Try to fool the guard**: type any model reply; the agent keeps OpenCV's 6.55 m and the siren | **Story in Hindi** (also Nepali), every figure with its source | **River graph**: arrival bands from Chatara across the border |
-| ![Red-team panel](docs/screenshots/redteam.png) | ![Story in Hindi](docs/screenshots/story_hindi.png) | ![Rivers ETA](docs/screenshots/rivers_eta.png) |
+| Overall | OpenCV 5 doing substantive image or video analysis, plus a meaningful AWS component | [OpenCV 5](#opencv-5): a full metric measurement pipeline on every camera burst. [AWS](#aws): one CloudFormation stack on Graviton4 and the managed services around it, measured in production |
+| Best Use of COOL | Cloud-Optimized OpenCV on AWS Graviton | [COOL on AWS Graviton](#cool-on-aws-graviton): the OpenCV 5 workload benchmarked on Graviton4 against x86 with identical outputs, KleidiCV active, and a one-flag switch to the COOL AMI |
+| Agentic Vision | Image or video results change the agent's next plan, tool call, action or request for human approval | [Agentic vision](#agentic-vision): decision branches D1–D9, each chosen by an OpenCV number, and every public action behind a human PIN |
 
-NadiSaathi is a flood early-warning and relief tool for the rivers that rise in Nepal and flood the plains of Bihar and Uttar Pradesh. Its measurement engine, JalRekha (जलरेखा, "waterline"), turns an ordinary camera pointed at a staff gauge into a calibrated river gauge. The agent around it uses each reading to decide what to do next, and the river graph turns an upstream rise into a downstream arrival window, across the border.
+### OpenCV 5
 
-Numbers generated {{generated_at}} by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this file and the JSON disagree.
-
-## Results
-
-| What | NadiSaathi | Baseline | Data |
-|---|---|---|---|
-| Stage error on real USGS staff-gauge cameras, physical calibration (gauge numerals clicked once, nothing fitted to gauge data) | **{{real_full_mae_cm}} cm MAE** (95% CI {{real_full_ci}}), median {{real_full_median_cm}} cm | original PIL edge heuristic: answers only {{real_b0_coverage}} of frames; on those same {{real_b0_subset_n}} frames it is {{real_b0_on_subset_cm}} cm vs {{real_full_on_b0_subset_cm}} cm for ours; naive max-edge {{real_b1_mae_cm}} cm | REAL, {{real_n}} in-range frames, 2 sites |
-| A vision-language model as the gauge reader ({{vlm_model}} on the same real frames) | OpenCV: {{cv_on_vlm_answered_cm}} cm on the frames the model answered, in ~0.09 s per burst on Graviton for $0.446 per million frames | {{vlm_model}}: {{vlm_on_answered_cm}} cm, answered {{vlm_coverage}} of frames, ~{{vlm_latency_s}} s and {{vlm_cost_1k}} per 1,000 frames | REAL, {{vlm_frames}} frames, the model given the gauge span and units |
-| The agent on a real camera (USGS Hancock, July 2026 flood, {{rr_frames}} archived frames) | used {{rr_used}} readings at **{{rr_used_mae_cm}} cm MAE** (median {{rr_used_median_cm}} cm), held {{rr_held_pct}} for review; siren on the first frame above the danger mark: {{rr_siren_first}}; {{rr_quiet_alerts}} alert drafts on the quiet days; all-clear proposed: {{rr_all_clear}}. No warning lead on this camera: the rise happened overnight, when it records nothing | – | REAL, illustrative warning/danger marks (14 ft / 17 ft) |
-| Stage error, synthetic scenes, 9 conditions (rain, fog, night, shake, blur, glare, JPEG, still water) | **{{synth_full_mae_cm}} cm MAE** (CI {{synth_full_ci}}), {{synth_full_within5}} within 5 cm | original heuristic, border-fixed {{synth_b0r_mae_cm}} cm; as shipped it answers {{synth_b0_coverage}} of frames | SYNTHETIC, {{synth_frames}} frames, 30 scene seeds never used for tuning |
-| Lead time gained downstream by watching the upstream gauge | Official NWS action stages (pre-registered primary): median **{{lt_nws_gain_median_min}} min**, mean {{lt_nws_gain_mean_h}} h, detection before the crossing {{lt_nws_det_down}} → {{lt_nws_det_comb}}. Percentile warning levels: median **{{lt_p95_gain_median_h}} h** (CI {{lt_p95_gain_ci}} min), detection {{lt_p95_det_down}} → {{lt_p95_det_comb}} | same rule on the downstream gauge only | REAL USGS gauge pairs, {{lt_pairs}} pairs, held-out 2024–2026 events |
-| Agent scenario suite | first alert a median **{{ag_lead_median_min}} min before** the true warning crossing; {{ag_success}} runs correct, {{ag_false_alert_runs}} false-alert runs | same projection rule without the vision gates: {{pj_lead_median_min}} min, {{pj_success}} correct, {{pj_false_alert_runs}} false-alert runs; threshold agent: {{rb_lead_median_min}} min, {{rb_success}} | SYNTHETIC, {{ag_flood_runs}} flood + {{ag_quiet_runs}} no-flood runs incl. camera knocks near the warning level |
-| Guard against a lying or hijacked vision model | **{{guard_caught}}/{{guard_bad}} bad replies caught** (contradictions, prompt injections in English/Hindi/Nepali, malformed), {{guard_confirm_ok}} honest confirmations accepted, danger siren never cancelled | – | SYNTHETIC danger-level burst, {{guard_cases}} scripted replies through the full agent cycle |
-| Volunteer photo triage on real Indian and Nepali flood photos (Claude, after face/plate blur) | flagged **{{pt_road_hit}}/{{pt_road_pos}}** flooded roads and underpasses; also flagged {{pt_others_flagged}} of the other {{pt_others}} photos (a washed-out bridge, a boat rescue); ~{{pt_latency_s}} s and {{pt_cost_photo}} per photo | – | REAL, {{pt_photos}} licensed Wikimedia Commons photos, labels from the photo subject; small n, a sanity check |
-| CV pipeline on Graviton4 vs x86 (same 4 vCPU, same frames, identical outputs) | c8g.xlarge **{{B_fps}} frames/s, {{B_usd_1m}} per 1M frames** | c7i.xlarge {{C_fps}} frames/s, {{C_usd_1m}} per 1M frames ({{BC_cost_saving}} cheaper on Graviton) | benchmark workload, `bench/cool_bench.py` |
-| Deployed endpoint | {{soak_uptime}} of {{soak_probes}} health probes OK over {{soak_hours}} h, p50 {{soak_p50_ms}} ms / p95 {{soak_p95_ms}} ms | – | REAL, CloudWatch (keep-warm probe every 5 min) |
-
-What these numbers do not show, and the failures we found:
-
-- With official NWS action stages, most downstream floods gained no lead time (median {{lt_nws_gain_median_min}} min). Action stages are set town by town; in many events the upstream gauge rose but never reached its own action stage. The cross-border logic is only as good as the warning levels it is given.
-- Camera-like noise (σ = 5 cm) on the upstream readings raised upstream false alerts to {{lt_p95cam_fa_up}} per 30 days per pair. A rise-significance rule (rate − {{lt2_z}}·σ ≥ 0.30 m/h, chosen on the training years) brings that to {{lt2_p95cam_fa_up}}; the test years had already been seen, so that second number is optimistic. The agent now uses this rule; with it, detection before the crossing is {{lt2_nws_det_down}} → {{lt2_nws_det_comb}} (action stages) and {{lt2_p95_det_down}} → {{lt2_p95_det_comb}} (percentiles), and the median gains are unchanged ({{lt2_nws_gain_median_min}} min, {{lt2_p95_gain_median_h}} h). The table above shows the pre-registered v1 rule.
-- On real hourly snapshots the fused reading equals the colour estimator E3 alone ({{real_e3_mae_cm}} cm): the temporal estimator needs a burst and abstains, and the edge estimator is down-weighted. Fusion helps on bursts (synthetic: E3 alone {{synth_e3_mae_cm}} cm, fused {{synth_full_mae_cm}} cm), not yet on real snapshots.
-- On the real Moravia camera, which was reframed after a flood, image registration made accuracy worse ({{real_moravia_within10}} within 10 cm with it, {{real_moravia_noreg_within10}} without).
-- Our first real-camera protocol fitted a camera-to-stage line on each site's first frames and failed ({{real_fitted_protocol_mae_cm}} cm, no better than a constant). We then switched to physical calibration on the same frames, and excluded a third site (Avon) after inspection because its staff plates use another datum and stay dry for most of the event. Nothing is fitted to gauge readings, but the protocol choice was made after seeing the first failure.
-- In the agent suite most of the lead time comes from the Kalman projection, which the "projection without gates" baseline shares. The vision gates show their value on the hard no-flood runs: when a knocked camera's misregistered frame reads high, the system without gates drafts alerts on a steady river ({{pj_false_alert_runs}} false-alert runs) while the agent's registration check marks the site degraded instead ({{split_variant}}, T+{{split_t}} min: "{{split_agent_summary}}"). Both of those runs come from scenes never used for development. The first run of the hard variants also found an agent failure (glare biasing readings, then a recovery jump read as a rise), fixed with a post-gap confirmation rule; the suite also caught a scenario-cache bug and drafts rewritten after the peak. All fixed and covered by tests.
-- The adversarial replies in the guard evaluation are scripted test inputs. The live second opinion is Claude ({{vlm_model}}); as a gauge reader on its own it is slower, costlier and, on these frames, less accurate than the OpenCV pipeline, which is why the agent calls it only when its own estimators disagree.
-- Glare on the gauge is the worst synthetic condition ({{synth_full_glare_mae_cm}} cm MAE), and it is a blind spot for the agent: in {{glare_wrong}} of {{glare_bursts}} strong-glare bursts ({{glare_wrong_pct}}) the quality gate passed and two estimators agreed on a reading {{glare_err_range}} too low. Because the estimators agree, the agent does not ask for a second opinion, so the guard would keep the wrong value and an alert could come late. A glare-specific detector, or always confirming readings taken under glare, is the next fix.
-
-## What happens in one cycle
+The measurement engine, JalRekha (जलरेखा, "waterline"), is `backend/src/jalrekha/vision/`: pure OpenCV {{B_cv2}} and NumPy. It runs on every agent cycle, in the API process on Graviton4.
 
 ```
 camera burst ─► quality gate ─► registration ─► gauge strip ─► 3 waterline estimators ─► fusion ─► Kalman
- (5 frames)    blur/night/     ORB, rescue     warpAffine     E1 edge energy (Scharr)     robust    level +
+ ({{pol_burst_normal}} frames)    blur/night/     ORB, rescue     warpAffine     E1 edge energy (Scharr)     weighted  level +
                glare/fog       with ALIKED+    along the      E2 temporal texture (DIS)  median,   rise rate
                                LightGlue       gauge axis     E3 colour step (Lab)       sigma     (m/h)
-                                                                                                    │
-     ┌──────────────────────────────── the reading picks the branch ◄─────────────────────────────┘
-     ▼
-  D1 bad frame ─► no alert from it, longer burst, ask a volunteer for a photo after two in a row
-  D2 camera moved ─► ALIKED+LightGlue, keyframe chain; if lost, site degraded + recalibration request
-  D3 estimators disagree ─► only now pay for a VLM second opinion (Claude), else hold the reading
-  D4 fast rise ─► capture every 5 min instead of 10, compute downstream ETA bands on the river graph
-  D5 warning reached or projected ─► draft local + cross-border alerts (SMS, voice, CAP) for approval
-  D6 danger level, estimators agree ─► local siren (the only public action it takes alone)
-  D7 VLM contradicts a confident measurement, is malformed or carries instructions ─► keep OpenCV value, ask a human
-  D8 relief photo shows a flooded road ─► route-board update drafted for approval
-  D9 falling after the peak ─► cadence back down, all-clear proposed for approval
 ```
 
-Every step lands in a trace (tool, inputs, outputs, decision before → after, latency, estimated cost, model, guard verdict). Open any trace from the Live page. On the Agent trace page, "Try to fool the guard" lets you type your own vision-model reply (a false reading, an instruction, any language); the real agent runs one danger-level cycle at a sandbox camera and shows whether it kept the OpenCV measurement.
+| OpenCV API | File | What it does here |
+|---|---|---|
+| `cv2.ALIKED_create` + `cv2.LightGlueMatcher_create` (ONNX models on the OpenCV 5 DNN engine) | `register.py` | Re-registers the camera when ORB fails: rain, high water hiding the reference features, a knocked mount (branch D2) |
+| `cv2.ORB_create` + `cv2.BFMatcher` (Hamming) | `register.py` | Default registration of each burst to the calibration frame |
+| `cv2.estimateAffinePartial2D` (RANSAC) | `register.py` | Rotation, scale and shift from the matches; inliers and residual feed the D2 decision |
+| `cv2.phaseCorrelate` + `cv2.createHanningWindow` | `register.py` | Aligns the frames inside a burst against wind shake |
+| `cv2.warpAffine` | `gauge.py`, `pipeline.py` | Cuts a rectified strip along the gauge axis; applies the burst alignment |
+| `cv2.Laplacian`, `cv2.calcHist`, `cv2.meanStdDev` | `quality.py` | Sharpness, clipped and glare pixels, contrast: the quality gate (D1) |
+| `cv2.Scharr` | `waterline.py` | Estimator E1: edge-energy profile down the gauge |
+| `cv2.DISOpticalFlow_create`, `cv2.cartToPolar` | `waterline.py`, `flow.py` | Estimator E2: water moves, the gauge does not; also a surface-motion proxy |
+| `cv2.cvtColor(..., COLOR_BGR2Lab)` | `waterline.py`, `relief.py` | Estimator E3: the colour step where paint meets water |
+| `cv2.KalmanFilter` | `temporal.py` | Level and rise rate in m/h with irregular time steps and a Mahalanobis gate (D4, D5, D9) |
+| `cv2.FaceDetectorYN_create` (YuNet) | `privacy.py` | Blurs faces before any frame is stored or shown |
+| `cv2.dnn.readNet`, `cv2.dnn.blobFromImage`, `cv2.dnn.NMSBoxes` (LPD-YuNet) | `privacy.py` | Blurs number plates |
+| `cv2.GaussianBlur` | `privacy.py`, `waterline.py` | Redaction; smoothing of the estimator profiles |
+| `cv2.grabCut`, `cv2.morphologyEx`, `cv2.connectedComponentsWithStats` | `relief.py` | Water mask on a volunteer's road photo and depth at a reference object (D8) |
+| `cv2.drawMatches`, `cv2.drawKeypoints`, `cv2.applyColorMap`, `cv2.getBuildInformation` | `explain.py` | Vision Lab: RANSAC inliers, Laplacian heat map, the host's build and HAL lines |
 
-## Nepal and India, concretely
+**Accuracy.**
 
-- Region profiles `backend/src/jalrekha/regions/data/np.json` and `in.json`: languages, authority roles (ward focal person and municipal EOC in Nepal; DDMA control room, SDMA, panchayat volunteer, NGO team in India), alert channels and CAP settings.
-- River graphs for the Koshi, Gandak, Karnali and Bagmati (`regions/data/rivers/`). Indian gauge nodes carry CWC warning and danger levels from the CWC flood-forecasting SOP (April 2025). Distances are sourced where a source exists (Chatara–Kosi barrage 43 km; Birpur–Basua 64.25 km); every travel time that is a distance/celerity estimate says so in the API and the UI.
-- Alerts in Nepali, Hindi, Maithili, Bhojpuri and English, each at most two SMS segments (UCS-2, 70/67 characters). Voice: Amazon Polly Kajal for Hindi and English; Polly has no Nepali, Maithili or Bhojpuri voice, so Nepali uses an offline espeak-ng voice and Maithili/Bhojpuri use a labelled fallback. Maithili and Bhojpuri texts are marked for native review.
-- Every fact used in the story and the profiles is in `docs/FACTS.md` with its source and a verified / secondary / unverified status.
+- Real USGS staff-gauge cameras, physical calibration (gauge numerals clicked once, nothing fitted to gauge data): **{{real_full_mae_cm}} cm** mean error (95% CI {{real_full_ci}}), median **{{real_full_median_cm}} cm**, {{real_n}} frames at two sites. Hancock alone: median {{real_hancock_median_cm}} cm, {{real_hancock_within10}} within 10 cm.
+- The original edge heuristic the project started from: {{real_b0_mae_cm}} cm on the {{real_b0_coverage}} of frames it answers; on those same {{real_b0_subset_n}} frames the OpenCV pipeline is **{{real_full_on_b0_subset_cm}} cm**.
+- Claude ({{vlm_model}}) reading the same gauges: {{vlm_on_answered_cm}} cm on the frames it answered, against **{{cv_on_vlm_answered_cm}} cm** for OpenCV on those frames, at ~{{vlm_latency_s}} s and {{vlm_cost_1k}} per 1,000 frames. OpenCV costs {{B_usd_1m}} per million frames on Graviton4.
+- The agent on a real camera through the July 2026 Hancock flood: **{{rr_used_mae_cm}} cm** on the {{rr_used}} readings it used, siren on the first frame above the danger mark, {{rr_quiet_alerts}} alert drafts on the quiet days.
+- Held-out synthetic scenes in rain, fog, night, shake, blur, glare, JPEG and still water: **{{synth_full_mae_cm}} cm** (CI {{synth_full_ci}}), {{synth_full_within5}} within 5 cm, {{synth_frames}} frames from 30 scene seeds never used for tuning.
 
-## Architecture on AWS
+**Vision Lab** (`/vision` in the app) rebuilds any recorded cycle and shows each OpenCV stage with its real images and numbers: the quality metrics and Laplacian map, ORB or ALIKED+LightGlue inliers, the rectified gauge strip, the three estimator profiles on a metre axis, fusion and Kalman, and per-stage timing with the host's OpenCV build.
+
+| Registration: RANSAC inliers and a reference/warped checkerboard | The three waterline estimators on a metre axis |
+|---|---|
+| ![Vision Lab registration](docs/screenshots/readme/vision-registration.png) | ![Vision Lab estimators](docs/screenshots/readme/vision-estimators.png) |
+
+**Why it fits the prize:** OpenCV 5 is the measurement itself, not a pre-processing step. Every alert, siren and cadence change starts from a number these APIs produce, and the OpenCV 5 DNN engine runs the ALIKED+LightGlue rescue that keeps a knocked camera usable.
+
+### AWS
+
+One CloudFormation stack, `infra/nadisaathi.yaml`, {{ops_stack_resources}} resources, deployed and updated with `make deploy`.
+
+| Service | What it does here |
+|---|---|
+| EC2 {{B_type}} (Graviton4, Ubuntu 24.04 arm64) | FastAPI, the PWA, the OpenCV 5 pipeline and the agent loop; IMDSv2, no SSH (SSM only) |
+| API Gateway (HTTP API, VPC link) | The public HTTPS front door, with throttling; the instance port is not public |
+| S3 | Evidence archive: every agent cycle's JSON event and blurred overlay, kept 90 days by a lifecycle rule; CAP files; deploy bundles |
+| CloudWatch | One JSON event per agent cycle, per-stage OpenCV metrics (`StageMs`), Logs Insights queries, a dashboard and {{ops_alarms}} alarms (instance health, public health probe, OpenCV slower than 1 s) |
+| SNS | Operator notifications, and SMS after approval to verified test numbers |
+| Polly | Hindi and English alert audio (Kajal, neural) |
+| Step Functions | A drafted public alert starts a timer; while it waits for a decision, operators are re-notified every 15 minutes, up to three times |
+| EventBridge + Lambda | Keep-warm health probe every 5 minutes, with an alarm to SNS |
+| SSM Parameter Store | Operator PIN, camera key, model key |
+| AWS Budgets | Cost alarm for the stack |
+| IAM | Least-privilege instance role scoped to the stack's bucket, topic, log group and metric namespace |
+
+**In production**, read back from CloudWatch Logs Insights by `scripts/cloud_ops_report.py`: over {{ops_days}} days the stack logged **{{ops_cycles}} agent cycles** ({{ops_frames}} frames, {{ops_sites}} camera sites). OpenCV took **{{ops_total_p50_ms}} ms per cycle at the median** on Graviton4 (registration {{ops_register_ms}} ms, face and plate blur {{ops_redact_ms}} ms, DIS-flow estimator {{ops_e2_ms}} ms on average). ORB aligned {{ops_orb_cycles}} cycles with {{ops_orb_inliers}} inliers on average, ALIKED+LightGlue rescued {{ops_aliked_cycles}}, and {{ops_reg_failed}} cycles from the camera-knock scenario were held for a person. Claude gave {{ops_claude_calls}} live second opinions at {{ops_claude_p50_s}} s median for {{ops_claude_usd}} in total. S3 holds {{ops_s3_objects}} cycle evidence objects. The public health probe: **{{soak_uptime}}** of {{soak_probes}} probes OK over {{soak_hours}} h, p50 {{soak_p50_ms}} ms.
+
+The **AWS cloud** page (`/cloud`) shows this live: the service states, the CloudWatch log tail of agent cycles, the fixed Logs Insights queries with their query text, and the OpenCV stage metrics.
+
+![AWS cloud page: OpenCV stage times on Graviton4 from CloudWatch metrics, and a Logs Insights query over agent cycles per site](docs/screenshots/readme/cloud-insights.png)
+
+**Why it fits the prize:** AWS is where the system runs and where its evidence lives. The OpenCV pipeline, the agent and the approvals run on Graviton4; every decision is a CloudWatch event and an S3 evidence file; Step Functions follows up on alerts waiting for a person; and the whole stack is one template.
+
+### COOL on AWS Graviton
+
+`bench/cool_bench.py` runs the same camera bursts through the full pipeline on each host, five repeats, and hashes every stage reading rounded to 1 mm. `scripts/bench/cloud_bench.sh` launches each configuration on a temporary EC2 instance and records the instance id, type, AMI and `cv2.getBuildInformation()`.
+
+| Same 4 vCPU, same frames | Graviton4 {{B_type}} | x86 {{C_type}} | Graviton4 vs x86 |
+|---|---|---|---|
+| CPU | {{B_cpu}} | {{C_cpu}} | |
+| ms per 5-frame burst (mean of 5, sd) | **{{B_ms}}** ({{B_ms_sd}}) | {{C_ms}} ({{C_ms_sd}}) | {{BC_speedup}} faster |
+| Frames/s, one worker per vCPU | **{{B_fps}}** | {{C_fps}} | {{BC_tp_ratio}} |
+| Cost per million frames (on-demand) | **{{B_usd_1m}}** | {{C_usd_1m}} | **{{BC_cost_saving}} cheaper** |
+| ALIKED+LightGlue registration, ms | {{B_aliked_ms}} | {{C_aliked_ms}} | **{{BC_aliked_speedup}}** |
+| DIS optical flow 960×540, ms | {{B_dis_ms}} | {{C_dis_ms}} | **{{BC_dis_speedup}}** |
+| KleidiCV in the OpenCV build | **{{B_kleidi}}** | {{C_kleidi}} | |
+| Output hash (stage readings, 1 mm) | `{{B_hash}}` | `{{C_hash}}` | **{{BC_equal}}** |
+
+- **KleidiCV is active on Graviton4.** The c8g build reports `Custom HAL: {{B_custom_hal}}`, recorded in `bench/results/B-stock-wheel-c8g.xlarge.json`; the Vision Lab's timing panel shows the same line live from the deployed instance.
+- **Capacity per instance.** From the OpenCV cycle time measured on the deployed host ({{cloud_cycle_ms}} ms, CloudWatch) with one vision worker per vCPU, one {{B_type}} serves about **{{cloud_cams_10s}} cameras at a 10-second cadence** or {{cloud_cams_300s}} at a 5-minute cadence, about {{cloud_usd_cam_month_300s}} of compute per camera per month ({{B_usd_month}} per instance per month on demand).
+- **COOL-ready.** `USE_COOL_AMI=true make deploy` switches the stack to the COOL Graviton4 AMI. The benchmark harness carries the COOL configuration as config A (`scripts/bench/cloud_bench.sh A`), which uses the AMI's own OpenCV build; its results land in `bench/results/A-cool-c8g.xlarge.json`, and `make check-numbers` adds them as a column of `docs/COOL.md`.
+
+Full method and per-stage numbers: [`docs/COOL.md`](docs/COOL.md).
+
+**Why it fits the prize:** the workload is an OpenCV 5 pipeline that runs in production on Graviton4, measured against x86 on the same frames with byte-identical outputs, with the Arm-optimised KleidiCV HAL in the build, and the deployment switches to the COOL AMI with one flag.
+
+### Agentic vision
+
+The agent (`backend/src/jalrekha/agent/runner.py`) runs one cycle per camera burst: perceive, assess, plan, guard, act or ask, trace. The OpenCV output picks the branch, and the branch changes the next tool call or action:
+
+| Branch | OpenCV output | Next plan, tool call or action |
+|---|---|---|
+| D1 | Quality gate fails (night, blur, glare, fog) | No alert from this frame; `request_burst` {{pol_burst_normal}} → {{pol_burst_boost}} frames; a photo request to a volunteer after {{pol_photo_streak}} bad frames in a row |
+| D2 | ORB registration fails | `register_heavy`: ALIKED+LightGlue or a keyframe chain; if still lost, site degraded and a recalibration request to a person |
+| D3 | Fewer than 2 of 3 estimators within {{pol_agree_cm}} cm, or sigma above {{pol_sigma_max_cm}} cm | `verify_with_vlm`: a Claude second opinion, paid for only now; with no model available, the reading is held |
+| D4 | Significant Kalman rise (rate − {{pol_z}}·σ ≥ {{pol_r_fast}} m/h) | `set_capture_cadence` up (every {{pol_scn_normal_min}} → {{pol_scn_fast_min}} min on the scenario sites); `downstream_eta` bands on the river graph |
+| D5 | Stage at warning, or projected to cross within {{pol_cross_h}} h | `draft_alert`: local and cross-border SMS, voice and CAP drafts for the right authority, **sent to the approval inbox** |
+| D6 | Danger level, quality OK, 2 of 3 estimators agree | `trigger_siren`: local siren through the guard (the only public action the agent takes alone) |
+| D7 | The model's reply contradicts a confident measurement by {{pol_vlm_contra_cm}} cm or more, is malformed, or carries instructions | Keep the OpenCV value, **request human review** |
+| D8 | GrabCut depth at a reference object of {{pol_road_unsafe_m}} m or more on a volunteer's road photo | Route-board "blocked" update **drafted for approval** |
+| D9 | Falling for {{pol_falling_cycles}} cycles after a peak | Cadence back down; all-clear **proposed for approval** |
+
+On the deployed stack, CloudWatch counted the branches the live agent took: **{{ops_branch_list}}**. In the scenario suite, the trace shows where vision changed the plan: in `{{split_variant}}` at T+{{split_t}} min a knocked camera's misregistered frame reads high, the baseline without vision gates drafts alerts, and the agent's branch is "{{split_agent_summary}}".
+
+**Human approval by PIN.** The agent alone changes what the camera does, calls the second opinion, computes arrival windows, drafts messages and sounds the local siren at danger level. Public SMS, voice, CAP, cross-border notices, all-clears, road status and relief dispatch wait in **Approvals** for a named operator and a PIN, with the evidence (camera stage, filtered stage, rise rate, warning levels, downstream bands) linked to the trace steps that produced it. Edits are kept next to the original draft. Wrong PINs lock out; SMS goes to verified test numbers in this pilot.
+
+**Guard against lying or injected model replies.** Only three JSON keys of a model reply are read; a contradiction of a confident OpenCV measurement goes to a person; numbers in model-written text must come from tool outputs. On {{guard_cases}} scripted replies run through full danger-level agent cycles, the guard caught **{{guard_caught}}/{{guard_bad}}** bad replies (contradictions, prompt injections in English, Hindi and Nepali, malformed output; injections alone {{guard_inject_ok}}), accepted **{{guard_confirm_ok}}** honest confirmations, and never cancelled the danger siren. In the app, "Try to fool the guard" lets anyone type a model reply in any language and watch the agent keep the OpenCV value.
+
+**The agent against baselines** ({{ag_flood_runs}} flood and {{ag_quiet_runs}} no-flood runs on held-out scenes, including camera knocks near the warning level; same OpenCV reading for all three):
+
+| | Agent | Projection rule without vision gates | Threshold agent |
+|---|---|---|---|
+| Correct runs | **{{ag_success}}** | {{pj_success}} | {{rb_success}} |
+| First alert vs true warning crossing (median) | **{{ag_lead_median_min}} min before** | {{pj_lead_median_min}} min | {{rb_lead_median_min}} min |
+| False-alert runs | **{{ag_false_alert_runs}}** | {{pj_false_alert_runs}} | {{rb_false_alert_runs}} |
+| On {{agu_runs}} scenes added after the last agent change | **{{agu_success}}** | {{pju_success}} | {{rbu_success}} |
+
+**Live Claude second opinions.** In run `{{live_run_id}}` on the deployed stack, the agent read {{live_cycles}} archived frames of the real Hancock camera and called Claude {{live_opinions}} times when its estimators could not confirm each other: {{live_confirmed}} confirmed the OpenCV reading and {{live_held}} were held for a person. Every call, with model, latency and cost, is in [`docs/traces/LIVE.md`](docs/traces/LIVE.md) and in CloudWatch.
+
+#### MCP server
+
+`make mcp` starts an MCP server (`backend/src/jalrekha/mcp_server.py`) over the AWS deployment, registered for Claude Code in `.mcp.json`. It has {{mcp_tools}} tools: `list_sites`, `river_status`, `downstream_eta`, `explain_reading` (what OpenCV did in a cycle), `agent_trace`, `pending_alerts`, `situation_report`, `run_replay`, `replay_status` and `cloud_insights`. {{mcp_tools_readonly}} are read-only and `run_replay` starts a replay. **No tool can approve, edit or send an alert**, and `backend/tests/test_mcp_server.py` checks it.
+
+**Why it fits the prize:** each branch is triggered by an OpenCV number and changes a concrete next step: the burst length, the registration method, whether to pay for a model call, the capture cadence, which drafts go to which authority's approval inbox, and whether to ask a person.
+
+## Screens
+
+| Live control room: the camera overlay, the stage in metres, the next check and drafts waiting | Vision Lab: one real agent cycle, stage by stage |
+|---|---|
+| ![Live control room](docs/screenshots/readme/live.png) | ![Vision Lab](docs/screenshots/readme/vision.png) |
+| **Approvals: Hindi, Maithili and English drafts with SMS segment counts, voice and CAP** | **Rivers: arrival bands from Chatara across the Nepal–India border** |
+| ![Approvals](docs/screenshots/readme/approvals.png) | ![Rivers](docs/screenshots/readme/rivers.png) |
+| **Relief: requests in Hindi or Nepali, road photo depth check, route board, shelters** | **Story: the Koshi flood night, every figure linked to its source** |
+| ![Relief](docs/screenshots/readme/relief.jpg) | ![Story](docs/screenshots/readme/story.jpg) |
+| **AWS cloud: services, CloudWatch log and Logs Insights queries** | **On a phone: home, the live control room and an approval card** |
+| ![AWS cloud](docs/screenshots/readme/cloud.png) | ![Phone views](docs/screenshots/readme/phone.png) |
+
+Every page in light and dark at 1440 and 390 px: `docs/screenshots/ui/`. The interface is in English, Hindi and Nepali.
+
+## Results
+
+Numbers generated {{generated_at}} by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this page and the JSON disagree.
+
+| What | NadiSaathi | Baseline | Data |
+|---|---|---|---|
+| River level on real USGS staff-gauge cameras, physical calibration | **{{real_full_mae_cm}} cm** mean error (95% CI {{real_full_ci}}), median {{real_full_median_cm}} cm | original edge heuristic: answers {{real_b0_coverage}} of frames; on those {{real_b0_subset_n}} frames {{real_b0_on_subset_cm}} cm vs **{{real_full_on_b0_subset_cm}} cm** for OpenCV; naive max-edge {{real_b1_mae_cm}} cm | REAL, {{real_n}} frames, 2 sites |
+| OpenCV vs a vision-language model as the gauge reader | OpenCV **{{cv_on_vlm_answered_cm}} cm** on the frames the model answered, {{B_usd_1m}} per million frames on Graviton4 | {{vlm_model}}: {{vlm_on_answered_cm}} cm, answered {{vlm_coverage}} of frames, ~{{vlm_latency_s}} s and {{vlm_cost_1k}} per 1,000 frames | REAL, {{vlm_frames}} frames |
+| The agent on a real camera (USGS Hancock, July 2026 flood) | **{{rr_used_mae_cm}} cm** on the {{rr_used}} readings it used (median {{rr_used_median_cm}} cm); siren on the first frame above the danger mark: {{rr_siren_first}}; {{rr_quiet_alerts}} alert drafts on the quiet days; all-clear proposed: {{rr_all_clear}} | – | REAL, {{rr_frames}} archived frames, illustrative warning/danger marks |
+| River level, synthetic scenes in 9 conditions | **{{synth_full_mae_cm}} cm** (CI {{synth_full_ci}}), {{synth_full_within5}} within 5 cm | original heuristic, border-fixed: {{synth_b0r_mae_cm}} cm | SYNTHETIC, {{synth_frames}} frames, 30 held-out scene seeds |
+| Lead time from watching the upstream gauge | Percentile warning levels: median **{{lt_p95_gain_median_h}} h** gained, floods flagged before the crossing {{lt_p95_det_down}} → **{{lt_p95_det_comb}}**. Official NWS action stages (pre-registered primary): flagged before the crossing {{lt_nws_det_down}} → **{{lt_nws_det_comb}}**, mean gain {{lt_nws_gain_mean_h}} h, median {{lt_nws_gain_median_min}} min | the same rule on the downstream gauge only | REAL USGS gauge pairs, {{lt_pairs}} pairs, held-out 2024–2026 events |
+| Agent scenario suite | **{{ag_success}}** correct, first alert a median **{{ag_lead_median_min}} min** before the warning crossing, {{ag_false_alert_runs}} false-alert runs | no vision gates: {{pj_success}}, {{pj_false_alert_runs}} false-alert runs; threshold agent: {{rb_success}}, {{rb_lead_median_min}} min | SYNTHETIC, {{ag_runs}} runs |
+| Guard against a lying or hijacked vision model | **{{guard_caught}}/{{guard_bad}}** bad replies caught, {{guard_confirm_ok}} honest confirmations accepted, danger siren never cancelled | – | SYNTHETIC, {{guard_cases}} scripted replies through full agent cycles |
+| Volunteer photo triage on real flood photos from India and Nepal (Claude, after face and plate blur) | flagged **{{pt_road_hit}}/{{pt_road_pos}}** flooded roads and underpasses, ~{{pt_latency_s}} s and {{pt_cost_photo}} per photo | – | REAL, {{pt_photos}} licensed Wikimedia Commons photos |
+| CV pipeline on Graviton4 vs x86 (same 4 vCPU, same frames, identical outputs) | {{B_type}} **{{B_fps}} frames/s, {{B_usd_1m}} per 1M frames** | {{C_type}} {{C_fps}} frames/s, {{C_usd_1m}} per 1M frames ({{BC_cost_saving}} cheaper on Graviton4) | benchmark workload, `bench/cool_bench.py` |
+| Deployed endpoint | **{{soak_uptime}}** of {{soak_probes}} health probes OK over {{soak_hours}} h, p50 {{soak_p50_ms}} ms / p95 {{soak_p95_ms}} ms | – | REAL, CloudWatch |
+
+Evaluation details, protocol and limits: [`docs/REPORT.md`](docs/REPORT.md).
+
+## Built and tested
+
+- **{{tests_total_passed}} tests passing** on the last recorded run ({{tests_run_date}}): backend pytest **{{tests_backend_passed}} passed** in {{tests_backend_files}} files ({{tests_backend_xfailed}} expected failure), frontend vitest **{{tests_frontend_passed}} passed** in {{tests_frontend_files}} files. The counts are written by `scripts/count_tests.py` to `eval/results/tests.json`.
+- The tests cover the agent scenarios, approvals and PIN lockout, the guardrails, relief, the photo check, the lead-time code, the MCP server's no-approval rule, and the original API.
+- Every measured number in this README, the report, the COOL page and the submission text comes from a result file; `make check-numbers` fails on any mismatch.
+- Evaluation scripts, each writing `eval/results/*.json`: `run_real_physical.py` (real cameras), `run_real_replay.py` (agent on a real camera), `run_vlm_baseline.py` (model as gauge reader), `run_stage.py` (synthetic scenes), `run_leadtime.py` and `run_leadtime_v2.py` (real gauge pairs), `run_agent_suite.py`, `run_guard_eval.py`, `run_photo_triage.py`. Protocols are frozen before test runs (`eval/config*.frozen.json`).
+- Production: the endpoint answered **{{soak_uptime}}** of {{soak_probes}} health probes over {{soak_hours}} h (`scripts/soak_report.py`); `make smoke` calls every original and new API route against the deployed stack.
+
+```bash
+make test            # backend pytest + frontend vitest, ESLint and production build
+make count-tests     # run both suites, record the counts, regenerate the docs
+make eval            # every evaluation -> eval/results/*.json, then the docs
+make bench           # the OpenCV benchmark on this machine
+make check-numbers   # README, report, COOL page and submission text match the JSON
+make smoke           # every API route against the deployed stack
+make ops-report      # production numbers from CloudWatch Logs Insights
+```
+
+## Architecture
 
 ![Architecture: camera, OpenCV 5 pipeline and agent on EC2 Graviton4, managed AWS services](docs/diagrams/architecture_blocks.png)
 
-Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.md`).
+Agent workflow: [`docs/diagrams/agent_workflow.png`](docs/diagrams/agent_workflow.png) (source: [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)).
 
 ```
  phone / browser ─► API Gateway HTTPS ─► (VPC link) ─► EC2 c8g.xlarge Graviton4, Ubuntu 24.04 arm64
@@ -91,48 +251,40 @@ Agent workflow: `docs/diagrams/agent_workflow.png` (source: `docs/ARCHITECTURE.m
  CloudFormation: infra/nadisaathi.yaml   `make deploy` (about 60 s per update)   `make destroy`
 ```
 
-Capacity, as an estimate: from the OpenCV pipeline time measured on the cloud host ({{cloud_cycle_ms}} ms per cycle, CloudWatch), one c8g.xlarge with one vision worker per vCPU would serve about {{cloud_cams_300s}} cameras at a 5-minute cadence, about {{cloud_usd_cam_month_300s}} of compute per camera per month (the benchmark upper bound is {{B_cams_300s}}; the current deployment runs a single worker process). Details in `docs/COOL.md`. The core workload runs on Graviton4 with the stock OpenCV 5 wheel. COOL (Cloud-Optimized OpenCV, AWS Marketplace) is wired as `USE_COOL_AMI=true make deploy` but has not run yet: it needs the account owner to accept the Marketplace terms; the benchmark for COOL vs the stock wheel vs x86 is in `docs/COOL.md`. The second opinion, report structuring, photo descriptions and situation summaries run on Claude ({{vlm_model}}) through the Anthropic API with server-side refusal fallbacks; Amazon Bedrock is wired as an alternative (its account quota is zero today). Without either, every second opinion takes the labelled rule fallback.
+**Nepal and India, concretely.** Region profiles (`backend/src/jalrekha/regions/data/np.json`, `in.json`) carry the languages, authority roles (ward focal person and municipal EOC in Nepal; DDMA control room, SDMA, panchayat volunteer and NGO team in India), alert channels and CAP settings. River graphs for the Koshi, Gandak, Karnali and Bagmati carry CWC warning and danger levels from the CWC flood-forecasting SOP (April 2025) on the Indian gauge nodes; every travel time that is a distance/celerity estimate says so in the API and the UI. Voice: Amazon Polly Kajal for Hindi and English, an offline espeak-ng voice for Nepali, and a labelled fallback voice for Maithili and Bhojpuri, whose texts are marked for native review. Every fact in the story and the profiles is in `docs/FACTS.md` with its source.
 
-### What the deployment records
+**Responsible use.** NadiSaathi is decision support that complements DHM, CWC, IMD and NDMA warnings. Every public message needs a named person's approval. Faces and number plates are blurred with YuNet before any frame is stored; relief requests keep no names or phone numbers. A frame too poor to read gives "unknown", never "safe". Details: `docs/RESPONSIBLE_USE.md` and `docs/MODEL_CARDS.md`.
 
-Every agent cycle writes one JSON event to CloudWatch Logs (the river level, error bar, alignment method and inliers, each estimator's reading, the time of every OpenCV stage, the second opinion's model, latency and cost) and archives that event with its blurred overlay in S3 for 90 days. The OpenCV stage times also become CloudWatch metrics, with an alarm if the pipeline slows past 1 s. Over the last {{ops_days}} days the live stack logged {{ops_cycles}} cycles ({{ops_frames}} frames, {{ops_sites}} camera sites): OpenCV took {{ops_total_p50_ms}} ms per cycle at the median and {{ops_total_p95_ms}} ms at the 95th percentile on the Graviton4 host; ORB aligned {{ops_orb_cycles}} cycles ({{ops_orb_inliers}} inliers on average), ALIKED+LightGlue rescued {{ops_aliked_cycles}}, and {{ops_reg_failed}} cycles failed to align and were held (the camera-knock scenario); Claude gave {{ops_claude_calls}} live second opinions at {{ops_claude_p50_s}} s median for {{ops_claude_usd}} in total. Numbers from `scripts/cloud_ops_report.py` (CloudWatch Logs Insights), REAL deployment, replays of synthetic and archived camera frames.
-
-Two pages in the app show this: **Vision Lab** (`/vision`) rebuilds any recorded cycle and shows each OpenCV stage with its real images and numbers (quality metrics and Laplacian map, ORB or ALIKED matches, the rectified gauge strip, the three estimator profiles in metres, fusion and Kalman, per-stage timing and the OpenCV build on the host); **AWS cloud** (`/cloud`) streams the CloudWatch log, runs fixed Logs Insights queries, charts the stage metrics and shows the state of each service in the stack.
+```
+backend/src/jalrekha/vision/    OpenCV 5 measurement: quality, register, gauge, waterline, fuse, temporal, flow, privacy, relief, explain
+backend/src/jalrekha/agent/     agent loop, policy, approvals, scenarios, relief, cloud adapters, guardrails
+backend/src/jalrekha/regions/   region profiles (Nepal, India) and river graphs
+frontend/src/pages/             Home, Live, Vision Lab, Approvals, Agent trace, Rivers, Relief, Story, AWS cloud, Credits
+eval/  bench/  infra/  docs/    evaluations, benchmark, CloudFormation, report and facts
+android/                        volunteer app
+```
 
 ## Run it
 
 ```bash
 make setup          # backend (uv) + frontend (npm ci)
-make test           # backend pytest + frontend vitest + lint
-make eval           # all evaluations -> eval/results/*.json, then the docs are regenerated
-make check-numbers  # README / report / Devpost / video script match the JSON
 make dev            # API on :8000, PWA on :5173
-make deploy         # AWS (see docs/DEPLOY.md); make destroy removes everything
+make deploy         # AWS stack (docs/DEPLOY.md); USE_COOL_AMI=true selects the COOL AMI; make destroy removes it
 ```
 
-Scenario replays run without any hardware: `POST /api/scenarios/koshi-night-rise/run`. API reference: `docs/API_AGENT.md`.
+Scenario replays need no hardware: `POST /api/scenarios/koshi-night-rise/run`. API reference: `docs/API_AGENT.md`.
 
-### Use it from another agent (MCP)
+## Versions
 
-`make mcp` starts an MCP server (`backend/src/jalrekha/mcp_server.py`) that talks to the AWS deployment. The repository's `.mcp.json` registers it for Claude Code. Ten tools: `list_sites`, `river_status`, `downstream_eta`, `explain_reading` (what OpenCV did in a cycle), `agent_trace`, `pending_alerts`, `situation_report`, `run_replay`, `replay_status` and `cloud_insights`. Nine are read-only; `run_replay` starts a replay. No tool approves, edits or sends an alert: that stays with a named operator and a PIN in the app, and a test checks it.
-
-## Responsible use
-
-NadiSaathi is decision support. It does not replace DHM, CWC, IMD or NDMA warnings, and every public message needs a named person's approval. Faces and number plates are blurred with YuNet before any frame is stored; relief requests keep no names or phone numbers. When a frame is too poor to read, the system says "unknown", never "safe". Details: `docs/RESPONSIBLE_USE.md` (consent, signage text in three languages, retention, failure behaviour), `docs/REPORT.md` (sections 8 and 9) and `docs/MODEL_CARDS.md`.
-
-## Repository
-
-```
-backend/src/jalrekha/vision/    OpenCV 5 measurement: quality, register, gauge, waterline, fuse, temporal, flow, privacy, relief
-backend/src/jalrekha/agent/     agent loop, policy, approvals, scenarios, relief, cloud adapters, guardrails
-backend/src/jalrekha/regions/   Nepal / India / Argentina profiles and river graphs
-frontend/src/pages/             Live, Traces, Approvals, Rivers, Relief, Story + the original dashboard pages
-eval/  bench/  infra/  docs/    evaluations, benchmark, CloudFormation, report and facts
-android/                        volunteer app (unchanged)
-```
+- [v0.1.0](https://github.com/Prashant-thakur77/JalRekha/releases/tag/v0.1.0): camera gauge and agent on AWS Graviton: the OpenCV 5 pipeline, branches D1–D9, river graphs, drafts with PIN approval, one CloudFormation stack.
+- [v0.2.0](https://github.com/Prashant-thakur77/JalRekha/releases/tag/v0.2.0): Claude live as second opinion, report and relief parser and photo describer; licensed flood photos from India and Nepal; the new interface in English, Hindi and Nepali.
+- [v0.3.0](https://github.com/Prashant-thakur77/JalRekha/releases/tag/v0.3.0): Vision Lab, a CloudWatch event per agent cycle with stage metrics and an S3 evidence archive, and the AWS cloud page.
+- [v0.4.0](https://github.com/Prashant-thakur77/JalRekha/releases/tag/v0.4.0): the MCP server, live real-camera traces with Claude second opinions, and the report as a PDF (attached to the release).
 
 ## Data and model notices
 
 USGS HIVIS imagery and NWIS gauge data are U.S. public domain (credit: U.S. Geological Survey). Weather data by Open-Meteo.com (CC BY 4.0). OpenCV is Apache-2.0. YuNet face and plate detectors (opencv_zoo), ALIKED (BSD-3-Clause) and LightGlue (Apache-2.0) ONNX weights are downloaded at runtime with SHA-1 checks and are not redistributed here. Gemma model weights, used by the edge components, are under the Gemma Terms of Use and are fetched at runtime.
 
 The flood photos from India and Nepal in the app and in `datasets/india_flood_photos/` are from Wikimedia Commons under public domain, CC0, CC BY and CC BY-SA licences; each photo's author, licence and source are listed in `docs/PHOTO_CREDITS.md`, on the app's Credits page and next to the photo. The web copies are resized and re-encoded; CC BY-SA photos stay under CC BY-SA.
+
+**License:** [MIT](LICENSE).

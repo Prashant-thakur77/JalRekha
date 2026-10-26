@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NadiSaathi film graphics</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..700&family=Fragment+Mono&family=Anek+Devanagari:wght@400..600&display=block">
+<style>
+  :root { --ink:#121211; --ink2:#1C1C1A; --paper:#F3F2EE; --line:#D6D4CC; --muted:#A3A29B; --lime:#C6FF3D;
+          --warn:#FF7A1A; --danger:#F03A2E; --ease:cubic-bezier(0.16,1,0.3,1); }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html, body { width:1920px; height:1080px; overflow:hidden; background:var(--ink); color:#F3F2EE;
+               font-family:'Host Grotesk','Anek Devanagari',sans-serif; -webkit-font-smoothing:antialiased; }
+  .mono { font-family:'Fragment Mono',monospace; text-transform:uppercase; letter-spacing:.16em; font-size:20px; }
+  .rise { opacity:0; transform:translateY(12px); transition:opacity .6s var(--ease), transform .6s var(--ease); }
+  .rise.on { opacity:1; transform:none; }
+  .scene { position:absolute; inset:0; display:none; }
+  .scene.active { display:block; }
+
+  /* photo: slow push, credit chip, warm desaturated grade */
+  #photo img { position:absolute; inset:-4%; width:108%; height:108%; object-fit:cover;
+               filter:saturate(.72) contrast(1.04) sepia(.12) brightness(.82); transform-origin:50% 50%; }
+  #photo .shade { position:absolute; inset:0; background:linear-gradient(180deg, rgba(18,18,17,.25), rgba(18,18,17,.05) 40%, rgba(18,18,17,.55)); }
+  #photo .credit { position:absolute; right:48px; top:44px; font-size:15px; color:rgba(243,242,238,.82); letter-spacing:.12em; }
+  #photo .place { position:absolute; left:96px; top:84px; }
+  #photo .place .t { font-size:22px; color:var(--lime); }
+  #photo .place .s { font-size:18px; color:rgba(243,242,238,.75); margin-top:10px; }
+
+  /* turn: kinetic type */
+  #turn { display:none; align-items:center; justify-content:center; }
+  #turn.active { display:flex; flex-direction:column; gap:28px; text-align:center; }
+  #turn .big { font-size:150px; font-weight:400; letter-spacing:-.045em; line-height:1; }
+  #turn .big b { font-weight:400; color:var(--lime); }
+  #turn .row { display:flex; gap:56px; font-size:56px; letter-spacing:-.02em; color:#F3F2EE; }
+  #turn .row span em { font-style:normal; color:var(--lime); }
+  #turn .deva { font-size:46px; color:var(--muted); }
+
+  /* stats */
+  #stats { padding:120px 110px; }
+  #stats h2 { font-size:64px; font-weight:400; letter-spacing:-.03em; margin:14px 0 70px; }
+  #stats .cards { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
+  #stats .card { background:var(--ink2); border-radius:26px; padding:44px 44px 40px; min-height:440px; position:relative; overflow:hidden;
+                 border:1px solid rgba(255,255,255,.08); }
+  #stats .card::before { content:""; position:absolute; inset:0; background:radial-gradient(120% 80% at 100% 0%, rgba(198,255,61,.14), transparent 55%); }
+  #stats .num { font-size:136px; letter-spacing:-.05em; line-height:1; position:relative; }
+  #stats .num small { font-size:44px; letter-spacing:0; margin-left:6px; color:var(--muted); }
+  #stats .lbl { font-size:30px; line-height:1.3; margin-top:26px; position:relative; }
+  #stats .vs { font-size:24px; color:var(--muted); margin-top:18px; position:relative; }
+  #stats .src { font-size:15px; color:var(--muted); position:absolute; left:44px; bottom:30px; letter-spacing:.1em; }
+  #stats .tag { display:inline-block; font-size:15px; padding:6px 12px; border-radius:999px; background:rgba(198,255,61,.14); color:var(--lime); position:relative; }
+
+  /* built: the stack, piece by piece */
+  #built { padding:96px 110px; }
+  #built h2 { font-size:58px; font-weight:400; letter-spacing:-.03em; margin:14px 0 54px; }
+  #built .flow { display:flex; align-items:stretch; gap:18px; }
+  #built .box { flex:1; background:var(--ink2); border:1px solid rgba(255,255,255,.1); border-radius:22px; padding:28px; }
+  #built .box .k { color:var(--lime); font-size:16px; }
+  #built .box .v { font-size:34px; margin-top:12px; letter-spacing:-.01em; }
+  #built .box .d { font-size:21px; color:var(--muted); margin-top:10px; line-height:1.35; }
+  #built .arrow { align-self:center; font-size:40px; color:var(--lime); }
+  #built .chips { display:flex; flex-wrap:wrap; gap:14px; margin-top:46px; }
+  #built .chip { font-family:'Fragment Mono',monospace; font-size:22px; padding:14px 22px; border-radius:999px;
+                 border:1px solid rgba(255,255,255,.18); color:#F3F2EE; }
+  #built .chip.l { border-color:var(--lime); color:var(--lime); }
+
+  /* mcp terminal */
+  #mcp { padding:90px 110px; }
+  #mcp h2 { font-size:54px; font-weight:400; letter-spacing:-.03em; margin:14px 0 36px; }
+  #mcp pre { font-family:'Fragment Mono',monospace; font-size:24px; line-height:1.55; background:#0B0B0A; border-radius:22px;
+             padding:36px 40px; color:#D9D8D2; white-space:pre-wrap; border:1px solid rgba(255,255,255,.08); height:700px; overflow:hidden; }
+  #mcp pre .p { color:var(--lime); }
+  #mcp pre .no { color:var(--danger); }
+
+  /* end card */
+  #end { display:none; }
+  #end.active { display:flex; align-items:center; justify-content:space-between; padding:0 140px; }
+  #end .word { font-size:150px; letter-spacing:-.05em; line-height:1; }
+  #end .deva { font-size:50px; color:var(--muted); margin-top:10px; }
+  #end .links { margin-top:56px; display:grid; gap:16px; font-size:30px; }
+  #end .links .mono { font-size:17px; color:var(--lime); display:block; margin-bottom:6px; }
+  #end .qr { background:var(--paper); padding:22px; border-radius:22px; width:340px; height:340px; }
+  #end .qr svg { width:100%; height:100%; }
+  #end .event { margin-top:44px; font-size:20px; color:var(--muted); }
+</style>
+</head>
+<body>
+<section class="scene" id="photo">
+  <img id="ph-img" alt="">
+  <div class="shade"></div>
+  <div class="place rise" id="ph-place"><div class="t mono" id="ph-t"></div><div class="s mono" id="ph-s"></div></div>
+  <div class="credit mono" id="ph-credit"></div>
+</section>
+
+<section class="scene" id="turn">
+  <div class="big rise" id="tn-name">This is Nadi<b>Saathi</b>.</div>
+  <div class="deva rise" id="tn-deva">नदी साथी · the river friend</div>
+  <div class="row"><span class="rise" id="tn-1">A camera <em>reads</em> the river.</span><span class="rise" id="tn-2">An agent <em>decides</em>.</span><span class="rise" id="tn-3">A person <em>approves</em>.</span></div>
+</section>
+
+<section class="scene" id="stats">
+  <div class="mono rise" style="color:var(--lime)" id="st-k">Measured, from the repository's result files</div>
+  <h2 class="rise" id="st-h">Proof in three numbers</h2>
+  <div class="cards" id="st-cards"></div>
+</section>
+
+<section class="scene" id="built">
+  <div class="mono rise" style="color:var(--lime)" id="bt-k">Built with</div>
+  <h2 class="rise" id="bt-h">OpenCV 5 on AWS Graviton4, one CloudFormation stack</h2>
+  <div class="flow" id="bt-flow"></div>
+  <div class="chips" id="bt-chips"></div>
+</section>
+
+<section class="scene" id="mcp">
+  <div class="mono rise" style="color:var(--lime)" id="mc-k">MCP · real output from the live deployment</div>
+  <h2 class="rise" id="mc-h">An MCP client calls NadiSaathi's tools</h2>
+  <pre id="mc-pre"></pre>
+</section>
+
+<section class="scene" id="end">
+  <div>
+    <div class="word rise" id="en-w">NadiSaathi</div>
+    <div class="deva rise" id="en-d">नदी साथी · the river friend</div>
+    <div class="links rise" id="en-l"></div>
+    <div class="event mono rise" id="en-e">OpenCV AI Competition 2026 · OpenCV 5 · AWS Graviton4</div>
+  </div>
+  <div class="qr rise" id="en-qr"></div>
+</section>
+
+<script>
+const q = new URLSearchParams(location.search);
+const P = JSON.parse(decodeURIComponent(q.get('p') || '%7B%7D'));
+const scene = q.get('scene');
+const dur = parseFloat(q.get('dur') || '8');
+const at = (s, fn) => setTimeout(fn, s * 1000);
+const on = (id) => document.getElementById(id).classList.add('on');
+document.getElementById(scene).classList.add('active');
+
+function countUp(el, to, decimals, ms) {
+  const t0 = performance.now();
+  const step = (now) => { const t = Math.min((now - t0) / ms, 1); const e = 1 - Math.pow(1 - t, 3);
+    el.textContent = (to * e).toFixed(decimals); if (t < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
+window.__start = () => {
+  if (scene === 'photo') {
+    const img = document.getElementById('ph-img');
+    img.src = P.img;
+    document.getElementById('ph-credit').textContent = P.credit;
+    document.getElementById('ph-t').textContent = P.title || '';
+    document.getElementById('ph-s').textContent = P.sub || '';
+    const from = P.kb === 'out' ? 'scale(1.10)' : 'scale(1.0)';
+    const to = P.kb === 'out' ? 'scale(1.0)' : 'scale(1.10)';
+    const pan = P.pan || '0%';
+    img.animate([{ transform: from + ' translateX(0)' }, { transform: to + ` translateX(${pan})` }], { duration: dur * 1000, easing: 'linear', fill: 'forwards' });
+    if (P.title) at(0.6, () => on('ph-place'));
+  }
+  if (scene === 'turn') {
+    at(0.2, () => on('tn-name')); at(P.t1 || 1.6, () => on('tn-deva'));
+    at(P.t2 || 2.4, () => on('tn-1')); at(P.t3 || 3.4, () => on('tn-2')); at(P.t4 || 4.3, () => on('tn-3'));
+  }
+  if (scene === 'stats') {
+    const cards = document.getElementById('st-cards');
+    P.cards.forEach((c, i) => {
+      const d = document.createElement('div'); d.className = 'card rise'; d.id = 'st-c' + i;
+      d.innerHTML = `<span class="tag mono">${c.tag}</span><div class="num" style="margin-top:28px"><span>0</span><small>${c.unit}</small></div>
+        <div class="lbl">${c.label}</div><div class="vs">${c.vs || ''}</div><div class="src mono">${c.src}</div>`;
+      cards.appendChild(d);
+    });
+    at(0.2, () => on('st-k')); at(0.4, () => on('st-h'));
+    P.cards.forEach((c, i) => at(c.at, () => { on('st-c' + i); countUp(document.querySelector(`#st-c${i} .num span`), c.value, c.dec || 0, 900); }));
+  }
+  if (scene === 'built') {
+    const flow = document.getElementById('bt-flow');
+    P.boxes.forEach((b, i) => {
+      if (i) { const a = document.createElement('div'); a.className = 'arrow rise'; a.id = 'bt-a' + i; a.textContent = '→'; flow.appendChild(a); }
+      const d = document.createElement('div'); d.className = 'box rise'; d.id = 'bt-b' + i;
+      d.innerHTML = `<div class="k mono">${b.k}</div><div class="v">${b.v}</div><div class="d">${b.d}</div>`; flow.appendChild(d);
+    });
+    const chips = document.getElementById('bt-chips');
+    P.chips.forEach((c, i) => { const s = document.createElement('span'); s.className = 'chip rise' + (c.l ? ' l' : ''); s.id = 'bt-c' + i; s.textContent = c.t; chips.appendChild(s); });
+    at(0.2, () => on('bt-k')); at(0.4, () => on('bt-h'));
+    P.boxes.forEach((b, i) => at(b.at, () => { on('bt-b' + i); if (i) on('bt-a' + i); }));
+    P.chips.forEach((c, i) => at(P.chipsAt + i * 0.18, () => on('bt-c' + i)));
+  }
+  if (scene === 'mcp') {
+    at(0.2, () => on('mc-k')); at(0.4, () => on('mc-h'));
+    const pre = document.getElementById('mc-pre');
+    let i = 0;
+    const lines = P.lines;
+    const type = () => { if (i >= lines.length) return; const l = lines[i++];
+      const span = document.createElement('div'); span.innerHTML = l; pre.appendChild(span); setTimeout(type, P.gap || 260); };
+    at(0.9, type);
+  }
+  if (scene === 'end') {
+    document.getElementById('en-l').innerHTML = P.links.map(l => `<div><span class="mono">${l.k}</span>${l.v}</div>`).join('');
+    document.getElementById('en-qr').innerHTML = P.qr;
+    at(0.2, () => on('en-w')); at(0.6, () => on('en-d')); at(1.0, () => on('en-l')); at(1.4, () => on('en-qr')); at(1.8, () => on('en-e'));
+  }
+};
+document.fonts.ready.then(() => { window.__ready = true; });
+</script>
+</body>
+</html>

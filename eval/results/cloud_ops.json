@@ -2,41 +2,41 @@
  "meta": {
   "label": "REAL AWS deployment: CloudWatch Logs Insights over agent-cycle events, S3 evidence archive",
   "generated_by": "scripts/cloud_ops_report.py",
-  "generated_at": "2026-10-25T18:48:00.771674+00:00",
-  "window_days": 2,
+  "generated_at": "2026-10-26T09:47:00.119953+00:00",
+  "window_days": 7,
   "region": "us-east-1",
   "log_group": "/nadisaathi/app"
  },
  "totals": [
   {
-   "cycles": 241.0,
-   "sites": 4.0,
-   "runs": 9.0,
-   "frames_total": 865.0
+   "cycles": 285.0,
+   "sites": 5.0,
+   "runs": 10.0,
+   "frames_total": 1093.0
   }
  ],
  "stages": [
   {
-   "total_avg": 211.9524,
-   "total_p50": 102.6869,
-   "total_p95": 1301.685,
-   "register": 126.5829,
-   "warp": 11.1234,
-   "quality": 0.9722,
-   "median": 0.9022,
-   "e1": 0.461,
-   "e2": 6.1922,
-   "e3": 1.6902,
-   "fuse": 0.2291,
-   "redact": 55.6127,
-   "overlay": 2.1606
+   "total_avg": 193.9281,
+   "total_p50": 93.2918,
+   "total_p95": 308.011,
+   "register": 110.5858,
+   "warp": 10.9607,
+   "quality": 0.9342,
+   "median": 0.9576,
+   "e1": 0.4357,
+   "e2": 6.6226,
+   "e3": 1.4918,
+   "fuse": 0.2237,
+   "redact": 53.1,
+   "overlay": 2.0951
   }
  ],
  "registration": [
   {
    "registration": "orb",
-   "cycles": 227.0,
-   "avg_inliers": 660.3304
+   "cycles": 271.0,
+   "avg_inliers": 666.1882
   },
   {
    "registration": "failed",
@@ -51,26 +51,44 @@
  ],
  "second_opinion": [
   {
+   "model": "user-supplied-redteam-reply",
+   "calls": 1.0,
+   "latency_p50": 0.0,
+   "usd": 0.0
+  },
+  {
+   "model": "scripted-adversarial-test",
+   "calls": 3.0,
+   "latency_p50": 0.0,
+   "usd": 0.0
+  },
+  {
    "model": "claude:claude-opus-5-5",
    "calls": 27.0,
    "latency_p50": 4134.57,
    "usd": 0.2148
-  },
-  {
-   "model": "scripted-adversarial-test",
-   "calls": 2.0,
-   "latency_p50": 0.0,
-   "usd": 0.0
   }
  ],
  "branches": [
   {
-   "branch": "D3",
-   "cycles": 26.0
+   "branch": "D7",
+   "cycles": 4.0
   },
   {
-   "branch": "D7",
-   "cycles": 2.0
+   "branch": "D5",
+   "cycles": 4.0
+  },
+  {
+   "branch": "D4",
+   "cycles": 4.0
+  },
+  {
+   "branch": "D1",
+   "cycles": 9.0
+  },
+  {
+   "branch": "D3",
+   "cycles": 26.0
   },
   {
    "branch": "D9",
@@ -79,21 +97,9 @@
   {
    "branch": "D2",
    "cycles": 15.0
-  },
-  {
-   "branch": "D5",
-   "cycles": 3.0
-  },
-  {
-   "branch": "D4",
-   "cycles": 3.0
-  },
-  {
-   "branch": "D1",
-   "cycles": 7.0
   }
  ],
- "s3_cycle_objects": 487,
+ "s3_cycle_objects": 575,
  "alarms": [
   "health",
   "instance-status-reboot",

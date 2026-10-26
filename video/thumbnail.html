@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>NadiSaathi thumbnail</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400..700&family=Fragment+Mono&display=block">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1920px; height: 1080px; overflow: hidden; }
+  body { background: radial-gradient(90% 80% at 100% 0%, rgba(198,255,61,.16), transparent 55%), #121211; color: #F3F2EE;
+         font-family: 'Host Grotesk', sans-serif; position: relative; border-radius: 28px; }
+  .left { position: absolute; left: 96px; top: 150px; width: 820px; }
+  .kick { font-family: 'Fragment Mono', monospace; font-size: 26px; letter-spacing: .16em; color: #C6FF3D; text-transform: uppercase; }
+  h1 { font-size: 136px; line-height: .95; letter-spacing: -.05em; font-weight: 600; margin-top: 30px;
+       -webkit-text-stroke: 2px #F3F2EE; }
+  h1 em { font-style: normal; color: #C6FF3D; -webkit-text-stroke: 2px #C6FF3D; }
+  .sub { font-size: 40px; margin-top: 40px; color: #D9D8D2; letter-spacing: -.01em; line-height: 1.25; }
+  .chips { margin-top: 50px; display: flex; gap: 14px; flex-wrap: wrap; }
+  .chip { font-family: 'Fragment Mono', monospace; font-size: 24px; padding: 12px 20px; border-radius: 999px; border: 2px solid rgba(243,242,238,.35); }
+  .chip.l { border-color: #C6FF3D; color: #C6FF3D; }
+  .frame { position: absolute; border-radius: 18px; overflow: hidden; background: #1C1C1A; box-shadow: 0 30px 80px rgba(0,0,0,.55);
+           border: 1px solid rgba(255,255,255,.12); }
+  .frame .bar { height: 34px; background: #2A2A27; display: flex; align-items: center; gap: 8px; padding-left: 14px; }
+  .frame .bar i { width: 11px; height: 11px; border-radius: 50%; background: #5F5E58; display: block; }
+  .frame img { display: block; width: 100%; }
+  .back { right: 70px; top: 90px; width: 900px; height: 600px; transform: rotate(2deg); }
+  .front { right: 260px; top: 470px; width: 760px; height: 520px; transform: rotate(-2.5deg); }
+  .front img { object-fit: cover; object-position: 0 0; height: 486px; }
+  .back img { object-fit: cover; object-position: 0 0; height: 566px; }
+</style>
+</head>
+<body>
+  <div class="frame back"><div class="bar"><i></i><i></i><i></i></div><img src="../docs/screenshots/readme/hero.jpg" alt=""></div>
+  <div class="frame front"><div class="bar"><i></i><i></i><i></i></div><img src="../docs/screenshots/readme/vision-estimators.png" alt=""></div>
+  <div class="left">
+    <div class="kick">Nepal → India · flood warning</div>
+    <h1>A camera reads the <em>river</em>.</h1>
+    <div class="sub">OpenCV 5 measures it in metres. An agent warns the towns downstream. A person approves.</div>
+    <div class="chips"><span class="chip l">OpenCV 5</span><span class="chip l">AWS Graviton4</span><span class="chip">Agentic vision</span></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Field Node</title>
+    <!--
+  NadiSaathi film: the field hardware, and how one reading travels from the river to the cloud, drawn with three.js.
+  hardware.html?dur=<seconds>&cues=<url-encoded JSON {name: seconds}>[&warn=<metres>]
+  Cues: scene, pole, burst, uplink, opencv, rise, end. Missing cues fall back to defaults spread over dur.
+  window.__ready turns true once fonts, three.js and the first frame are in; window.__start() runs the timeline.
+  Every frame is a pure function of the seconds since __start(), so a recording is reproducible.
+  A concept illustration of the field setup, not a photo of deployed hardware.
+-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..700&family=Fragment+Mono&display=block"
+    />
+    <style>
+      :root {
+        --bg: #121211;
+        --slab: #1c1c1a;
+        --hair: rgba(255, 255, 255, 0.14);
+        --lime: #c6ff3d;
+        --paper: #f3f2ee;
+        --muted: #a3a29b;
+        --orange: #ff7a1a;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      body {
+        background:
+          radial-gradient(1300px 950px at 100% 0%, rgba(198, 255, 61, 0.1), rgba(198, 255, 61, 0.035) 38%, rgba(198, 255, 61, 0) 70%),
+          #121211;
+        color: var(--paper);
+        font-family: 'Host Grotesk', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      canvas.gl {
+        position: absolute;
+        inset: 0;
+        display: block;
+      }
+      #hud {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #wires {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: visible;
+      }
+      .abs {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+      .mono {
+        font-family: 'Fragment Mono', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+      .kicker {
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--lime);
+        white-space: nowrap;
+      }
+
+      /* ---------- part labels ---------- */
+      .lab {
+        white-space: nowrap;
+      }
+      .lab h3 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 38px;
+        line-height: 44px;
+        letter-spacing: -0.015em;
+      }
+      .lab small {
+        display: block;
+        margin-top: 4px;
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--muted);
+      }
+      .lab.right {
+        text-align: left;
+      }
+
+      /* ---------- the burst's frames ---------- */
+      .thumb {
+        width: 132px;
+        height: 92px;
+        border-radius: 10px;
+        border: 1.5px solid var(--lime);
+        background: #1c1c1a;
+        box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+        overflow: hidden;
+      }
+      .thumb canvas {
+        display: block;
+      }
+      .thumb span {
+        position: absolute;
+        right: 8px;
+        top: 5px;
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--paper);
+        letter-spacing: 0.08em;
+      }
+
+      /* ---------- pills ---------- */
+      .pill {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 16px;
+        border-radius: 999px;
+        border: 1.5px solid var(--lime);
+        background: rgba(18, 18, 17, 0.9);
+        box-shadow: 0 0 24px rgba(198, 255, 61, 0.22);
+        color: var(--lime);
+        font-size: 20px;
+        line-height: 24px;
+        white-space: nowrap;
+      }
+      .tag {
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      /* ---------- the reading ---------- */
+      .read {
+        padding: 16px 24px 18px;
+        border: 2px solid var(--lime);
+        border-radius: 16px;
+        background: rgba(18, 18, 17, 0.93);
+        box-shadow: 0 0 34px rgba(198, 255, 61, 0.18);
+        white-space: nowrap;
+      }
+      .read .row {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+      }
+      .read b {
+        font-weight: 600;
+        font-size: 56px;
+        line-height: 60px;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .read .u {
+        font-weight: 500;
+        font-size: 34px;
+        line-height: 40px;
+      }
+      .read .pm {
+        font-weight: 400;
+        font-size: 34px;
+        line-height: 40px;
+        color: var(--muted);
+        font-variant-numeric: tabular-nums;
+      }
+      .read small {
+        display: block;
+        margin-top: 6px;
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--muted);
+      }
+      .warnTag {
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--orange);
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hud">
+      <svg id="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <script type="module">
+      import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
+
+      const W = 1920,
+        H = 1080;
+      const SVGNS = 'http://www.w3.org/2000/svg';
+
+      // ------------------------------------------------------------ params and cues
+      const qs = new URLSearchParams(location.search);
+      const DUR = Math.max(6, parseFloat(qs.get('dur')) || 18);
+      const parseCues = (raw) => {
+        if (!raw) return {};
+        for (const s of [raw, decodeURIComponent(raw)]) {
+          try {
+            const o = JSON.parse(s);
+            if (o && typeof o === 'object') return o;
+          } catch (e) {}
+        }
+        return {};
+      };
+      const given = parseCues(qs.get('cues'));
+      // Defaults are fractions of dur, matching the pacing of an 18 s take.
+      const FRAC = { scene: 0.0167, pole: 0.0833, burst: 0.3333, uplink: 0.4444, opencv: 0.6111, rise: 0.75 };
+      const CUE = {};
+      const has = (k) => given[k] !== null && given[k] !== '' && given[k] !== undefined && Number.isFinite(Number(given[k]));
+      for (const k of Object.keys(FRAC)) CUE[k] = has(k) ? Number(given[k]) : FRAC[k] * DUR;
+      CUE.end = has('end') ? Number(given.end) : Math.min(DUR - 0.3, Math.max(CUE.rise + 1.5, CUE.rise + 0.8 * (DUR - CUE.rise)));
+      window.__cues = CUE;
+
+      // The reading: 6.62 m when OpenCV first reports, rising to 6.80 m.
+      const G0 = 6.62,
+        G1 = 6.8,
+        SIGMA = 0.02;
+      const WARN = Number.isFinite(parseFloat(qs.get('warn'))) ? parseFloat(qs.get('warn')) : 6.7;
+
+      // ------------------------------------------------------------ easing (one ease)
+      const bezier = (x1, y1, x2, y2) => {
+        const cx = 3 * x1,
+          bx = 3 * (x2 - x1) - cx,
+          ax = 1 - cx - bx;
+        const cy = 3 * y1,
+          by = 3 * (y2 - y1) - cy,
+          ay = 1 - cy - by;
+        const sx = (t) => ((ax * t + bx) * t + cx) * t;
+        const sy = (t) => ((ay * t + by) * t + cy) * t;
+        const dx = (t) => (3 * ax * t + 2 * bx) * t + cx;
+        return (x) => {
+          if (x <= 0) return 0;
+          if (x >= 1) return 1;
+          let t = x;
+          for (let i = 0; i < 8; i++) {
+            const e = sx(t) - x,
+              d = dx(t);
+            if (Math.abs(e) < 1e-6) return sy(t);
+            if (Math.abs(d) < 1e-6) break;
+            t -= e / d;
+          }
+          let lo = 0,
+            hi = 1;
+          t = x;
+          for (let i = 0; i < 30; i++) {
+            const v = sx(t);
+            if (Math.abs(v - x) < 1e-6) break;
+            if (v < x) lo = t;
+            else hi = t;
+            t = (lo + hi) / 2;
+          }
+          return sy(t);
+        };
+      };
+      const ease = bezier(0.16, 1, 0.3, 1);
+      // Only for travel between stops (packet, camera, water), never for entrances.
+      const glide = (p) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p));
+      const clamp01 = (v) => Math.min(1, Math.max(0, v));
+      const prog = (t, t0, d) => clamp01((t - t0) / d);
+      const lerp = (a, b, f) => a + (b - a) * f;
+      const deg = (d) => (d * Math.PI) / 180;
+      /** Integer hash in [0, 1): the only "randomness", fixed by its seed. */
+      const hash = (a, b = 0) => {
+        let h = (Math.imul(a + 0x9e37, 0x85ebca6b) ^ Math.imul(b + 0x7f4a, 0xc2b2ae35)) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x45d9f3b) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x45d9f3b) >>> 0;
+        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+      };
+      const rgb = (hex) => [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+      const mix = (a, b, f, alphaA = 1, alphaB = 1) => {
+        const A = rgb(a),
+          B = rgb(b);
+        return `rgba(${A.map((v, i) => Math.round(lerp(v, B[i], f))).join(',')},${lerp(alphaA, alphaB, f).toFixed(3)})`;
+      };
+      /** Every entrance: a small rise plus a fade, on the one ease. */
+      const enter = (t, t0, d = 0.7) => ease(prog(t, t0, d));
+
+      const LIME = '#c6ff3d',
+        ORANGE = '#ff7a1a',
+        PAPER = '#f3f2ee',
+        MUTED = '#a3a29b';
+
+      // ------------------------------------------------------------ DOM helpers
+      const hud = document.getElementById('hud');
+      const wires = document.getElementById('wires');
+      const el = (tag, cls, html = '') => {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        e.innerHTML = html;
+        hud.append(e);
+        return e;
+      };
+      const svg = (tag, attrs, parent = wires) => {
+        const e = document.createElementNS(SVGNS, tag);
+        for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+        parent.append(e);
+        return e;
+      };
+      const put = (node, x, y, o) => {
+        node.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+        node.style.opacity = o.toFixed(3);
+      };
+      const f1 = (v) => v.toFixed(1);
+
+      await Promise.all(
+        ['600 38px "Host Grotesk"', '600 56px "Host Grotesk"', '700 40px "Host Grotesk"', '400 34px "Host Grotesk"', '20px "Fragment Mono"'].map((f) =>
+          document.fonts.load(f),
+        ),
+      );
+      await document.fonts.ready;
+
+      // ------------------------------------------------------------ renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H);
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.NoToneMapping;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.domElement.className = 'gl';
+      document.body.prepend(renderer.domElement);
+      const ANISO = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+
+      const world = new THREE.Scene();
+      world.fog = new THREE.Fog('#121211', 26, 78);
+      const camera = new THREE.PerspectiveCamera(30, W / H, 0.1, 300);
+      const tmpV = new THREE.Vector3();
+      const toScreen = (v) => {
+        tmpV.copy(v).project(camera);
+        return { x: ((tmpV.x + 1) / 2) * W, y: ((1 - tmpV.y) / 2) * H, z: tmpV.z };
+      };
+
+      world.add(new THREE.HemisphereLight('#f3f2ee', '#121211', 1.05));
+      const key = new THREE.DirectionalLight('#fffdf6', 2.3);
+      key.position.set(7, 16, 11);
+      key.target.position.set(0, 0, -1);
+      key.castShadow = true;
+      key.shadow.mapSize.set(2048, 2048);
+      key.shadow.radius = 5;
+      key.shadow.bias = -0.0006;
+      key.shadow.normalBias = 0.02;
+      Object.assign(key.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 1, far: 50 });
+      world.add(key, key.target);
+      const fill = new THREE.DirectionalLight('#dfe3e8', 0.55);
+      fill.position.set(-10, 6, 6);
+      world.add(fill);
+
+      const canvasTex = (w, h, draw) => {
+        const c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        draw(c.getContext('2d'), w, h);
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = ANISO;
+        tex.userData.canvas = c;
+        return tex;
+      };
+      const cLime = new THREE.Color(LIME),
+        cOrange = new THREE.Color(ORANGE),
+        cHair = new THREE.Color('#ffffff');
+
+      // ------------------------------------------------------------ helpers: rounded shapes, bevelled boxes, beams
+      const rrShape = (w, h, r) => {
+        const s = new THREE.Shape(),
+          x = w / 2,
+          y = h / 2;
+        s.moveTo(-x + r, -y);
+        s.lineTo(x - r, -y);
+        s.quadraticCurveTo(x, -y, x, -y + r);
+        s.lineTo(x, y - r);
+        s.quadraticCurveTo(x, y, x - r, y);
+        s.lineTo(-x + r, y);
+        s.quadraticCurveTo(-x, y, -x, y - r);
+        s.lineTo(-x, -y + r);
+        s.quadraticCurveTo(-x, -y, -x + r, -y);
+        return s;
+      };
+      /** A box with rounded corners along its depth (local z) and a small chamfer, plus hairline outlines. */
+      const bevelBox = (w, h, d, r, color, { rough = 0.7, metal = 0.1 } = {}) => {
+        const b = Math.min(0.018, d * 0.15);
+        const g = new THREE.ExtrudeGeometry(rrShape(w - 2 * b, h - 2 * b, Math.max(0.004, r - b)), {
+          depth: d - 2 * b,
+          bevelEnabled: true,
+          bevelThickness: b,
+          bevelSize: b,
+          bevelSegments: 1,
+          curveSegments: 5,
+        });
+        g.translate(0, 0, -(d - 2 * b) / 2);
+        const mat = new THREE.MeshStandardMaterial({ color, roughness: rough, metalness: metal });
+        const mesh = new THREE.Mesh(g, mat);
+        mesh.castShadow = true;
+        const lg = new THREE.BufferGeometry().setFromPoints(rrShape(w, h, r).getPoints(5).map((p) => new THREE.Vector3(p.x, p.y, 0)));
+        const em = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0.18, toneMapped: false });
+        for (const z of [d / 2 - b, -(d / 2 - b)]) {
+          const l = new THREE.LineLoop(lg, em);
+          l.position.z = z;
+          mesh.add(l);
+        }
+        mesh.userData.edge = em;
+        return mesh;
+      };
+      const YUP = new THREE.Vector3(0, 1, 0);
+      const beam = (a, b, r, mat, seg = 8) => {
+        const len = a.distanceTo(b);
+        const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, len, seg), mat);
+        m.position.copy(a).add(b).multiplyScalar(0.5);
+        m.quaternion.setFromUnitVectors(YUP, b.clone().sub(a).normalize());
+        m.castShadow = true;
+        return m;
+      };
+      const hairMat = (opacity = 0.16) => new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity, toneMapped: false });
+
+      // ------------------------------------------------------------ the river and its banks
+      // Gauge metres map straight to world units: the water surface sits at y = 0 when the gauge reads G0.
+      const yOf = (g) => g - G0;
+      const BANK_Y = 0.9,
+        BED_Y = -2.7,
+        NEAR_CREST = -0.6,
+        NEAR_TOE = 1.1,
+        FAR_TOE = 13.6,
+        FAR_CREST = 15.4,
+        FAR_Y = 0.7;
+      const groundMat = new THREE.MeshStandardMaterial({ color: '#171716', roughness: 0.92, metalness: 0, flatShading: true });
+      const bankFrom = (pts, z0, z1) => {
+        const s = new THREE.Shape(pts.map(([x, y]) => new THREE.Vector2(x, y)));
+        const g = new THREE.ExtrudeGeometry(s, { depth: z1 - z0, bevelEnabled: false });
+        g.translate(0, 0, z0);
+        const m = new THREE.Mesh(g, groundMat);
+        m.receiveShadow = true;
+        world.add(m);
+        return m;
+      };
+      const sceneGroup = new THREE.Group();
+      world.add(sceneGroup);
+      bankFrom(
+        [
+          [-60, BED_Y - 1],
+          [NEAR_TOE + 0.6, BED_Y - 1],
+          [NEAR_TOE, BED_Y],
+          [NEAR_CREST, BANK_Y],
+          [-60, BANK_Y],
+        ],
+        -90,
+        26,
+      );
+      bankFrom(
+        [
+          [FAR_TOE - 0.6, BED_Y - 1],
+          [90, BED_Y - 1],
+          [90, FAR_Y],
+          [FAR_CREST, FAR_Y],
+          [FAR_TOE, BED_Y],
+        ],
+        -90,
+        26,
+      );
+      // The crests get a hairline, like every other edge in the film.
+      for (const [x, y] of [
+        [NEAR_CREST, BANK_Y + 0.004],
+        [FAR_CREST, FAR_Y + 0.004],
+      ]) {
+        const g = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x, y, -90), new THREE.Vector3(x, y, 26)]);
+        world.add(new THREE.Line(g, hairMat(0.2)));
+      }
+      // Riverbed, so the water reads as depth rather than a hole.
+      {
+        const bed = new THREE.Mesh(new THREE.PlaneGeometry(40, 120), new THREE.MeshStandardMaterial({ color: '#141716', roughness: 1 }));
+        bed.rotation.x = -Math.PI / 2;
+        bed.position.set(7, BED_Y, -30);
+        world.add(bed);
+      }
+      // A few low stones along the near waterline, placed by hash.
+      {
+        const stoneGeo = new THREE.IcosahedronGeometry(0.22, 0);
+        const stoneMat = new THREE.MeshStandardMaterial({ color: '#262624', roughness: 0.9, flatShading: true });
+        for (let i = 0; i < 16; i++) {
+          const z = 5 - i * 1.5 - hash(i, 3) * 1.2;
+          const along = 0.15 + hash(i, 5) * 0.75; // fraction down the slope
+          const x = lerp(NEAR_CREST, NEAR_TOE, along);
+          const y = lerp(BANK_Y, BED_Y, along);
+          const s = new THREE.Mesh(stoneGeo, stoneMat);
+          s.position.set(x + 0.1, y + 0.05, z);
+          s.scale.set(0.8 + hash(i, 7) * 1.1, 0.45 + hash(i, 9) * 0.5, 0.8 + hash(i, 11) * 0.9);
+          s.rotation.set(hash(i, 13) * 3, hash(i, 15) * 3, 0);
+          s.receiveShadow = true;
+          world.add(s);
+        }
+      }
+
+      // ------------------------------------------------------------ water: dark teal-grey, ripples as a pure function of time
+      const waterMat = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        fog: true,
+        uniforms: THREE.UniformsUtils.merge([
+          THREE.UniformsLib.fog,
+          {
+            uTime: { value: 0 },
+            uBase: { value: new THREE.Color('#1e2a2a') },
+            uLight: { value: new THREE.Vector3(-0.25, 0.42, -1).normalize() },
+            uAlpha: { value: 0.94 },
+          },
+        ]),
+        vertexShader: /* glsl */ `
+          varying vec3 vW;
+          #include <fog_pars_vertex>
+          void main() {
+            vec4 w = modelMatrix * vec4(position, 1.0);
+            vW = w.xyz;
+            vec4 mvPosition = viewMatrix * w;
+            gl_Position = projectionMatrix * mvPosition;
+            #include <fog_vertex>
+          }`,
+        fragmentShader: /* glsl */ `
+          uniform float uTime;
+          uniform vec3 uBase;
+          uniform vec3 uLight;
+          uniform float uAlpha;
+          varying vec3 vW;
+          #include <fog_pars_fragment>
+          void wave(inout vec2 g, vec2 p, vec2 d, float k, float s, float a) {
+            g += a * k * cos(dot(d, p) * k + uTime * s) * d;
+          }
+          void main() {
+            vec2 p = vW.xz;
+            vec2 g = vec2(0.0);
+            // The river flows toward the viewer (+z); a few long swells and finer chop.
+            wave(g, p, normalize(vec2(0.18, 1.0)), 0.9, -1.1, 0.050);
+            wave(g, p, normalize(vec2(-0.45, 1.0)), 1.7, -1.7, 0.026);
+            wave(g, p, normalize(vec2(0.8, 0.6)), 3.1, -2.3, 0.012);
+            wave(g, p, normalize(vec2(-0.9, 0.35)), 5.3, -3.1, 0.006);
+            wave(g, p, normalize(vec2(0.3, -1.0)), 8.7, 3.9, 0.0035);
+            vec3 N = normalize(vec3(-g.x, 1.0, -g.y));
+            vec3 V = normalize(cameraPosition - vW);
+            float fres = pow(1.0 - max(dot(N, V), 0.0), 4.0);
+            vec3 R = reflect(-V, N);
+            float spec = pow(max(dot(R, uLight), 0.0), 140.0);
+            vec3 col = uBase * (0.92 + 0.22 * N.x) + fres * vec3(0.012, 0.016, 0.016) + spec * vec3(0.026, 0.032, 0.032);
+            gl_FragColor = vec4(col, uAlpha);
+            #include <colorspace_fragment>
+            #include <fog_fragment>
+          }`,
+      });
+      const water = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), waterMat);
+      water.rotation.x = -Math.PI / 2;
+      water.scale.set(FAR_CREST - NEAR_CREST + 4, 120, 1);
+      water.position.set((NEAR_CREST + FAR_CREST) / 2, 0, -32);
+      water.renderOrder = 2;
+      world.add(water);
+
+      // ------------------------------------------------------------ the staff gauge
+      const BOARD_W = 0.42,
+        G_LO = 5.9,
+        G_HI = 8.3;
+      const BOARD_H = G_HI - G_LO;
+      const GAUGE = new THREE.Vector3(2.15, 0, -0.35);
+      const GAUGE_YAW = -0.42;
+      const PX_M = 640; // texture pixels per metre
+      const gaugeTex = canvasTex(256, Math.round(BOARD_H * PX_M), (g, w, h) => {
+        g.fillStyle = '#f3f2ee';
+        g.fillRect(0, 0, w, h);
+        const yPx = (m) => h - (m - G_LO) * PX_M;
+        const cm = PX_M / 100;
+        const m0 = 10,
+          barW = 22,
+          toothW = 104;
+        for (let d = Math.ceil(G_LO * 10); d <= Math.floor(G_HI * 10); d++) {
+          const gm = d / 10;
+          const yb = yPx(gm);
+          const left = d % 2 === 0;
+          g.fillStyle = '#161615';
+          // The E: a 5 cm bar with three 1 cm teeth, alternating sides each decimetre.
+          const x0 = left ? m0 : w - m0 - barW;
+          g.fillRect(x0, yb - 5 * cm, barW, 5 * cm);
+          for (const c of [0, 2, 4]) g.fillRect(left ? m0 : w - m0 - toothW, yb - (c + 1) * cm, toothW, cm);
+          // Numbers: red metres, black decimetres, on the side opposite the E.
+          const nx = left ? w - m0 - 46 : m0 + 46;
+          if (d % 10 === 0) {
+            g.fillStyle = '#d8231a';
+            g.fillRect(0, yb - 1.2 * cm, w, 1.2 * cm);
+            g.font = '700 86px "Host Grotesk"';
+            g.textAlign = 'center';
+            g.textBaseline = 'alphabetic';
+            g.fillText(String(d / 10), nx, yb - 1.8 * cm);
+          } else {
+            g.fillStyle = '#161615';
+            g.font = '700 40px "Host Grotesk"';
+            g.textAlign = 'center';
+            g.textBaseline = 'alphabetic';
+            g.fillText(String(d % 10), nx, yb - 1.0 * cm);
+          }
+        }
+        g.strokeStyle = 'rgba(22,22,21,0.55)';
+        g.lineWidth = 4;
+        g.strokeRect(2, 2, w - 4, h - 4);
+      });
+      const gaugeGroup = new THREE.Group();
+      gaugeGroup.position.copy(GAUGE);
+      gaugeGroup.rotation.y = GAUGE_YAW;
+      world.add(gaugeGroup);
+      const boardMats = [
+        new THREE.MeshStandardMaterial({ color: '#d9d8d2', roughness: 0.6 }),
+        new THREE.MeshStandardMaterial({ map: gaugeTex, emissive: '#ffffff', emissiveMap: gaugeTex, emissiveIntensity: 0.32, roughness: 0.55 }),
+      ];
+      const boardMesh = new THREE.Mesh(new THREE.BoxGeometry(BOARD_W, BOARD_H, 0.035), [
+        boardMats[0],
+        boardMats[0],
+        boardMats[0],
+        boardMats[0],
+        boardMats[1],
+        boardMats[0],
+      ]);
+      boardMesh.position.set(0, yOf((G_LO + G_HI) / 2), 0.07);
+      boardMesh.castShadow = true;
+      gaugeGroup.add(boardMesh);
+      {
+        const steel = new THREE.MeshStandardMaterial({ color: '#3a3a36', roughness: 0.5, metalness: 0.55 });
+        const post = new THREE.Mesh(new THREE.BoxGeometry(0.13, yOf(G_HI) + 0.25 - BED_Y, 0.1), steel);
+        post.position.set(0, (yOf(G_HI) + 0.25 + BED_Y) / 2, 0);
+        post.castShadow = true;
+        gaugeGroup.add(post);
+        const cap = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.05, 0.16), steel);
+        cap.position.set(0, yOf(G_HI) + 0.27, 0.02);
+        gaugeGroup.add(cap);
+        // Two clamps holding the board to the post.
+        for (const g of [6.05, 8.285]) {
+          const c = new THREE.Mesh(new THREE.BoxGeometry(BOARD_W + 0.04, 0.05, 0.02), steel);
+          c.position.set(0, yOf(g), 0.1);
+          gaugeGroup.add(c);
+        }
+        const e = new THREE.LineSegments(new THREE.EdgesGeometry(boardMesh.geometry), hairMat(0.25));
+        boardMesh.add(e);
+      }
+      const BFRONT = 0.07 + 0.0185; // the board's face, in gauge-local z
+      const gLocal = (x, g, z = BFRONT + 0.004, out = new THREE.Vector3()) => gaugeGroup.localToWorld(out.set(x, yOf(g), z));
+      // Rings where the river meets the post.
+      const rippleGeo = new THREE.RingGeometry(0.92, 1.0, 64);
+      rippleGeo.rotateX(-Math.PI / 2);
+      const ripples = [0, 1, 2].map(() => {
+        const m = new THREE.Mesh(
+          rippleGeo,
+          new THREE.MeshBasicMaterial({ color: '#cfd8d6', transparent: true, opacity: 0, depthWrite: false, toneMapped: false }),
+        );
+        m.renderOrder = 3;
+        world.add(m);
+        return m;
+      });
+
+      // ------------------------------------------------------------ the field node on its pole
+      const POLE = new THREE.Vector3(-2.15, BANK_Y, 0.75);
+      const POLE_H = 4.45;
+      const metal = new THREE.MeshStandardMaterial({ color: '#4a4a45', roughness: 0.42, metalness: 0.6 });
+      const housing = '#2c2c29';
+      const nodeGroup = new THREE.Group();
+      nodeGroup.position.copy(POLE);
+      world.add(nodeGroup);
+      const poleRig = new THREE.Group();
+      nodeGroup.add(poleRig);
+      {
+        const pole = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.07, POLE_H, 16), metal);
+        pole.position.y = POLE_H / 2;
+        pole.castShadow = true;
+        poleRig.add(pole);
+        const foot = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.26, 0.3, 0.16, 20),
+          new THREE.MeshStandardMaterial({ color: '#2a2a27', roughness: 0.9 }),
+        );
+        foot.position.y = 0.06;
+        foot.castShadow = true;
+        foot.receiveShadow = true;
+        poleRig.add(foot);
+        const capTop = new THREE.Mesh(new THREE.CylinderGeometry(0.075, 0.075, 0.05, 16), metal);
+        capTop.position.y = POLE_H;
+        poleRig.add(capTop);
+      }
+      const band = (y) => {
+        const b = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.05, 16), metal);
+        b.position.y = y;
+        return b;
+      };
+
+      // Solar panel, tilted up toward the sky and the viewer.
+      const panel = new THREE.Group();
+      {
+        const PW = 1.3,
+          PD = 0.86;
+        const frame = bevelBox(PW, PD, 0.05, 0.03, '#34342f', { rough: 0.5, metal: 0.4 });
+        panel.add(frame);
+        const cells = canvasTex(520, 344, (g, w, h) => {
+          g.fillStyle = '#1b2324';
+          g.fillRect(0, 0, w, h);
+          const cols = 6,
+            rows = 4,
+            pad = 10,
+            gap = 6;
+          const cw = (w - 2 * pad - (cols - 1) * gap) / cols,
+            ch = (h - 2 * pad - (rows - 1) * gap) / rows;
+          for (let r = 0; r < rows; r++)
+            for (let c = 0; c < cols; c++) {
+              const x = pad + c * (cw + gap),
+                y = pad + r * (ch + gap);
+              g.fillStyle = '#22302f';
+              g.fillRect(x, y, cw, ch);
+              g.strokeStyle = 'rgba(190,210,205,0.16)';
+              g.lineWidth = 1.5;
+              for (let k = 1; k < 4; k++) {
+                g.beginPath();
+                g.moveTo(x + (cw * k) / 4, y);
+                g.lineTo(x + (cw * k) / 4, y + ch);
+                g.stroke();
+              }
+            }
+        });
+        const face = new THREE.Mesh(
+          new THREE.PlaneGeometry(PW - 0.06, PD - 0.06),
+          new THREE.MeshStandardMaterial({ map: cells, roughness: 0.28, metalness: 0.35 }),
+        );
+        face.position.z = 0.027;
+        panel.add(face);
+        panel.userData.edge = frame.userData.edge;
+        panel.rotation.x = deg(-58);
+        panel.rotation.y = deg(-20);
+      }
+      const panelMount = new THREE.Group();
+      panelMount.position.set(0, POLE_H + 0.12, 0);
+      panelMount.add(panel);
+      {
+        const br = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.22, 0.08), metal);
+        br.position.y = -0.08;
+        panelMount.add(br);
+      }
+      nodeGroup.add(panelMount);
+
+      // Battery box, high on the pole, under the panel.
+      const battery = new THREE.Group();
+      {
+        const box = bevelBox(0.46, 0.56, 0.3, 0.05, housing);
+        box.position.z = 0.24;
+        battery.add(box);
+        // Vent slots.
+        const ventMat = new THREE.MeshBasicMaterial({ color: '#141413' });
+        for (let i = 0; i < 4; i++) {
+          const v = new THREE.Mesh(new THREE.PlaneGeometry(0.26, 0.022), ventMat);
+          v.position.set(0, 0.16 - i * 0.05, 0.24 + 0.151);
+          battery.add(v);
+        }
+        battery.add(band(0.18), band(-0.18));
+        battery.userData.edge = box.userData.edge;
+        battery.position.y = 3.62;
+      }
+      nodeGroup.add(battery);
+
+      // Camera on a short arm, aimed at the gauge.
+      const AIM_G = 6.75;
+      const camRig = new THREE.Group();
+      const camHead = new THREE.Group();
+      const lensGlow = new THREE.Sprite(
+        new THREE.SpriteMaterial({
+          map: canvasTex(128, 128, (g) => {
+            const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+            grad.addColorStop(0, 'rgba(255,255,255,1)');
+            grad.addColorStop(0.3, 'rgba(255,255,255,0.4)');
+            grad.addColorStop(1, 'rgba(255,255,255,0)');
+            g.fillStyle = grad;
+            g.fillRect(0, 0, 128, 128);
+          }),
+          color: LIME,
+          transparent: true,
+          opacity: 0,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+          toneMapped: false,
+          fog: false,
+        }),
+      );
+      const dotTex = lensGlow.material.map;
+      const LENS_Z = 0.38;
+      {
+        const arm = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.06, 0.06), metal);
+        arm.position.set(0.21, 0, 0);
+        camRig.add(arm, band(0));
+        const body = bevelBox(0.24, 0.22, 0.62, 0.05, '#d3d2cb', { rough: 0.55, metal: 0.05 });
+        body.userData.edge.color.set('#ffffff');
+        body.userData.edge.opacity = 0.35;
+        camHead.add(body);
+        const hood = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.018, 0.7), new THREE.MeshStandardMaterial({ color: '#bdbcb5', roughness: 0.55 }));
+        hood.position.set(0, 0.13, 0.07);
+        hood.castShadow = true;
+        camHead.add(hood);
+        const ring = new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.05, 24), new THREE.MeshStandardMaterial({ color: '#2a2a27', roughness: 0.4, metalness: 0.5 }));
+        ring.rotation.x = Math.PI / 2;
+        ring.position.z = 0.33;
+        camHead.add(ring);
+        const glass = new THREE.Mesh(new THREE.CircleGeometry(0.066, 24), new THREE.MeshStandardMaterial({ color: '#0b0e10', roughness: 0.12, metalness: 0.8 }));
+        glass.position.z = LENS_Z - 0.024;
+        camHead.add(glass);
+        lensGlow.position.z = LENS_Z;
+        lensGlow.scale.setScalar(0.5);
+        camHead.add(lensGlow);
+        const tilt = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.12, 0.07), metal);
+        tilt.position.set(0, -0.15, -0.05);
+        camHead.add(tilt);
+        camHead.position.set(0.44, 0.13, 0);
+        camRig.add(camHead);
+        camRig.userData.edge = body.userData.edge;
+        camRig.position.y = 2.82;
+      }
+      nodeGroup.add(camRig);
+      nodeGroup.updateMatrixWorld(true);
+      camHead.lookAt(gLocal(0, AIM_G));
+
+      // 4G modem, low on the pole, with a stub antenna and a status light.
+      const modem = new THREE.Group();
+      const modemLed = new THREE.Mesh(new THREE.SphereGeometry(0.022, 12, 8), new THREE.MeshBasicMaterial({ color: LIME, toneMapped: false, transparent: true }));
+      const ANT_TIP = new THREE.Vector3(0.09, 0.46, 0.2);
+      {
+        const box = bevelBox(0.3, 0.38, 0.13, 0.04, housing);
+        box.position.z = 0.17;
+        modem.add(box);
+        const ant = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.02, 0.3, 10), new THREE.MeshStandardMaterial({ color: '#1a1a18', roughness: 0.6 }));
+        ant.position.set(0.09, 0.32, 0.2);
+        ant.castShadow = true;
+        modem.add(ant);
+        modemLed.position.set(-0.08, 0.11, 0.17 + 0.066);
+        modem.add(modemLed);
+        modem.add(band(0.1), band(-0.1));
+        modem.userData.edge = box.userData.edge;
+        modem.position.y = 1.95;
+      }
+      nodeGroup.add(modem);
+      nodeGroup.traverse((o) => {
+        if (o.isMesh) o.castShadow = true;
+      });
+
+      // What the camera sees: a frustum from the lens to a window on the gauge.
+      const VIEW_LO = 6.25,
+        VIEW_HI = 7.35,
+        VIEW_X = 0.48;
+      const lensW = new THREE.Vector3();
+      camHead.updateMatrixWorld(true);
+      camHead.localToWorld(lensW.set(0, 0, LENS_Z));
+      const viewCorners = [
+        [-VIEW_X, VIEW_LO],
+        [VIEW_X, VIEW_LO],
+        [VIEW_X, VIEW_HI],
+        [-VIEW_X, VIEW_HI],
+      ].map(([x, g]) => gLocal(x, g, BFRONT + 0.01));
+      const frustumMat = new THREE.LineBasicMaterial({ color: LIME, transparent: true, opacity: 0, toneMapped: false, fog: false, depthWrite: false });
+      {
+        const pts = [];
+        for (let i = 0; i < 4; i++) pts.push(lensW, viewCorners[i], viewCorners[i], viewCorners[(i + 1) % 4]);
+        const fr = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), frustumMat);
+        fr.renderOrder = 5;
+        world.add(fr);
+      }
+      const shotDot = new THREE.Mesh(new THREE.SphereGeometry(0.05, 14, 10), new THREE.MeshBasicMaterial({ color: LIME, transparent: true, toneMapped: false, fog: false }));
+      {
+        const halo = new THREE.Sprite(
+          new THREE.SpriteMaterial({ map: dotTex, color: LIME, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, fog: false }),
+        );
+        halo.scale.setScalar(0.45);
+        shotDot.add(halo);
+        shotDot.userData.halo = halo;
+      }
+      shotDot.visible = false;
+      shotDot.renderOrder = 6;
+      shotDot.userData.halo.renderOrder = 6;
+      world.add(shotDot);
+      const viewMid = gLocal(0, (VIEW_LO + VIEW_HI) / 2, BFRONT + 0.02);
+
+      // ------------------------------------------------------------ the mobile tower, the uplink and the cloud
+      const TOWER = new THREE.Vector3(17, FAR_Y, -12);
+      const TOWER_H = 8.6;
+      const towerGroup = new THREE.Group();
+      towerGroup.position.copy(TOWER);
+      world.add(towerGroup);
+      const towerMat = new THREE.MeshStandardMaterial({ color: '#4a4a45', roughness: 0.5, metalness: 0.5 });
+      {
+        const SECT = 7,
+          B0 = 1.0,
+          B1 = 0.28;
+        const half = (y) => lerp(B0, B1, y / TOWER_H);
+        const C4 = [
+          [1, 1],
+          [-1, 1],
+          [-1, -1],
+          [1, -1],
+        ];
+        for (const [sx, sz] of C4)
+          towerGroup.add(beam(new THREE.Vector3(sx * B0, 0, sz * B0), new THREE.Vector3(sx * B1, TOWER_H, sz * B1), 0.05, towerMat, 6));
+        const pts = [];
+        for (let s = 0; s < SECT; s++) {
+          const y0 = (s / SECT) * TOWER_H,
+            y1 = ((s + 1) / SECT) * TOWER_H;
+          const h0 = half(y0),
+            h1 = half(y1);
+          for (let f = 0; f < 4; f++) {
+            const [ax, az] = C4[f],
+              [bx, bz] = C4[(f + 1) % 4];
+            pts.push(new THREE.Vector3(ax * h0, y0, az * h0), new THREE.Vector3(bx * h1, y1, bz * h1));
+            pts.push(new THREE.Vector3(bx * h0, y0, bz * h0), new THREE.Vector3(ax * h1, y1, az * h1));
+            pts.push(new THREE.Vector3(ax * h1, y1, az * h1), new THREE.Vector3(bx * h1, y1, bz * h1));
+          }
+        }
+        towerGroup.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(pts), hairMat(0.38)));
+        // Platform, three sector antennas and a mast.
+        const plat = new THREE.Mesh(new THREE.BoxGeometry(1.1, 0.06, 1.1), towerMat);
+        plat.position.y = TOWER_H - 0.9;
+        towerGroup.add(plat);
+        for (let k = 0; k < 3; k++) {
+          const a = deg(30 + k * 120);
+          const ant = bevelBox(0.26, 1.0, 0.1, 0.03, '#d3d2cb', { rough: 0.6 });
+          ant.position.set(Math.cos(a) * 0.48, TOWER_H - 0.35, Math.sin(a) * 0.48);
+          ant.rotation.y = -a + Math.PI / 2;
+          towerGroup.add(ant);
+        }
+        towerGroup.add(beam(new THREE.Vector3(0, TOWER_H - 0.9, 0), new THREE.Vector3(0, TOWER_H + 1.0, 0), 0.04, towerMat, 6));
+      }
+      const TOWER_TOP = TOWER.clone().add(new THREE.Vector3(0, TOWER_H + 1.05, 0));
+      const beacon = new THREE.Sprite(
+        new THREE.SpriteMaterial({ map: dotTex, color: LIME, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, fog: false }),
+      );
+      beacon.position.copy(TOWER_TOP);
+      beacon.scale.setScalar(1.4);
+      world.add(beacon);
+      const towerRingGeo = new THREE.RingGeometry(0.9, 1.0, 64);
+      const towerRing = new THREE.Mesh(
+        towerRingGeo,
+        new THREE.MeshBasicMaterial({ color: LIME, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false, fog: false }),
+      );
+      towerRing.position.copy(TOWER_TOP);
+      towerRing.renderOrder = 5;
+      beacon.renderOrder = 5;
+      world.add(towerRing);
+
+      // The cloud: a small floating slab in the same family as the architecture scene.
+      const TILE = new THREE.Vector3(5.2, 7.0, -8);
+      const TW = 3.4,
+        TD = 2.1,
+        TT = 0.2;
+      const tileGroup = new THREE.Group();
+      tileGroup.position.copy(TILE);
+      tileGroup.rotation.set(deg(26), deg(-10), 0);
+      world.add(tileGroup);
+      const tileMat = new THREE.MeshStandardMaterial({ color: '#1c1c1a', roughness: 0.85, transparent: true, opacity: 0 });
+      const tileEdge = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, toneMapped: false, fog: false });
+      const tileGlowMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, blending: THREE.AdditiveBlending, depthWrite: false, toneMapped: false, fog: false });
+      {
+        const s = rrShape(TW, TD, 0.3);
+        const g = new THREE.ExtrudeGeometry(s, { depth: TT, bevelEnabled: false, curveSegments: 10 });
+        g.rotateX(-Math.PI / 2);
+        g.translate(0, -TT / 2, 0);
+        const m = new THREE.Mesh(g, tileMat);
+        tileGroup.add(m);
+        const outline = (y) => new THREE.BufferGeometry().setFromPoints(s.getPoints(10).map((p) => new THREE.Vector3(p.x, y, -p.y)));
+        tileGroup.add(new THREE.LineLoop(outline(TT / 2 + 0.004), tileEdge), new THREE.LineLoop(outline(-TT / 2), tileEdge));
+        tileGlowMat.map = canvasTex(512, 324, (c, w, h) => {
+          const grad = c.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.62);
+          grad.addColorStop(0, 'rgba(198,255,61,0.55)');
+          grad.addColorStop(0.55, 'rgba(198,255,61,0.22)');
+          grad.addColorStop(1, 'rgba(198,255,61,0.06)');
+          c.fillStyle = grad;
+          c.beginPath();
+          c.roundRect(0, 0, w, h, (0.3 / TW) * w);
+          c.fill();
+        });
+        const glow = new THREE.Mesh(new THREE.PlaneGeometry(TW, TD), tileGlowMat);
+        glow.rotation.x = -Math.PI / 2;
+        glow.position.y = TT / 2 + 0.006;
+        tileGroup.add(glow);
+      }
+      const TILE_TOP = TILE.clone().add(new THREE.Vector3(0, 0.25, 0));
+
+      // The uplink: modem → tower → cloud, as two arcs that draw on behind the packet.
+      nodeGroup.updateMatrixWorld(true);
+      const MODEM_TIP = modem.localToWorld(ANT_TIP.clone());
+      const arcA = new THREE.QuadraticBezierCurve3(
+        MODEM_TIP,
+        MODEM_TIP.clone().lerp(TOWER_TOP, 0.5).add(new THREE.Vector3(0, 4.2, 0)),
+        TOWER_TOP,
+      );
+      const arcB = new THREE.QuadraticBezierCurve3(TOWER_TOP, TOWER_TOP.clone().lerp(TILE_TOP, 0.5).add(new THREE.Vector3(0, 2.6, 0)), TILE_TOP);
+      const TUBE_SEG = 96,
+        TUBE_RAD = 6;
+      const tubeMat = new THREE.MeshBasicMaterial({ color: LIME, transparent: true, opacity: 0.55, toneMapped: false, fog: false, depthWrite: false });
+      const tubeA = new THREE.Mesh(new THREE.TubeGeometry(arcA, TUBE_SEG, 0.035, TUBE_RAD, false), tubeMat);
+      const tubeB = new THREE.Mesh(new THREE.TubeGeometry(arcB, TUBE_SEG, 0.035, TUBE_RAD, false), tubeMat);
+      tubeA.renderOrder = tubeB.renderOrder = 5;
+      world.add(tubeA, tubeB);
+      const drawTube = (tube, f) => {
+        const n = Math.floor(clamp01(f) * TUBE_SEG);
+        tube.visible = n > 0;
+        tube.geometry.setDrawRange(0, n * TUBE_RAD * 6);
+      };
+      const packet = new THREE.Mesh(new THREE.SphereGeometry(0.17, 18, 12), new THREE.MeshBasicMaterial({ color: LIME, transparent: true, toneMapped: false, fog: false }));
+      {
+        const halo = new THREE.Sprite(
+          new THREE.SpriteMaterial({ map: dotTex, color: LIME, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false, fog: false }),
+        );
+        halo.scale.setScalar(1.5);
+        packet.add(halo);
+        packet.userData.halo = halo;
+      }
+      packet.visible = false;
+      packet.renderOrder = 6;
+      packet.userData.halo.renderOrder = 6;
+      world.add(packet);
+
+      // ------------------------------------------------------------ HUD
+      const kicker = el('div', 'abs mono kicker', 'Field node · Concept illustration');
+
+      const PARTS = {
+        solar: { title: 'Solar + battery', line: 'Runs off-grid, day and night' },
+        cam: { title: 'Camera · 5-frame burst', line: 'Aimed at the staff gauge' },
+        modem: { title: '4G modem', line: 'Sends each burst to the cloud' },
+      };
+      const labels = {};
+      for (const [k, v] of Object.entries(PARTS)) {
+        const node = el('div', 'abs lab', `<h3>${v.title}</h3><small class="mono">${v.line}</small>`);
+        const leads = [0, 1].map(() => svg('path', { fill: 'none', 'stroke-width': 2, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-linecap': 'round' }));
+        const dots = [0, 1].map(() => svg('circle', { r: 5 }));
+        labels[k] = { node, leads, dots };
+      }
+
+      // Five frames, drawn from the gauge texture: what the burst saw.
+      const thumbs = [0, 1, 2, 3, 4].map((i) => {
+        const node = el('div', 'abs thumb', `<canvas width="132" height="92"></canvas><span class="mono">0${i + 1}</span>`);
+        const g = node.querySelector('canvas').getContext('2d');
+        const src = gaugeTex.userData.canvas;
+        const sy = (m) => src.height - (m - G_LO) * PX_M;
+        const shift = (hash(i, 41) - 0.5) * 3;
+        g.fillStyle = '#20201e';
+        g.fillRect(0, 0, 132, 92);
+        g.fillStyle = '#2a2a27';
+        g.fillRect(0, 0, 132, 40);
+        g.drawImage(src, 0, sy(7.42), 256, (7.42 - 6.3) * PX_M, 38 + shift, -2, 34, 100);
+        const wy = 2 + ((7.42 - G0) / (7.42 - 6.3)) * 96;
+        g.fillStyle = 'rgba(30,42,42,0.94)';
+        g.fillRect(0, wy, 132, 92 - wy);
+        g.strokeStyle = 'rgba(200,215,212,0.35)';
+        g.lineWidth = 1;
+        for (let r = 0; r < 3; r++) {
+          g.beginPath();
+          g.moveTo(8 + r * 30 + hash(i, r) * 12, wy + 8 + r * 7);
+          g.lineTo(40 + r * 30 + hash(i, r) * 12, wy + 8 + r * 7);
+          g.stroke();
+        }
+        return node;
+      });
+
+      const towerTag = el('div', 'abs mono tag', 'Mobile tower');
+      const tileLab = el('div', 'abs lab', `<h3>AWS · Graviton4</h3><small class="mono">EC2 · OpenCV 5</small>`);
+      const tileLead = svg('path', { fill: 'none', 'stroke-width': 2, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-linecap': 'round', stroke: LIME });
+      const tileDot = svg('circle', { r: 5, fill: LIME });
+      const every = el(
+        'div',
+        'abs pill mono',
+        `<svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#c6ff3d" stroke-width="2"/><path d="M10 5.5 V10 L13 12" fill="none" stroke="#c6ff3d" stroke-width="2" stroke-linecap="round"/></svg><span>Every 5 minutes</span>`,
+      );
+
+      // OpenCV's overlay on the gauge.
+      const ov = svg('g', {});
+      const roi = [0, 1, 2, 3].map(() => svg('path', { fill: 'none', stroke: LIME, 'stroke-width': 2.5, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, ov));
+      const TICKS = [];
+      for (let d = 64; d <= 76; d++) TICKS.push(d / 10);
+      const ticks = TICKS.map((g) => ({
+        g,
+        line: svg('line', { stroke: LIME, 'stroke-width': Math.abs(g * 2 - Math.round(g * 2)) < 1e-6 ? 2.5 : 2, 'stroke-linecap': 'round' }, ov),
+        text:
+          Math.abs(g * 2 - Math.round(g * 2)) < 1e-6
+            ? svg('text', { fill: LIME, 'font-family': 'Fragment Mono', 'font-size': 20, 'dominant-baseline': 'central' }, ov)
+            : null,
+      }));
+      ticks.forEach((tk) => tk.text && (tk.text.textContent = tk.g.toFixed(1)));
+      const warnLine = svg('line', { stroke: ORANGE, 'stroke-width': 2.5, 'stroke-dasharray': '9 7', 'stroke-linecap': 'round' }, ov);
+      const warnText = svg('text', { fill: ORANGE, 'font-family': 'Fragment Mono', 'font-size': 20, 'letter-spacing': '0.16em', 'text-anchor': 'end', 'dominant-baseline': 'central' }, ov);
+      warnText.textContent = `WARNING ${WARN.toFixed(1)} M`;
+      const wlGlow = svg('line', { stroke: LIME, 'stroke-width': 12, 'stroke-linecap': 'round', opacity: 0.18 }, ov);
+      const wl = svg('line', { stroke: LIME, 'stroke-width': 3.5, 'stroke-linecap': 'round' }, ov);
+      const wlEnds = [0, 1].map(() => svg('circle', { r: 5, fill: LIME }, ov));
+      const chipLead = svg('path', { fill: 'none', stroke: LIME, 'stroke-width': 2, pathLength: 1, 'stroke-dasharray': '1 1' }, ov);
+      const read = el(
+        'div',
+        'abs read',
+        `<div class="row"><b>${G0.toFixed(2)}</b><span class="u">m</span><span class="pm">± ${SIGMA.toFixed(2)}</span></div><small class="mono">OpenCV 5 · Scharr · DIS flow · Lab colour</small>`,
+      );
+      const readVal = read.querySelector('b');
+      const warnTag = el('div', 'abs mono warnTag', `Above warning ${WARN.toFixed(1)} m`);
+
+      // ------------------------------------------------------------ the timeline's derived beats
+      const POLE_RISE = 0.8;
+      const STEP = Math.min(0.75, Math.max(0.3, (CUE.burst - CUE.pole - POLE_RISE - 0.9) / 4));
+      const PART_AT = { panel: CUE.pole + POLE_RISE, battery: CUE.pole + POLE_RISE + STEP, cam: CUE.pole + POLE_RISE + 2 * STEP, modem: CUE.pole + POLE_RISE + 3 * STEP };
+      const LABEL_AT = { solar: PART_AT.battery + 0.1, cam: PART_AT.cam + 0.1, modem: PART_AT.modem + 0.1 };
+      const SHOT = Math.min(0.32, Math.max(0.16, (CUE.uplink - CUE.burst - 0.45) / 5));
+      const SHOT_AT = [0, 1, 2, 3, 4].map((k) => CUE.burst + 0.15 + k * SHOT);
+      const FLY = Math.min(0.13, SHOT * 0.42); // lens to gauge, and the same back
+      const UP_SPAN = Math.max(1.6, Math.min(2.8, CUE.opencv - CUE.uplink - 0.2));
+      const UP = {
+        tower: CUE.uplink,
+        tile: CUE.uplink + 0.15 * UP_SPAN,
+        go: CUE.uplink + 0.22 * UP_SPAN,
+        atTower: CUE.uplink + 0.6 * UP_SPAN,
+        leave: CUE.uplink + 0.66 * UP_SPAN,
+        atTile: CUE.uplink + UP_SPAN,
+      };
+      const RISE_DUR = Math.max(1.2, CUE.end - CUE.rise);
+      const gaugeAt = (t) => G0 + (G1 - G0) * glide(prog(t, CUE.rise, RISE_DUR));
+
+      // ------------------------------------------------------------ camera: keyframed framings, glided, plus a slow orbit
+      const F = {
+        wide: { x: 1.4, y: 0.9, z: -1.5, dist: 27, az: -26, elv: 17 },
+        pole: { x: -0.2, y: 2.5, z: 0.1, dist: 16.5, az: -21, elv: 10 },
+        up: { x: 6.6, y: 3.7, z: -5, dist: 31, az: -17, elv: 9 },
+        close: { x: 2.95, y: 0.62, z: -0.3, dist: 8.2, az: -13, elv: 7 },
+      };
+      const KEYS = [
+        { at: CUE.pole - 0.3, d: 2.8, f: F.pole },
+        { at: CUE.uplink - 0.4, d: 2.2, f: F.up },
+        { at: CUE.opencv, d: 3.2, f: F.close },
+      ];
+      const FIELDS = ['x', 'y', 'z', 'dist', 'az', 'elv'];
+      const pose = {};
+      const target = new THREE.Vector3();
+      const placeCamera = (t) => {
+        for (const k of FIELDS) pose[k] = F.wide[k];
+        for (const K of KEYS) {
+          const f = glide(prog(t, K.at, K.d));
+          if (f > 0) for (const k of FIELDS) pose[k] = lerp(pose[k], K.f[k], f);
+        }
+        const u = t / DUR;
+        const az = deg(pose.az + 7 * u); // a slow orbit across the whole take
+        const elv = deg(pose.elv);
+        const dist = pose.dist * (1 - 0.035 * u); // and a gentle drift in
+        target.set(pose.x, pose.y, pose.z);
+        camera.position.set(
+          target.x + dist * Math.cos(elv) * Math.sin(az),
+          target.y + dist * Math.sin(elv),
+          target.z + dist * Math.cos(elv) * Math.cos(az),
+        );
+        camera.lookAt(target);
+        camera.updateMatrixWorld();
+      };
+
+      // ------------------------------------------------------------ one frame, from t alone
+      const glCanvas = renderer.domElement;
+      const pos = new THREE.Vector3();
+      const vA = new THREE.Vector3(),
+        vB = new THREE.Vector3(),
+        vC = new THREE.Vector3();
+      const partOffset = { panel: new THREE.Vector3(0, 0.7, 0), battery: new THREE.Vector3(-0.6, 0, 0.3), cam: new THREE.Vector3(0.6, 0, 0.2), modem: new THREE.Vector3(-0.6, 0, 0.3) };
+      const partHome = { panel: panelMount.position.clone(), battery: battery.position.clone(), cam: camRig.position.clone(), modem: modem.position.clone() };
+      const partObj = { panel: panelMount, battery, cam: camRig, modem };
+      const partEdge = { panel: panel.userData.edge, battery: battery.userData.edge, cam: camRig.userData.edge, modem: modem.userData.edge };
+      const LX = 72; // the pole labels' column
+
+      const frame = (t) => {
+        placeCamera(t);
+        const fadeField = 1 - ease(prog(t, CUE.opencv, 0.6)); // pole and uplink labels give way to the reading
+        const fadePole = 1 - ease(prog(t, CUE.uplink - 0.2, 0.6)); // the pole labels clear before the camera pulls back
+
+        // ---- scene: everything fades up together
+        glCanvas.style.opacity = enter(t, CUE.scene, 1.4).toFixed(3);
+        put(kicker, 72, 60 + 12 * (1 - enter(t, CUE.scene + 0.1)), enter(t, CUE.scene + 0.1));
+
+        // ---- water
+        const g = gaugeAt(t);
+        water.position.y = yOf(g);
+        waterMat.uniforms.uTime.value = t;
+        ripples.forEach((m, k) => {
+          const ph = (((t / 2.4 + k / 3) % 1) + 1) % 1;
+          gLocal(0, g, 0.03, m.position);
+          m.position.y = yOf(g) + 0.004;
+          m.scale.set(0.22 + 0.75 * ph, 1, 0.16 + 0.5 * ph);
+          m.material.opacity = 0.16 * (1 - ph) * Math.min(1, ph * 6);
+        });
+
+        // ---- pole and parts
+        const poleP = ease(prog(t, CUE.pole, POLE_RISE));
+        nodeGroup.visible = t >= CUE.pole;
+        poleRig.scale.set(1, Math.max(0.001, poleP), 1);
+        for (const k of Object.keys(partObj)) {
+          const o = partObj[k];
+          const p = ease(prog(t, PART_AT[k], 0.45));
+          o.visible = t >= PART_AT[k];
+          o.position.copy(partHome[k]).addScaledVector(partOffset[k], 1 - p);
+          o.scale.setScalar(lerp(0.7, 1, p));
+          const flash = t >= PART_AT[k] ? 1 - ease(prog(t, PART_AT[k] + 0.25, 0.9)) : 0;
+          const base = k === 'cam' ? 0.35 : 0.18;
+          partEdge[k].color.copy(cHair).lerp(cLime, flash);
+          partEdge[k].opacity = lerp(base, 1, flash);
+        }
+
+        // ---- burst: five shots, lens to gauge and back
+        let shotFlash = 0,
+          dotOn = false;
+        SHOT_AT.forEach((s) => {
+          const d = t - s;
+          if (d >= 0 && d < 0.3) shotFlash = Math.max(shotFlash, Math.pow(1 - d / 0.3, 2));
+          if (d >= 0 && d < 2 * FLY) {
+            dotOn = true;
+            const f = d < FLY ? glide(d / FLY) : 1 - glide((d - FLY) / FLY);
+            shotDot.position.lerpVectors(lensW, viewMid, f);
+          }
+        });
+        const burstWin = t >= CUE.burst ? enter(t, CUE.burst, 0.3) * (1 - ease(prog(t, SHOT_AT[4] + 0.5, 0.6))) : 0;
+        frustumMat.opacity = burstWin * (0.22 + 0.7 * shotFlash);
+        lensGlow.material.opacity = shotFlash;
+        lensGlow.scale.setScalar(0.35 + 0.5 * shotFlash);
+        shotDot.visible = dotOn;
+        if (camRig.userData.edge && t >= CUE.burst && t < SHOT_AT[4] + 0.8) {
+          camRig.userData.edge.color.copy(cHair).lerp(cLime, Math.max(shotFlash, burstWin * 0.6));
+          camRig.userData.edge.opacity = lerp(0.35, 1, Math.max(shotFlash, burstWin * 0.6));
+        }
+
+        // ---- uplink: tower rises, tile settles, the packet flies
+        const towerP = ease(prog(t, UP.tower, 0.9));
+        towerGroup.visible = t >= UP.tower;
+        towerGroup.position.y = TOWER.y - (TOWER_H + 1.4) * (1 - towerP);
+        const tileP = enter(t, UP.tile, 0.8);
+        tileGroup.visible = t >= UP.tile;
+        tileGroup.position.y = TILE.y - 0.6 * (1 - tileP);
+        tileMat.opacity = tileP;
+        tileMat.transparent = tileP < 0.999;
+        tileMat.depthWrite = tileP > 0.6;
+        const tileLit = t >= UP.atTile ? 1 - 0.55 * ease(prog(t, UP.atTile + 0.4, 1.2)) : 0;
+        tileEdge.color.copy(cHair).lerp(cLime, tileLit);
+        tileEdge.opacity = tileP * lerp(0.2, 1, tileLit);
+        tileGlowMat.opacity = tileP * 0.28 * tileLit;
+        const aF = glide(prog(t, UP.go, UP.atTower - UP.go));
+        const bF = glide(prog(t, UP.leave, UP.atTile - UP.leave));
+        drawTube(tubeA, aF);
+        drawTube(tubeB, bF);
+        tubeMat.opacity = 0.6 - 0.3 * ease(prog(t, UP.atTile + 0.3, 1.0));
+        packet.visible = t >= UP.go && t < UP.atTile + 0.3;
+        if (packet.visible) {
+          if (t < UP.atTower) arcA.getPoint(aF, packet.position);
+          else if (t < UP.leave) packet.position.copy(TOWER_TOP);
+          else arcB.getPoint(bF, packet.position);
+          const out = prog(t, UP.atTile, 0.3);
+          packet.material.opacity = 1 - out;
+          packet.userData.halo.material.opacity = 0.85 * (1 - out);
+          packet.scale.setScalar(1 - 0.6 * out);
+        }
+        const hitTower = prog(t, UP.atTower, 0.9);
+        towerRing.material.opacity = hitTower > 0 && hitTower < 1 ? 0.9 * (1 - hitTower) : 0;
+        towerRing.scale.setScalar(0.2 + 0.9 * ease(hitTower));
+        towerRing.lookAt(camera.position);
+        beacon.material.opacity = t >= UP.tower ? towerP * (0.35 + 0.65 * (hitTower > 0 ? 1 - ease(hitTower) : 0)) : 0;
+        modemLed.material.opacity = t < UP.go ? 0.45 : t < UP.atTower ? (Math.floor((t - UP.go) / 0.12) % 2 ? 1 : 0.25) : 0.6;
+
+        // ---- labels on the pole
+        const anchor = {
+          solar: [toScreen(panelMount.localToWorld(vA.set(-0.3, 0, 0.15))), toScreen(battery.localToWorld(vB.set(-0.23, 0.1, 0.28)))],
+          cam: [toScreen(camHead.localToWorld(vA.set(0, 0.12, 0)))],
+          modem: [toScreen(modem.localToWorld(vA.set(-0.15, 0, 0.2)))],
+        };
+        const order = ['solar', 'cam', 'modem'];
+        let ly = 150;
+        const LY = {};
+        for (const k of order) {
+          const a = anchor[k];
+          const want = Math.min(...a.map((p) => p.y)) - 24;
+          ly = Math.max(ly, want);
+          LY[k] = ly;
+          ly += 118;
+        }
+        const active = t < CUE.burst ? null : t < UP.go - 0.1 ? 'cam' : t < CUE.opencv ? 'modem' : null;
+        for (const k of order) {
+          const L = labels[k];
+          const at = LABEL_AT[k];
+          const shown = t >= at;
+          const pLead = ease(prog(t, at + 0.05, 0.3));
+          const pTxt = enter(t, at + 0.15, 0.7);
+          const lit = active === null ? (t < CUE.burst ? 1 : 0.35) : active === k ? 1 : 0.35;
+          const x1 = LX + L.node.offsetWidth + 22,
+            y1 = LY[k] + 22;
+          anchor[k].forEach((a, j) => {
+            L.leads[j].setAttribute('d', `M${f1(a.x)} ${f1(a.y)} L${f1(x1 + 36)} ${f1(y1)} L${f1(x1)} ${f1(y1)}`);
+            L.leads[j].setAttribute('stroke-dashoffset', (1 - pLead).toFixed(4));
+            L.leads[j].setAttribute('stroke', mix('#ffffff', LIME, lit, 0.35, 1));
+            L.leads[j].style.opacity = shown ? fadePole : 0;
+            L.dots[j].setAttribute('cx', f1(a.x));
+            L.dots[j].setAttribute('cy', f1(a.y));
+            L.dots[j].setAttribute('fill', mix('#ffffff', LIME, lit, 0.5, 1));
+            L.dots[j].style.opacity = shown ? ease(prog(t, at, 0.2)) * fadePole : 0;
+          });
+          for (let j = anchor[k].length; j < 2; j++) {
+            L.leads[j].style.opacity = 0;
+            L.dots[j].style.opacity = 0;
+          }
+          put(L.node, LX, LY[k] + 14 * (1 - pTxt), (shown ? pTxt : 0) * fadePole * lerp(0.6, 1, lit));
+        }
+
+        // ---- the five frames stack beside the camera, then ride the packet out
+        const ch = anchor.cam[0];
+        const mdm = toScreen(MODEM_TIP);
+        thumbs.forEach((node, i) => {
+          const tin = SHOT_AT[i] + 2 * FLY;
+          const p = enter(t, tin, 0.45);
+          const tx = ch.x + 150 + i * 16,
+            ty = ch.y - 30 - i * 14;
+          const away = ease(prog(t, UP.go - 0.35 + i * 0.03, 0.4));
+          const x = lerp(tx, mdm.x - 66, away),
+            y = lerp(ty + 18 * (1 - p), mdm.y - 46, away);
+          node.style.transform = `translate(${f1(x)}px, ${f1(y)}px) scale(${(lerp(0.85, 1, p) * (1 - 0.8 * away)).toFixed(3)})`;
+          node.style.opacity = (t >= tin ? p * (1 - away) : 0).toFixed(3);
+          node.style.zIndex = String(10 + i);
+        });
+
+        // ---- uplink labels
+        const ts = toScreen(vA.copy(TOWER_TOP).add(vB.set(0, towerGroup.position.y - TOWER.y, 0)));
+        const tagP = enter(t, UP.tower + 0.5, 0.7);
+        put(towerTag, ts.x + 26, ts.y - 12 + 10 * (1 - tagP), (t >= UP.tower ? tagP : 0) * fadeField);
+        const mid = toScreen(arcA.getPoint(0.5, vC));
+        const evP = enter(t, UP.go + 0.35 * (UP.atTower - UP.go), 0.6);
+        put(every, mid.x - every.offsetWidth / 2, mid.y - every.offsetHeight - 22 + 10 * (1 - evP), (t >= UP.go ? evP : 0) * fadeField);
+        // Tile label: right of the tile's right corner.
+        tileGroup.updateMatrixWorld();
+        const tr = toScreen(tileGroup.localToWorld(vA.set(TW / 2 - 0.05, TT / 2, 0)));
+        const tlP = enter(t, UP.tile + 0.35, 0.7);
+        const tlx = Math.min(W - 72 - tileLab.offsetWidth, tr.x + 90),
+          tly = tr.y - 22;
+        tileLead.setAttribute('d', `M${f1(tr.x + 8)} ${f1(tr.y)} L${f1(tlx - 16)} ${f1(tly + 22)}`);
+        tileLead.setAttribute('stroke-dashoffset', (1 - ease(prog(t, UP.tile + 0.25, 0.3))).toFixed(4));
+        tileLead.style.opacity = t >= UP.tile ? fadeField : 0;
+        tileDot.setAttribute('cx', f1(tr.x + 8));
+        tileDot.setAttribute('cy', f1(tr.y));
+        tileDot.style.opacity = t >= UP.tile ? tlP * fadeField : 0;
+        put(tileLab, tlx, tly + 12 * (1 - tlP), (t >= UP.tile ? tlP : 0) * fadeField);
+
+        // ---- OpenCV's overlay on the gauge
+        const O = CUE.opencv + Math.max(0, Math.min(0.7, 0.3 * (CUE.rise - CUE.opencv) - 0.1));
+        const oOn = t >= O + 0.5;
+        ov.style.opacity = oOn ? 1 : 0;
+        if (oOn) {
+          // Region of interest: four corner brackets around the visible strip.
+          const rp = enter(t, O + 0.5, 0.6);
+          const rx = 0.36,
+            rLo = 6.3,
+            rHi = 7.75,
+            arm = 0.16 + 0.12 * (1 - rp);
+          const C = [
+            [-rx, rHi, 1, -1],
+            [rx, rHi, -1, -1],
+            [rx, rLo, -1, 1],
+            [-rx, rLo, 1, 1],
+          ];
+          C.forEach(([x, gg, sx, sg], i) => {
+            const c0 = toScreen(gLocal(x, gg)),
+              c1 = toScreen(gLocal(x + sx * arm * 0.9, gg)),
+              c2 = toScreen(gLocal(x, gg + sg * arm));
+            roi[i].setAttribute('d', `M${f1(c1.x)} ${f1(c1.y)} L${f1(c0.x)} ${f1(c0.y)} L${f1(c2.x)} ${f1(c2.y)}`);
+            roi[i].style.opacity = rp * 0.9;
+          });
+          // Ticks on each decimetre the camera can see above the water, drawn bottom to top.
+          ticks.forEach((tk, i) => {
+            const p = enter(t, O + 0.75 + i * 0.045, 0.4);
+            const major = tk.text !== null;
+            const above = clamp01((tk.g - g - 0.012) / 0.02);
+            const a = toScreen(gLocal(BOARD_W / 2 + 0.02, tk.g)),
+              b = toScreen(gLocal(BOARD_W / 2 + 0.02 + (major ? 0.15 : 0.08) * p, tk.g));
+            tk.line.setAttribute('x1', f1(a.x));
+            tk.line.setAttribute('y1', f1(a.y));
+            tk.line.setAttribute('x2', f1(b.x));
+            tk.line.setAttribute('y2', f1(b.y));
+            tk.line.style.opacity = (p * above).toFixed(3);
+            if (major) {
+              tk.text.setAttribute('x', f1(b.x + 10));
+              tk.text.setAttribute('y', f1(b.y));
+              tk.text.style.opacity = (p * above).toFixed(3);
+            }
+          });
+          // The warning level: dashed, across the board, labelled on the left.
+          const wp = enter(t, O + 1.1, 0.6);
+          const w0 = toScreen(gLocal(-BOARD_W / 2 - 0.34, WARN)),
+            w1 = toScreen(gLocal(lerp(-BOARD_W / 2 - 0.34, BOARD_W / 2 + 0.02, wp), WARN));
+          warnLine.setAttribute('x1', f1(w0.x));
+          warnLine.setAttribute('y1', f1(w0.y));
+          warnLine.setAttribute('x2', f1(w1.x));
+          warnLine.setAttribute('y2', f1(w1.y));
+          warnLine.style.opacity = (0.85 * wp).toFixed(3);
+          warnText.setAttribute('x', f1(w0.x - 14));
+          warnText.setAttribute('y', f1(w0.y));
+          warnText.style.opacity = wp.toFixed(3);
+          // The waterline, drawn left to right at the surface.
+          const lp = ease(prog(t, O + 1.0, 0.55));
+          const l0 = toScreen(gLocal(-BOARD_W / 2 - 0.2, g)),
+            l1 = toScreen(gLocal(lerp(-BOARD_W / 2 - 0.2, BOARD_W / 2 + 0.2, lp), g));
+          for (const ln of [wl, wlGlow]) {
+            ln.setAttribute('x1', f1(l0.x));
+            ln.setAttribute('y1', f1(l0.y));
+            ln.setAttribute('x2', f1(l1.x));
+            ln.setAttribute('y2', f1(l1.y));
+            ln.style.opacity = lp > 0 ? (ln === wl ? 1 : 0.18) : 0;
+          }
+          wlEnds[0].setAttribute('cx', f1(l0.x));
+          wlEnds[0].setAttribute('cy', f1(l0.y));
+          wlEnds[1].setAttribute('cx', f1(l1.x));
+          wlEnds[1].setAttribute('cy', f1(l1.y));
+          wlEnds.forEach((c) => (c.style.opacity = lp > 0 ? 1 : 0));
+          // The readout chip, tied to the right end of the waterline.
+          const cp = enter(t, O + 1.45, 0.7);
+          const over = clamp01((g - WARN) / 0.025);
+          const warnCol = mix(LIME, ORANGE, over);
+          const cx = l1.x + 120,
+            cy = l1.y - 52;
+          read.style.borderColor = warnCol;
+          read.style.boxShadow = `0 0 34px ${mix(LIME, ORANGE, over, 0.18, 0.22)}`;
+          readVal.textContent = g.toFixed(2);
+          put(read, Math.min(cx, W - 72 - read.offsetWidth), cy + 14 * (1 - cp), t >= O + 1.45 ? cp : 0);
+          chipLead.setAttribute('d', `M${f1(l1.x + 8)} ${f1(l1.y)} L${f1(Math.min(cx, W - 72 - read.offsetWidth) - 4)} ${f1(l1.y)}`);
+          chipLead.setAttribute('stroke', warnCol);
+          chipLead.setAttribute('stroke-dashoffset', (1 - ease(prog(t, O + 1.4, 0.3))).toFixed(4));
+          chipLead.style.opacity = t >= O + 1.4 ? 1 : 0;
+          const wt = ease(over);
+          put(warnTag, Math.min(cx, W - 72 - read.offsetWidth) + 4, cy + read.offsetHeight + 14 + 8 * (1 - wt), wt * cp);
+        } else {
+          put(read, 0, 0, 0);
+          put(warnTag, 0, 0, 0);
+        }
+      };
+
+      // ------------------------------------------------------------ clock and contract
+      let t0 = null;
+      let seekT = 0;
+      let frames = 0;
+      window.__stats = () => ({ frames, seconds: t0 === null ? 0 : (performance.now() - t0) / 1000 });
+      const loop = () => {
+        const t = t0 === null ? seekT : (performance.now() - t0) / 1000;
+        frame(t);
+        renderer.render(world, camera);
+        if (t0 !== null) frames++;
+        requestAnimationFrame(loop);
+      };
+      window.__start = () => {
+        if (t0 === null) {
+          t0 = performance.now();
+          frames = 0;
+        }
+      };
+      // For checking stills only (before __start): hold the scene at a given second.
+      window.__seek = (t) => {
+        seekT = t;
+      };
+
+      frame(0);
+      renderer.render(world, camera);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(loop);
+        window.__ready = true;
+      });
+    </script>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-.PHONY: help smoke deploy destroy status logs setup test test-backend test-frontend eval eval-quick bench bench-cloud check-numbers docs dev traces mcp ops-report
+.PHONY: help smoke deploy destroy status logs setup test test-backend test-frontend eval eval-quick bench bench-cloud check-numbers count-tests docs dev traces mcp ops-report
 
 help: ## List targets
 	@grep -hE '^[a-zA-Z_-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  %-14s %s\n", $$1, $$2}'
@@ -28,7 +28,7 @@ setup: ## Install backend (uv) and frontend (npm) dependencies
 test: test-backend test-frontend ## All tests + lint + build
 
 test-backend: ## Backend pytest (original + agent + eval code)
-	cd backend && uv run pytest -q
+	cd backend && uv run python -m pytest -q
 
 test-frontend: ## Frontend vitest, ESLint and production build
 	cd frontend && npm test && npm run lint && npm run build
@@ -61,6 +61,10 @@ bench-cloud: ## Benchmark configs on temporary EC2 instances (CFG=A|B|C, default
 docs: ## Regenerate README, report (and its PDF), Devpost text, video script and COOL page from the JSON
 	python3 scripts/make_headline.py
 	python3 scripts/report_pdf.py
+
+count-tests: ## Run both test suites and record their counts -> eval/results/tests.json, then the docs
+	python3 scripts/count_tests.py
+	$(MAKE) docs
 
 check-numbers: ## Fail if any document disagrees with eval/bench JSON
 	python3 scripts/make_headline.py --check

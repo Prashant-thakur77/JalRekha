@@ -76,6 +76,8 @@ fixtures/frames/
 !fixtures/live_demo/**
 outputs/
 screenshots/
+!docs/screenshots/
+!docs/screenshots/**
 datasets/raw/
 .scratch/
 /critical.png
@@ -117,3 +119,7 @@ eval/results/.tmp/
 
 # Re-download with scripts/fetch_india_flood_photos.py (SHA-1 checked)
 datasets/india_flood_photos/originals/
+
+# Film: the narrator reference recording stays local
+video/refs/*.wav
+video/__pycache__/

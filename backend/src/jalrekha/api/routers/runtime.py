@@ -13,10 +13,14 @@ router = APIRouter(tags=["runtime"])
 @router.get("/health")
 async def health() -> dict[str, object]:
     settings = get_settings()
+    from jalrekha.adapters import claude
+
+    # In the cloud the language model is Claude; the older flag covers the on-device model only.
     return {
         "status": "ok",
         "node_profile": settings.node_profile,
-        "llm_enabled": settings.llm_enabled,
+        "llm_enabled": settings.llm_enabled or claude.available(),
+        "llm": f"claude:{claude.MODEL}" if claude.available() else ("on-device" if settings.llm_enabled else None),
         "hydromet_enabled": settings.hydromet_enabled,
     }
 

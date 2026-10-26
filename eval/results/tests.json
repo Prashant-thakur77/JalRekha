@@ -1,0 +1,23 @@
+{
+ "meta": {
+  "generated_by": "scripts/count_tests.py",
+  "generated_at": "2026-10-25T20:08:26.676501+00:00"
+ },
+ "backend": {
+  "command": "cd backend && uv run pytest -q",
+  "files": 27,
+  "collected": 165,
+  "passed": 164,
+  "failed": 0,
+  "xfailed": 1,
+  "skipped": 0
+ },
+ "frontend": {
+  "command": "cd frontend && npm test",
+  "files": 10,
+  "collected": 57,
+  "passed": 57,
+  "failed": 0,
+  "skipped": 0
+ }
+}

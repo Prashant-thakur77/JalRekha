@@ -1,0 +1,964 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Architecture Stack</title>
+    <!--
+  NadiSaathi film: the architecture as an exploded stack of six layers, drawn with three.js.
+  three.html?dur=<seconds>&cues=<url-encoded JSON {name: seconds}>
+  Cues: layer1..layer6, packets, blocked, person, aws, end. Missing cues fall back to defaults spread over dur.
+  window.__ready turns true once fonts, three.js and the first frame are in; window.__start() runs the timeline.
+  Every frame is a pure function of the seconds since __start(), so a recording is reproducible.
+-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..700&family=Fragment+Mono&display=block"
+    />
+    <style>
+      :root {
+        --bg: #121211;
+        --slab: #1c1c1a;
+        --hair: rgba(255, 255, 255, 0.14);
+        --lime: #c6ff3d;
+        --paper: #f3f2ee;
+        --muted: #a3a29b;
+        --red: #f03a2e;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+      }
+      body {
+        background:
+          radial-gradient(1300px 950px at 100% 0%, rgba(198, 255, 61, 0.1), rgba(198, 255, 61, 0.035) 38%, rgba(198, 255, 61, 0) 70%),
+          #121211;
+        color: var(--paper);
+        font-family: 'Host Grotesk', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+      canvas {
+        position: absolute;
+        inset: 0;
+        display: block;
+      }
+      #hud {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+      }
+      #wires {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: visible;
+      }
+      .abs {
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+      .mono {
+        font-family: 'Fragment Mono', monospace;
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+      }
+      .kicker {
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--lime);
+        white-space: nowrap;
+      }
+
+      /* ---------- layer labels ---------- */
+      .lab {
+        width: 860px;
+      }
+      .lab .num {
+        position: absolute;
+        left: -56px;
+        top: -12px;
+        font-size: 20px;
+        line-height: 24px;
+      }
+      .lab h3 {
+        position: absolute;
+        left: 0;
+        top: -25px;
+        margin: 0;
+        font-weight: 600;
+        font-size: 40px;
+        line-height: 48px;
+        letter-spacing: -0.015em;
+        white-space: nowrap;
+      }
+      .lab p {
+        position: absolute;
+        left: 0;
+        top: 26px;
+        margin: 0;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 30px;
+        color: var(--paper);
+        white-space: nowrap;
+      }
+      .lab small {
+        position: absolute;
+        left: 0;
+        top: 60px;
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--muted);
+        white-space: nowrap;
+      }
+
+      /* ---------- AWS satellites ---------- */
+      .sat-head {
+        font-size: 20px;
+        line-height: 24px;
+        color: var(--muted);
+      }
+      .sat {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        width: 286px;
+        height: 70px;
+        padding: 0 20px;
+        border-radius: 18px;
+        border: 1.5px solid var(--hair);
+        background: rgba(28, 28, 26, 0.92);
+        font-weight: 500;
+        font-size: 26px;
+        letter-spacing: -0.01em;
+        white-space: nowrap;
+      }
+      .sat i {
+        flex: none;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+
+      /* ---------- the blocked reply ---------- */
+      .tag {
+        text-align: right;
+        white-space: nowrap;
+      }
+      .tag .mono {
+        display: block;
+        font-size: 20px;
+        line-height: 24px;
+        color: #ff8a80;
+      }
+      .tag b {
+        display: block;
+        margin-top: 4px;
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 36px;
+        color: var(--red);
+      }
+      .callout {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 22px 16px 16px;
+        border: 2px solid var(--red);
+        border-radius: 16px;
+        background: rgba(42, 20, 18, 0.94);
+        box-shadow: 0 14px 40px rgba(240, 58, 46, 0.18);
+        white-space: nowrap;
+      }
+      .callout .x {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: var(--red);
+      }
+      .callout h4 {
+        margin: 0;
+        font-weight: 600;
+        font-size: 30px;
+        line-height: 36px;
+        color: var(--paper);
+      }
+      .callout .mono {
+        display: block;
+        margin-top: 2px;
+        font-size: 20px;
+        line-height: 24px;
+        color: #ff8a80;
+      }
+
+      /* ---------- the PIN chip ---------- */
+      .chip {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 9px 16px 9px 14px;
+        border-radius: 999px;
+        border: 1.5px solid var(--lime);
+        background: rgba(18, 18, 17, 0.9);
+        box-shadow: 0 0 24px rgba(198, 255, 61, 0.25);
+        color: var(--lime);
+        font-size: 22px;
+        line-height: 24px;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="hud">
+      <svg id="wires" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <script type="module">
+      import * as THREE from 'https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.module.min.js';
+
+      const W = 1920,
+        H = 1080;
+      const SVGNS = 'http://www.w3.org/2000/svg';
+
+      // ------------------------------------------------------------ params and cues
+      const qs = new URLSearchParams(location.search);
+      const DUR = Math.max(4, parseFloat(qs.get('dur')) || 22);
+      const parseCues = (raw) => {
+        if (!raw) return {};
+        for (const s of [raw, decodeURIComponent(raw)]) {
+          try {
+            const o = JSON.parse(s);
+            if (o && typeof o === 'object') return o;
+          } catch (e) {}
+        }
+        return {};
+      };
+      const given = parseCues(qs.get('cues'));
+      // Defaults are fractions of dur, matching the pacing of a 22 s take.
+      const FRAC = {
+        layer1: 0.036,
+        layer2: 0.136,
+        packets: 0.159,
+        layer3: 0.273,
+        layer4: 0.386,
+        blocked: 0.477,
+        layer5: 0.591,
+        person: 0.636,
+        layer6: 0.727,
+        aws: 0.818,
+        end: 0.92,
+      };
+      const CUE = {};
+      for (const k of Object.keys(FRAC)) {
+        const v = Number(given[k]);
+        CUE[k] = Number.isFinite(v) && given[k] !== null && given[k] !== '' ? v : FRAC[k] * DUR;
+      }
+      if (!Number.isFinite(Number(given.end))) {
+        const last = Math.max(...Object.keys(FRAC).filter((k) => k !== 'end').map((k) => CUE[k]));
+        CUE.end = Math.min(DUR, Math.max(FRAC.end * DUR, last + 1.5));
+      }
+      const LAYER_AT = [1, 2, 3, 4, 5, 6].map((i) => CUE['layer' + i]);
+      window.__cues = CUE;
+
+      // ------------------------------------------------------------ easing (one ease)
+      const bezier = (x1, y1, x2, y2) => {
+        const cx = 3 * x1,
+          bx = 3 * (x2 - x1) - cx,
+          ax = 1 - cx - bx;
+        const cy = 3 * y1,
+          by = 3 * (y2 - y1) - cy,
+          ay = 1 - cy - by;
+        const sx = (t) => ((ax * t + bx) * t + cx) * t;
+        const sy = (t) => ((ay * t + by) * t + cy) * t;
+        const dx = (t) => (3 * ax * t + 2 * bx) * t + cx;
+        return (x) => {
+          if (x <= 0) return 0;
+          if (x >= 1) return 1;
+          let t = x;
+          for (let i = 0; i < 8; i++) {
+            const e = sx(t) - x,
+              d = dx(t);
+            if (Math.abs(e) < 1e-6) return sy(t);
+            if (Math.abs(d) < 1e-6) break;
+            t -= e / d;
+          }
+          let lo = 0,
+            hi = 1;
+          t = x;
+          for (let i = 0; i < 30; i++) {
+            const v = sx(t);
+            if (Math.abs(v - x) < 1e-6) break;
+            if (v < x) lo = t;
+            else hi = t;
+            t = (lo + hi) / 2;
+          }
+          return sy(t);
+        };
+      };
+      const ease = bezier(0.16, 1, 0.3, 1);
+      // Only for travel between stops (packets, camera), never for entrances.
+      const glide = (p) => (p <= 0 ? 0 : p >= 1 ? 1 : p * p * (3 - 2 * p));
+      const clamp01 = (v) => Math.min(1, Math.max(0, v));
+      const prog = (t, t0, d) => clamp01((t - t0) / d);
+      const lerp = (a, b, f) => a + (b - a) * f;
+      const deg = (d) => (d * Math.PI) / 180;
+      /** Integer hash in [0, 1): the only "randomness", fixed by its seed. */
+      const hash = (a, b = 0) => {
+        let h = (Math.imul(a + 0x9e37, 0x85ebca6b) ^ Math.imul(b + 0x7f4a, 0xc2b2ae35)) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x45d9f3b) >>> 0;
+        h = Math.imul(h ^ (h >>> 16), 0x45d9f3b) >>> 0;
+        return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
+      };
+      const rgb = (hex) => [parseInt(hex.slice(1, 3), 16), parseInt(hex.slice(3, 5), 16), parseInt(hex.slice(5, 7), 16)];
+      const mix = (a, b, f, alphaA = 1, alphaB = 1) => {
+        const A = rgb(a),
+          B = rgb(b);
+        return `rgba(${A.map((v, i) => Math.round(lerp(v, B[i], f))).join(',')},${lerp(alphaA, alphaB, f).toFixed(3)})`;
+      };
+      /** Every entrance: a small rise plus a fade, on the one ease. */
+      const enter = (t, t0, d = 0.7) => ease(prog(t, t0, d));
+
+      const LIME = '#c6ff3d',
+        RED = '#f03a2e',
+        PAPER = '#f3f2ee',
+        MUTED = '#a3a29b';
+
+      // ------------------------------------------------------------ DOM helpers
+      const hud = document.getElementById('hud');
+      const wires = document.getElementById('wires');
+      const el = (tag, cls, html = '') => {
+        const e = document.createElement(tag);
+        if (cls) e.className = cls;
+        e.innerHTML = html;
+        hud.append(e);
+        return e;
+      };
+      const svg = (tag, attrs) => {
+        const e = document.createElementNS(SVGNS, tag);
+        for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+        wires.append(e);
+        return e;
+      };
+      const put = (node, x, y, o) => {
+        node.style.transform = `translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
+        node.style.opacity = o.toFixed(3);
+      };
+
+      // ------------------------------------------------------------ renderer
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(1);
+      renderer.setSize(W, H);
+      renderer.setClearColor(0x000000, 0);
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.NoToneMapping;
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      document.body.prepend(renderer.domElement);
+
+      const world = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(30, W / H, 0.1, 200);
+      // Shift the frame so the stack sits left of centre, leaving the right for labels.
+      camera.setViewOffset(W, H, 250, 10, W, H);
+      const tmpV = new THREE.Vector3();
+      const toScreen = (v) => {
+        tmpV.copy(v).project(camera);
+        return { x: ((tmpV.x + 1) / 2) * W, y: ((1 - tmpV.y) / 2) * H };
+      };
+
+      world.add(new THREE.HemisphereLight('#f3f2ee', '#121211', 1.1));
+      const key = new THREE.DirectionalLight('#fffdf6', 2.4);
+      key.position.set(5, 20, 9);
+      key.castShadow = true;
+      key.shadow.mapSize.set(2048, 2048);
+      key.shadow.radius = 6;
+      key.shadow.bias = -0.0005;
+      key.shadow.normalBias = 0.02;
+      Object.assign(key.shadow.camera, { left: -9, right: 9, top: 9, bottom: -9, near: 1, far: 50 });
+      world.add(key);
+      const fill = new THREE.DirectionalLight('#dfe3e8', 0.5);
+      fill.position.set(-10, 6, 4);
+      world.add(fill);
+
+      // ------------------------------------------------------------ stack geometry
+      const GAP = 1.5,
+        SW = 4.6,
+        SD = 3.0,
+        ST = 0.22,
+        R = 0.32;
+      const FLOOR_Y = -1.0;
+      const topY = (i) => i * GAP + ST / 2;
+
+      const canvasTex = (w, h, draw) => {
+        const c = document.createElement('canvas');
+        c.width = w;
+        c.height = h;
+        draw(c.getContext('2d'), w, h);
+        const tex = new THREE.CanvasTexture(c);
+        tex.colorSpace = THREE.SRGBColorSpace;
+        return tex;
+      };
+
+      // Floor: a faint warm pool that fades into the graphite, plus soft shadows.
+      {
+        const tex = canvasTex(512, 512, (g, w, h) => {
+          const grad = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w / 2);
+          grad.addColorStop(0, 'rgba(243,242,238,0.055)');
+          grad.addColorStop(0.6, 'rgba(243,242,238,0.02)');
+          grad.addColorStop(1, 'rgba(243,242,238,0)');
+          g.fillStyle = grad;
+          g.fillRect(0, 0, w, h);
+        });
+        const pool = new THREE.Mesh(
+          new THREE.PlaneGeometry(22, 22),
+          new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, toneMapped: false }),
+        );
+        pool.rotation.x = -Math.PI / 2;
+        pool.position.y = FLOOR_Y - 0.002;
+        world.add(pool);
+        const shadow = new THREE.Mesh(new THREE.PlaneGeometry(26, 26), new THREE.ShadowMaterial({ opacity: 0.55 }));
+        shadow.rotation.x = -Math.PI / 2;
+        shadow.position.y = FLOOR_Y;
+        shadow.receiveShadow = true;
+        world.add(shadow);
+      }
+
+      const shape = new THREE.Shape();
+      {
+        const w = SW / 2,
+          d = SD / 2;
+        shape.moveTo(-w + R, -d);
+        shape.lineTo(w - R, -d);
+        shape.quadraticCurveTo(w, -d, w, -d + R);
+        shape.lineTo(w, d - R);
+        shape.quadraticCurveTo(w, d, w - R, d);
+        shape.lineTo(-w + R, d);
+        shape.quadraticCurveTo(-w, d, -w, d - R);
+        shape.lineTo(-w, -d + R);
+        shape.quadraticCurveTo(-w, -d, -w + R, -d);
+      }
+      const slabGeo = new THREE.ExtrudeGeometry(shape, { depth: ST, bevelEnabled: false, curveSegments: 10 });
+      slabGeo.rotateX(-Math.PI / 2);
+      slabGeo.translate(0, -ST / 2, 0);
+      const outline = (y) => new THREE.BufferGeometry().setFromPoints(shape.getPoints(10).map((p) => new THREE.Vector3(p.x, y, -p.y)));
+      const topLineGeo = outline(ST / 2 + 0.003);
+      const botLineGeo = outline(-ST / 2);
+      const glowTop = canvasTex(512, 340, (g, w, h) => {
+        const grad = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, w * 0.62);
+        grad.addColorStop(0, 'rgba(198,255,61,0.55)');
+        grad.addColorStop(0.55, 'rgba(198,255,61,0.22)');
+        grad.addColorStop(1, 'rgba(198,255,61,0.06)');
+        g.fillStyle = grad;
+        const r = (R / SW) * w;
+        g.beginPath();
+        g.roundRect(0, 0, w, h, r);
+        g.fill();
+      });
+      const glowTopGeo = new THREE.PlaneGeometry(SW, SD);
+      glowTopGeo.rotateX(-Math.PI / 2);
+
+      const cLime = new THREE.Color(LIME),
+        cRed = new THREE.Color(RED),
+        cHair = new THREE.Color('#ffffff');
+      const slabs = [0, 1, 2, 3, 4, 5].map((i) => {
+        const mat = new THREE.MeshStandardMaterial({ color: '#1c1c1a', roughness: 0.85, metalness: 0.0, transparent: true, opacity: 0 });
+        const mesh = new THREE.Mesh(slabGeo, mat);
+        mesh.castShadow = true;
+        mesh.receiveShadow = false; // tops stay evenly lit; only the floor takes shadows
+        const edgeMat = new THREE.LineBasicMaterial({ color: '#ffffff', transparent: true, opacity: 0, toneMapped: false });
+        mesh.add(new THREE.LineLoop(topLineGeo, edgeMat));
+        mesh.add(new THREE.LineLoop(botLineGeo, edgeMat));
+        const glowMat = new THREE.MeshBasicMaterial({
+          map: glowTop,
+          transparent: true,
+          opacity: 0,
+          blending: THREE.AdditiveBlending,
+          depthWrite: false,
+          toneMapped: false,
+        });
+        const glow = new THREE.Mesh(glowTopGeo, glowMat);
+        glow.position.y = ST / 2 + 0.006;
+        mesh.add(glow);
+        const pulseMat = new THREE.LineBasicMaterial({ color: LIME, transparent: true, opacity: 0, toneMapped: false });
+        const pulse = new THREE.LineLoop(topLineGeo, pulseMat);
+        mesh.add(pulse);
+        mesh.visible = false;
+        world.add(mesh);
+        return { mesh, mat, edgeMat, glowMat, pulse, pulseMat };
+      });
+
+      // ------------------------------------------------------------ packets
+      const dotTex = canvasTex(128, 128, (g) => {
+        const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+        grad.addColorStop(0, 'rgba(255,255,255,1)');
+        grad.addColorStop(0.3, 'rgba(255,255,255,0.4)');
+        grad.addColorStop(1, 'rgba(255,255,255,0)');
+        g.fillStyle = grad;
+        g.fillRect(0, 0, 128, 128);
+      });
+      const sphereGeo = new THREE.SphereGeometry(0.1, 18, 12);
+      const ringGeo = new THREE.RingGeometry(0.17, 0.2, 48);
+      ringGeo.rotateX(-Math.PI / 2);
+      const makePacket = (hex, size = 1) => {
+        const core = new THREE.Mesh(sphereGeo, new THREE.MeshBasicMaterial({ color: hex, transparent: true, toneMapped: false }));
+        core.scale.setScalar(size);
+        const halo = new THREE.Sprite(
+          new THREE.SpriteMaterial({ map: dotTex, color: hex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }),
+        );
+        halo.scale.setScalar(0.75);
+        core.add(halo);
+        core.visible = false;
+        world.add(core);
+        const ring = new THREE.Mesh(
+          ringGeo,
+          new THREE.MeshBasicMaterial({ color: hex, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, toneMapped: false }),
+        );
+        ring.visible = false;
+        world.add(ring);
+        return { core, halo, ring };
+      };
+      const setAlpha = (p, a) => {
+        p.core.material.opacity = a;
+        p.halo.material.opacity = a * 0.85;
+        p.core.visible = a > 0.002;
+      };
+
+      const SP = 0.62, // seconds between packets
+        APPEAR = 0.3,
+        PAUSE = 0.42,
+        MOVE = 0.6,
+        EXIT = 1.1;
+      const LIFE = APPEAR + PAUSE + 5 * (MOVE + PAUSE) + EXIT;
+      const POOL = Math.ceil(LIFE / SP) + 2;
+      const pool = Array.from({ length: POOL }, () => makePacket(LIME));
+      // Where packet k rests on layer i: a fixed, seeded spot on the slab's top.
+      const restAt = (k, i, out) => {
+        const x = (hash(k, i) - 0.5) * (SW - 1.5);
+        const z = (hash(k + 977, i) - 0.5) * (SD - 1.2);
+        return out.set(x, topY(i) + 0.13, z);
+      };
+      const vA = new THREE.Vector3(),
+        vB = new THREE.Vector3();
+      /** Packet k at time t: its position, opacity and the ring it leaves when it lands. */
+      const packetAt = (k, t, pos) => {
+        const born = CUE.packets + k * SP;
+        if (t < born) return null;
+        let leave = born + APPEAR + PAUSE;
+        if (t < leave) {
+          restAt(k, 0, pos);
+          return { a: ease(prog(t, born, APPEAR)), ring: prog(t, born + 0.05, 0.7) };
+        }
+        for (let i = 0; i < 5; i++) {
+          // A packet only climbs into a slab that has finished rising.
+          if (!(LAYER_AT[i + 1] + 0.6 <= leave)) {
+            const f = prog(t, leave, 0.35);
+            if (f >= 1) return null;
+            restAt(k, i, pos);
+            return { a: 1 - f, ring: 1 };
+          }
+          if (t < leave + MOVE) {
+            const e = glide(prog(t, leave, MOVE));
+            restAt(k, i, vA);
+            restAt(k, i + 1, vB);
+            pos.lerpVectors(vA, vB, e);
+            pos.y = lerp(vA.y, vB.y, glide(e));
+            return { a: 1, ring: 1 };
+          }
+          const land = leave + MOVE;
+          leave = land + PAUSE;
+          if (t < leave) {
+            restAt(k, i + 1, pos);
+            return { a: 1, ring: prog(t, land, 0.7) };
+          }
+        }
+        const f = prog(t, leave, EXIT * 0.8);
+        if (f >= 1) return null;
+        restAt(k, 5, pos);
+        pos.y += 0.9 * ease(f);
+        return { a: 1 - f, ring: 1 };
+      };
+
+      // ------------------------------------------------------------ the blocked reply
+      const BLOCK_HIT = CUE.blocked + 0.75;
+      const red = makePacket(RED, 1.45);
+      red.halo.scale.setScalar(0.9);
+      const redFrom = new THREE.Vector3(-SW / 2 - 2.7, topY(3) + 1.15, 1.1);
+      const redTo = new THREE.Vector3(-SW / 2 + 0.85, topY(3) + 0.14, 0.55);
+      const shardGeo = new THREE.TetrahedronGeometry(0.07);
+      const shards = Array.from({ length: 10 }, (_, j) => {
+        const m = new THREE.Mesh(shardGeo, new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0, toneMapped: false }));
+        const a = (j / 10) * Math.PI * 2 + hash(j, 31) * 0.5;
+        m.userData.dir = new THREE.Vector3(Math.cos(a), 0.35 + hash(j, 7) * 0.9, Math.sin(a)).normalize();
+        m.userData.speed = 0.9 + hash(j, 13) * 0.8;
+        m.userData.spin = 4 + hash(j, 17) * 6;
+        m.visible = false;
+        world.add(m);
+        return m;
+      });
+      const burstGeo = new THREE.RingGeometry(0.86, 1.0, 72);
+      burstGeo.rotateX(-Math.PI / 2);
+      const burst = new THREE.Mesh(
+        burstGeo,
+        new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }),
+      );
+      burst.position.set(redTo.x, topY(3) + 0.01, redTo.z);
+      world.add(burst);
+      const mark = new THREE.Mesh(
+        burstGeo,
+        new THREE.MeshBasicMaterial({ color: RED, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide, toneMapped: false }),
+      );
+      mark.position.copy(burst.position);
+      mark.scale.setScalar(0.34);
+      world.add(mark);
+      const flash = new THREE.PointLight(RED, 0, 3.2, 2);
+      flash.position.set(redTo.x, topY(3) + 0.6, redTo.z);
+      world.add(flash);
+
+      // ------------------------------------------------------------ HUD
+      const LAYERS = [
+        ['Camera', 'A staff gauge, five frames a burst', 'Chatara, Nepal'],
+        ['OpenCV 5 · Graviton4', 'Quality gate · ORB / ALIKED+LightGlue · gauge strip', 'Scharr · DIS flow · Lab colour · Kalman · YuNet blur'],
+        ['Agent', 'D1–D9: cadence, second opinion, arrival times, drafts', 'the measurement chooses the branch'],
+        ['Guard', 'Schema, bounds, rate limits, prompt injection', 'unknown never means safe'],
+        ['Person', 'A named operator approves with a PIN', 'ward office in Nepal · district control room in India'],
+        ['Out', 'SMS, voice and CAP alerts, in five languages', 'Supaul · Saptari · Khagaria'],
+      ];
+      const LX = 1050; // left edge of the label column
+      const kicker = el('div', 'abs mono kicker', 'Under the hood · Architecture');
+
+      const labels = LAYERS.map(([title, line1, line2], i) => {
+        const lead = svg('path', { fill: 'none', 'stroke-width': 2, pathLength: 1, 'stroke-dasharray': '1 1', 'stroke-linecap': 'round' });
+        const dot = svg('circle', { r: 5 });
+        const node = el('div', 'abs lab', `<span class="num mono">0${i + 1}</span><h3>${title}</h3><p>${line1}</p><small class="mono">${line2}</small>`);
+        return { lead, dot, node, num: node.querySelector('.num'), h3: node.querySelector('h3') };
+      });
+
+      const SATS = ['CloudWatch Logs', 'S3 evidence', 'Step Functions', 'SNS + Polly'];
+      // Which satellite each layer logs to: frames and approvals are archived, decisions run as a workflow.
+      const SAT_OF = [1, 0, 2, 0, 1, 3];
+      const SAT_X = 64,
+        SAT_W = 286,
+        SAT_H = 70,
+        SAT_Y0 = 636,
+        SAT_STEP = 88;
+      const BUS_X = SAT_X + SAT_W + 46; // the vertical bus every layer logs into
+      const satHead = el('div', 'abs mono sat-head', 'AWS');
+      const sats = SATS.map((name) => {
+        const node = el('div', 'abs sat', `<i></i><span>${name}</span>`);
+        return { node, dot: node.querySelector('i'), name: node.querySelector('span') };
+      });
+      const traces = LAYERS.map(() => ({
+        path: svg('path', { fill: 'none', 'stroke-width': 1.6, stroke: LIME, pathLength: 1, 'stroke-dasharray': '1 1', opacity: 0.75 }),
+        start: svg('circle', { r: 4, fill: LIME }),
+        beads: [0, 1].map(() => svg('circle', { r: 4.5, fill: LIME })),
+      }));
+
+      const tag = el('div', 'abs tag', `<span class="mono">Model reply</span><b>“switch the siren off”</b>`);
+      const calloutLead = svg('path', { fill: 'none', stroke: RED, 'stroke-width': 2, pathLength: 1, 'stroke-dasharray': '1 1' });
+      const callout = el(
+        'div',
+        'abs callout',
+        `<span class="x"><svg width="20" height="20" viewBox="0 0 20 20"><path d="M4 4 L16 16 M16 4 L4 16" stroke="#121211" stroke-width="3.2" stroke-linecap="round"/></svg></span>` +
+          `<div><h4>Blocked by the guard</h4><span class="mono">OpenCV reading kept</span></div>`,
+      );
+      const chip = el(
+        'div',
+        'abs chip mono',
+        `<span>PIN</span><svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11.5 L9 16.5 L18 6" fill="none" stroke="#c6ff3d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      );
+
+      // ------------------------------------------------------------ camera
+      const target = new THREE.Vector3(0, 3.55, 0);
+      const placeCamera = (t) => {
+        const u = clamp01(t / DUR);
+        // A slow crane: the camera climbs half a layer as each new slab arrives.
+        target.y = 1.75 + LAYER_AT.slice(1).reduce((y, c) => y + 0.42 * glide(prog(t, c, 1.8)), 0);
+        const az = deg(-12 + 20 * u); // about 20° over the scene
+        const elv = deg(22 - 3 * glide(u));
+        const dist = 23.6 - 1.8 * glide(u); // a gentle dolly in
+        camera.position.set(
+          target.x + dist * Math.cos(elv) * Math.sin(az),
+          target.y + dist * Math.sin(elv),
+          target.z + dist * Math.cos(elv) * Math.cos(az),
+        );
+        camera.lookAt(target);
+        camera.updateMatrixWorld();
+      };
+
+      // ------------------------------------------------------------ one frame, from t alone
+      const pos = new THREE.Vector3();
+      const corner = new THREE.Vector3();
+      const CORNERS = [
+        [-SW / 2, -SD / 2],
+        [SW / 2, -SD / 2],
+        [SW / 2, SD / 2],
+        [-SW / 2, SD / 2],
+      ];
+      const edgePoint = (i, y, side) => {
+        // The slab's rightmost (side=1) or leftmost (side=-1) corner on screen.
+        let best = null;
+        for (const [cx, cz] of CORNERS) {
+          corner.set(cx * 0.97, y, cz * 0.97);
+          const s = toScreen(corner);
+          if (!best || (side > 0 ? s.x > best.x : s.x < best.x)) best = s;
+        }
+        return best;
+      };
+
+      const frame = (t) => {
+        placeCamera(t);
+
+        put(kicker, 72, 60 + 12 * (1 - enter(t, 0.15)), enter(t, 0.15));
+
+        // Which layer is newest; its slab and label are the active ones.
+        let top = -1;
+        LAYER_AT.forEach((c, i) => {
+          if (t >= c) top = i;
+        });
+        const personPulse = (() => {
+          const d = t - CUE.person;
+          if (d < 0 || d > 2.6) return 0;
+          return Math.pow(Math.sin((d / 0.85) * Math.PI), 2) * (1 - d / 2.6);
+        })();
+        const redAmt = t < BLOCK_HIT ? 0 : t < BLOCK_HIT + 0.35 ? 1 : 1 - ease(prog(t, BLOCK_HIT + 0.35, 1.4));
+
+        // ---- slabs and labels
+        const labelY = [];
+        slabs.forEach((s, i) => {
+          const p = enter(t, LAYER_AT[i], 1.0);
+          const shown = t >= LAYER_AT[i];
+          s.mesh.visible = shown;
+          s.mesh.position.y = i * GAP - 0.7 * (1 - p);
+          s.mat.opacity = p;
+          s.mat.transparent = p < 0.999;
+          s.mat.depthWrite = p > 0.6;
+          // Active = newest; it fades out as the next layer arrives.
+          const on = shown ? (i === top ? 1 : 0) : 0;
+          const handoff = i < 5 && t >= LAYER_AT[i + 1] ? 1 - ease(prog(t, LAYER_AT[i + 1], 0.6)) : 1;
+          const act = shown ? Math.max(on, handoff * (i <= top ? 1 : 0)) * p : 0;
+          const lit = i === 4 ? Math.max(act, personPulse) : act;
+          s.edgeMat.color.copy(cHair).lerp(cLime, lit);
+          if (i === 3 && redAmt > 0) s.edgeMat.color.lerp(cRed, redAmt);
+          s.edgeMat.opacity = p * lerp(0.14, 1, Math.max(lit, i === 3 ? redAmt : 0));
+          s.glowMat.color.set(i === 3 && redAmt > 0 ? '#ffffff' : '#ffffff');
+          s.glowMat.opacity = p * (0.22 * lit + (i === 4 ? 0.3 * personPulse : 0));
+          if (i === 3 && redAmt > 0) {
+            s.glowMat.color.copy(cLime).lerp(cRed, redAmt).multiplyScalar(1.2);
+            s.glowMat.opacity = Math.max(s.glowMat.opacity, 0.16 * redAmt);
+          } else s.glowMat.color.set('#ffffff');
+          // Person: two lime outlines ripple out from layer 05.
+          if (i === 4) {
+            const d = t - CUE.person;
+            const w = d >= 0 && d < 1.7 ? (d % 0.85) / 0.85 : -1;
+            s.pulseMat.opacity = w >= 0 ? (1 - w) * 0.9 : 0;
+            s.pulse.scale.set(1 + 0.16 * ease(Math.max(w, 0)), 1, 1 + 0.16 * ease(Math.max(w, 0)));
+          }
+
+          // Label: pinned to the slab's right corner; a leader draws on in ~300 ms.
+          const L = labels[i];
+          const rc = edgePoint(i, s.mesh.position.y + ST / 2, 1);
+          labelY[i] = rc.y;
+          L.rc = rc;
+        });
+        // Keep labels at least 122 px apart, working up from the bottom.
+        for (let i = 1; i < 6; i++) labelY[i] = Math.min(labelY[i], labelY[i - 1] - 122);
+        slabs.forEach((s, i) => {
+          const L = labels[i];
+          const shown = t >= LAYER_AT[i];
+          const pLead = ease(prog(t, LAYER_AT[i] + 0.15, 0.3));
+          const pTxt = enter(t, LAYER_AT[i] + 0.3, 0.7);
+          const dim = i < 5 ? ease(prog(t, LAYER_AT[i + 1], 0.5)) : 0;
+          const personLift = i === 4 ? personPulse : 0;
+          const alpha = lerp(1, 0.45, dim);
+          const x0 = L.rc.x + 10,
+            y0 = L.rc.y,
+            x1 = LX - 70,
+            y1 = labelY[i];
+          L.lead.setAttribute('d', `M${x0.toFixed(1)} ${y0.toFixed(1)} L${(x1 - 30).toFixed(1)} ${y1.toFixed(1)} L${x1.toFixed(1)} ${y1.toFixed(1)}`);
+          L.lead.setAttribute('stroke-dashoffset', (1 - pLead).toFixed(4));
+          L.lead.setAttribute('stroke', mix(LIME, '#ffffff', dim, 1, 0.3));
+          L.lead.style.opacity = shown ? 1 : 0;
+          L.dot.setAttribute('cx', x0.toFixed(1));
+          L.dot.setAttribute('cy', y0.toFixed(1));
+          L.dot.setAttribute('fill', mix(LIME, '#ffffff', dim, 1, 0.35));
+          L.dot.style.opacity = shown ? ease(prog(t, LAYER_AT[i] + 0.1, 0.2)) : 0;
+          L.num.style.color = mix(LIME, MUTED, dim);
+          L.h3.style.color = personLift > 0 ? mix(PAPER, LIME, personLift * 0.85) : PAPER;
+          put(L.node, LX, y1 + 14 * (1 - pTxt), pTxt * alpha);
+        });
+
+        // ---- packets
+        for (const p of pool) {
+          p.core.visible = false;
+          p.ring.visible = false;
+        }
+        if (t >= CUE.packets) {
+          const newest = Math.floor((t - CUE.packets) / SP);
+          for (let k = Math.max(0, Math.ceil((t - CUE.packets - LIFE) / SP)); k <= newest; k++) {
+            const st = packetAt(k, t, pos);
+            if (!st) continue;
+            const p = pool[k % POOL];
+            p.core.position.copy(pos);
+            setAlpha(p, st.a);
+            if (st.ring < 1) {
+              p.ring.visible = true;
+              p.ring.position.set(pos.x, pos.y - 0.12, pos.z);
+              p.ring.scale.setScalar(1 + 2.4 * ease(st.ring));
+              p.ring.material.opacity = 0.7 * (1 - st.ring) * st.a;
+            }
+          }
+        }
+
+        // ---- the blocked reply
+        const rp = prog(t, CUE.blocked, BLOCK_HIT - CUE.blocked);
+        const inFlight = t >= CUE.blocked && t < BLOCK_HIT + 0.22;
+        if (inFlight) {
+          const f = rp * (0.55 + 0.45 * rp); // gathers speed into the hit
+          red.core.position.lerpVectors(redFrom, redTo, f);
+          red.core.position.y = lerp(redFrom.y, redTo.y, f * f);
+          const squash = prog(t, BLOCK_HIT, 0.22);
+          red.core.scale.setScalar(1.45 * (1 - squash));
+          setAlpha(red, Math.min(1, rp / 0.12) * (1 - squash));
+        } else setAlpha(red, 0);
+        const bp = prog(t, BLOCK_HIT, 1.0);
+        burst.scale.setScalar(0.25 + 1.6 * ease(bp));
+        burst.material.opacity = bp > 0 && bp < 1 ? 0.95 * (1 - bp) : 0;
+        const markA = t < BLOCK_HIT ? 0 : ease(prog(t, BLOCK_HIT, 0.4)) * lerp(0.95, 0.4, ease(prog(t, CUE.aws, 0.8)));
+        mark.material.opacity = markA;
+        flash.intensity = bp > 0 ? 10 * Math.pow(1 - bp, 2) : 0;
+        shards.forEach((m) => {
+          const sp = prog(t, BLOCK_HIT, 0.8);
+          m.visible = sp > 0 && sp < 1;
+          if (!m.visible) return;
+          const d = m.userData.speed * ease(sp);
+          m.position.copy(redTo).addScaledVector(m.userData.dir, d);
+          m.position.y -= 0.6 * sp * sp;
+          m.rotation.set(m.userData.spin * sp, m.userData.spin * 0.7 * sp, 0);
+          m.material.opacity = 1 - sp;
+        });
+        // Its tag rides above-left of the packet, then gives way to the callout.
+        const rs = toScreen(red.core.position);
+        const tagA = Math.min(enter(t, CUE.blocked, 0.4), 1 - ease(prog(t, BLOCK_HIT, 0.35)));
+        put(tag, Math.max(64, rs.x - 22 - tag.offsetWidth), rs.y - 30 - tag.offsetHeight + 10 * (1 - enter(t, CUE.blocked, 0.4)), t >= CUE.blocked ? tagA : 0);
+        const hitS = toScreen(redTo);
+        const cA = t < BLOCK_HIT ? 0 : enter(t, BLOCK_HIT + 0.05, 0.7) * (1 - ease(prog(t, CUE.aws - 0.1, 0.5)));
+        const cx = 64,
+          cy = hitS.y - 26;
+        put(callout, cx, cy + 14 * (1 - enter(t, BLOCK_HIT + 0.05, 0.7)), cA);
+        const cw = callout.offsetWidth,
+          ch = callout.offsetHeight;
+        const ax = cx + cw,
+          ay = cy + ch / 2;
+        calloutLead.setAttribute('d', `M${ax.toFixed(1)} ${ay.toFixed(1)} C${(ax + 50).toFixed(1)} ${ay.toFixed(1)} ${(hitS.x - 50).toFixed(1)} ${hitS.y.toFixed(1)} ${(hitS.x - 26).toFixed(1)} ${hitS.y.toFixed(1)}`);
+        calloutLead.setAttribute('stroke-dashoffset', (1 - ease(prog(t, BLOCK_HIT + 0.1, 0.4))).toFixed(4));
+        calloutLead.style.opacity = cA;
+
+        // ---- person: PIN chip floats above layer 05
+        const chipP = enter(t, CUE.person + 0.15, 0.7);
+        const cs = toScreen(corner.set(-1.05, slabs[4].mesh.position.y + ST / 2 + 0.05, 0.75));
+        put(chip, cs.x - chip.offsetWidth / 2, cs.y - chip.offsetHeight / 2 + 14 * (1 - chipP), t >= CUE.person ? chipP : 0);
+
+        // ---- AWS satellites and the traces that log into them
+        const satIn = (j) => enter(t, LAYER_AT[0] + 0.5 + j * 0.08, 0.7);
+        put(satHead, SAT_X + 4, SAT_Y0 - 42 + 12 * (1 - satIn(0)), satIn(0));
+        sats.forEach((s, j) => {
+          const lit = ease(prog(t, CUE.aws + 0.45 + j * 0.08, 0.5));
+          const y = SAT_Y0 + j * SAT_STEP;
+          put(s.node, SAT_X, y + 12 * (1 - satIn(j)), satIn(j));
+          s.node.style.borderColor = mix('#ffffff', LIME, lit, 0.14, 0.95);
+          s.node.style.boxShadow = lit > 0 ? `0 0 ${(28 * lit).toFixed(1)}px rgba(198,255,61,${(0.18 * lit).toFixed(3)})` : 'none';
+          s.dot.style.background = mix(MUTED, LIME, lit, 0.5, 1);
+          s.dot.style.boxShadow = lit > 0 ? `0 0 ${(12 * lit).toFixed(1)}px rgba(198,255,61,${(0.9 * lit).toFixed(3)})` : 'none';
+          s.name.style.color = mix(MUTED, PAPER, lit);
+        });
+        traces.forEach((tr, i) => {
+          const t0 = CUE.aws + i * 0.07;
+          const pd = ease(prog(t, t0, 0.6));
+          const on = t >= t0 && t >= LAYER_AT[i];
+          if (!on) {
+            tr.path.style.opacity = 0;
+            tr.start.style.opacity = 0;
+            tr.beads.forEach((b) => (b.style.opacity = 0));
+            return;
+          }
+          const lc = edgePoint(i, slabs[i].mesh.position.y, -1);
+          const j = SAT_OF[i];
+          const tx = SAT_X + SAT_W,
+            ty = SAT_Y0 + j * SAT_STEP + SAT_H / 2;
+          const sx = lc.x - 8,
+            sy = lc.y;
+          // Rounded orthogonal route: left to the bus, along it, then into the satellite.
+          const rr = 22,
+            sg = ty > sy ? 1 : -1,
+            bx = BUS_X;
+          const d =
+            Math.abs(ty - sy) < 2 * rr
+              ? `M${sx.toFixed(1)} ${sy.toFixed(1)} C${(bx - 10).toFixed(1)} ${sy.toFixed(1)} ${(bx + 10).toFixed(1)} ${ty.toFixed(1)} ${tx.toFixed(1)} ${ty.toFixed(1)}`
+              : `M${sx.toFixed(1)} ${sy.toFixed(1)} L${(bx + rr).toFixed(1)} ${sy.toFixed(1)} Q${bx} ${sy.toFixed(1)} ${bx} ${(sy + sg * rr).toFixed(1)} ` +
+                `L${bx} ${(ty - sg * rr).toFixed(1)} Q${bx} ${ty.toFixed(1)} ${(bx - rr).toFixed(1)} ${ty.toFixed(1)} L${tx.toFixed(1)} ${ty.toFixed(1)}`;
+          tr.path.setAttribute('d', d);
+          tr.path.setAttribute('stroke-dashoffset', (1 - pd).toFixed(4));
+          tr.path.style.opacity = 0.7;
+          tr.start.setAttribute('cx', sx.toFixed(1));
+          tr.start.setAttribute('cy', sy.toFixed(1));
+          tr.start.style.opacity = ease(prog(t, t0, 0.25));
+          const len = tr.path.getTotalLength();
+          tr.beads.forEach((b, n) => {
+            const f = (((t - t0 - 0.6) / 1.4 + n * 0.5 + i * 0.13) % 1 + 1) % 1;
+            const ready = t > t0 + 0.6;
+            if (!ready) return (b.style.opacity = 0);
+            const pt = tr.path.getPointAtLength(f * len);
+            b.setAttribute('cx', pt.x.toFixed(1));
+            b.setAttribute('cy', pt.y.toFixed(1));
+            b.style.opacity = (Math.min(1, f / 0.12, (1 - f) / 0.12) * ease(prog(t, t0 + 0.6, 0.4))).toFixed(3);
+          });
+        });
+      };
+
+      // ------------------------------------------------------------ clock and contract
+      let t0 = null;
+      let seekT = 0;
+      let frames = 0;
+      window.__stats = () => ({ frames, seconds: t0 === null ? 0 : (performance.now() - t0) / 1000 });
+      const loop = () => {
+        const t = t0 === null ? seekT : (performance.now() - t0) / 1000;
+        frame(t);
+        renderer.render(world, camera);
+        if (t0 !== null) frames++;
+        requestAnimationFrame(loop);
+      };
+      window.__start = () => {
+        if (t0 === null) {
+          t0 = performance.now();
+          frames = 0;
+        }
+      };
+      // For checking stills only (before __start): hold the scene at a given second.
+      window.__seek = (t) => {
+        seekT = t;
+      };
+
+      await Promise.all(['600 40px "Host Grotesk"', '400 24px "Host Grotesk"', '500 26px "Host Grotesk"', '20px "Fragment Mono"'].map((f) => document.fonts.load(f)));
+      await document.fonts.ready;
+      frame(0);
+      renderer.render(world, camera);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(loop);
+        window.__ready = true;
+      });
+    </script>
+  </body>
+</html>

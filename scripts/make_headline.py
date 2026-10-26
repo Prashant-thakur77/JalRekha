@@ -29,6 +29,7 @@ TARGETS = {
     "DEVPOST.tpl.md": ROOT / "docs" / "DEVPOST.md",
     "VIDEO_SCRIPT.tpl.md": ROOT / "docs" / "VIDEO_SCRIPT.md",
     "COOL.tpl.md": ROOT / "docs" / "COOL.md",
+    "JUDGES.tpl.md": ROOT / "docs" / "JUDGES.md",
 }
 
 
@@ -311,6 +312,8 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
                 k[f"{prefix}_cams_{cad}s"] = num(cams)
                 k[f"{prefix}_usd_cam_month_{cad}s"] = f"${month / max(cams, 1):,.2f}"
         k[f"{prefix}_kleidi"] = "yes" if d["host"]["kleidicv_present"] else "no"
+        hal = [ln for ln in d["host"].get("kleidicv_build_lines", []) if ln.startswith("Custom HAL:")]
+        k[f"{prefix}_custom_hal"] = re.sub(r"\s+", " ", hal[0].split(":", 1)[1]).strip() if hal else "n/a"
         k[f"{prefix}_cv2"] = d["host"]["opencv_version"]
         k[f"{prefix}_hash"] = d["equivalence"]["outputs_mm_sha256"][:12]
         m = d["micro_ms"]
@@ -362,9 +365,10 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
         sources.append("eval/results/cloud_ops.json")
         tot, st = ops["totals"][0], (ops.get("stages") or [{}])[0]
         k["ops_days"] = num(ops["meta"]["window_days"])
-        k["ops_cycles"] = num(tot.get("cycles", 0))
-        k["ops_sites"] = num(tot.get("sites", 0))
-        k["ops_frames"] = num(tot.get("frames_total", 0))
+        # Logs Insights returns counts as floats (241.0); counts are printed as integers.
+        k["ops_cycles"] = num(int(tot.get("cycles", 0)))
+        k["ops_sites"] = num(int(tot.get("sites", 0)))
+        k["ops_frames"] = num(int(tot.get("frames_total", 0)))
         k["ops_total_p50_ms"] = num(st.get("total_p50", 0), 0)
         k["ops_total_p95_ms"] = num(st.get("total_p95", 0), 0)
         for stage in ("register", "e1", "e2", "e3", "redact", "quality", "fuse"):
@@ -372,16 +376,93 @@ def build() -> tuple[dict[str, str], list[dict], list[str]]:
         reg = {r["registration"]: r for r in ops.get("registration", []) if isinstance(r.get("registration"), str)}
         if "orb" in reg:
             k["ops_orb_inliers"] = num(reg["orb"]["avg_inliers"], 0)
-        k["ops_aliked_cycles"] = num(reg.get("aliked_lightglue", {}).get("cycles", 0))
-        k["ops_reg_failed"] = num(reg.get("failed", {}).get("cycles", 0))
-        k["ops_orb_cycles"] = num(reg.get("orb", {}).get("cycles", 0))
+        k["ops_aliked_cycles"] = num(int(reg.get("aliked_lightglue", {}).get("cycles", 0)))
+        k["ops_reg_failed"] = num(int(reg.get("failed", {}).get("cycles", 0)))
+        k["ops_orb_cycles"] = num(int(reg.get("orb", {}).get("cycles", 0)))
         so = [r for r in ops.get("second_opinion", []) if str(r.get("model", "")).startswith("claude")]
         k["ops_claude_usd"] = f"${sum(r['usd'] for r in so):.2f}"
-        k["ops_claude_calls"] = num(sum(r["calls"] for r in so))
+        k["ops_claude_calls"] = num(int(sum(r["calls"] for r in so)))
         k["ops_claude_p50_s"] = num(so[0]["latency_p50"] / 1000, 1) if so else "n/a"
         k["ops_s3_objects"] = num(ops.get("s3_cycle_objects", 0))
         k["ops_alarms"] = num(len(ops.get("alarms", [])))
         k["ops_stack_resources"] = num(ops.get("stack_resources", 0))
+        # Decision branches the live agent took, as counted by CloudWatch Logs Insights.
+        br = {r["branch"]: int(r["cycles"]) for r in ops.get("branches", []) if isinstance(r.get("branch"), str)}
+        for d in (f"D{i}" for i in range(1, 10)):
+            k[f"ops_branch_{d}"] = num(br.get(d, 0))
+        k["ops_branch_list"] = ", ".join(f"{d} ×{br[d]}" for d in sorted(br)) or "none"
+        k["ops_branch_kinds"] = num(len(br))
+
+    # ---- test counts (scripts/count_tests.py runs both suites)
+    ts = _load(RES / "tests.json")
+    if ts:
+        sources.append("eval/results/tests.json")
+        b_, f_ = ts["backend"], ts["frontend"]
+        k["tests_backend_passed"] = num(b_["passed"])
+        k["tests_backend_failed"] = num(b_["failed"])
+        k["tests_backend_xfailed"] = num(b_["xfailed"])
+        k["tests_backend_files"] = num(b_["files"])
+        k["tests_frontend_passed"] = num(f_["passed"])
+        k["tests_frontend_failed"] = num(f_["failed"])
+        k["tests_frontend_files"] = num(f_["files"])
+        k["tests_total_passed"] = num(b_["passed"] + f_["passed"])
+        k["tests_failed_total"] = num(b_["failed"] + f_["failed"])
+        k["tests_badge_color"] = "brightgreen" if b_["failed"] + f_["failed"] == 0 else "red"
+        k["tests_run_date"] = ts["meta"]["generated_at"][:10]
+
+    # ---- agent thresholds, read from the code so the README's decision table matches it
+    src = ROOT / "backend" / "src" / "jalrekha"
+
+    def const(path: Path, name: str) -> float | None:
+        m = re.search(rf"^\s*{name}\s*(?::[^=]+)?=\s*(-?[0-9.]+)", path.read_text(), flags=re.M) if path.exists() else None
+        return float(m.group(1)) if m else None
+
+    pol, fz, rl, scn = src / "agent" / "policy.py", src / "vision" / "fuse.py", src / "vision" / "relief.py", src / "agent" / "scenarios.py"
+    for key, path, name, fmt in [
+        ("pol_burst_normal", pol, "BURST_NORMAL", lambda v: f"{v:.0f}"),
+        ("pol_burst_boost", pol, "BURST_BOOST", lambda v: f"{v:.0f}"),
+        ("pol_photo_streak", pol, "PHOTO_REQUEST_STREAK", lambda v: f"{v:.0f}"),
+        ("pol_sigma_max_cm", pol, "SIGMA_MAX_M", lambda v: f"{v * 100:.0f}"),
+        ("pol_r_fast", pol, "R_FAST_M_PER_H", lambda v: f"{v:.2f}"),
+        ("pol_z", pol, "RATE_SIGNIFICANCE_Z", lambda v: f"{v:g}"),
+        ("pol_cross_h", pol, "CROSS_HORIZON_H", lambda v: f"{v:g}"),
+        ("pol_vlm_contra_cm", pol, "VLM_CONTRADICTION_M", lambda v: f"{v * 100:.0f}"),
+        ("pol_falling_cycles", pol, "FALLING_CYCLES", lambda v: f"{v:.0f}"),
+        ("pol_agree_cm", fz, "DISAGREE_M", lambda v: f"{v * 100:.0f}"),
+        ("pol_road_unsafe_m", rl, "ROAD_UNSAFE_M", lambda v: f"{v:.2f}"),
+        ("pol_scn_normal_min", scn, "normal_cadence_s", lambda v: f"{v / 60:.0f}"),
+        ("pol_scn_fast_min", scn, "fast_cadence_s", lambda v: f"{v / 60:.0f}"),
+    ]:
+        v = const(path, name)
+        if v is not None:
+            k[key] = fmt(v)
+
+    # ---- MCP server: tools counted from the source
+    mcp_src = ROOT / "backend" / "src" / "jalrekha" / "mcp_server.py"
+    if mcp_src.exists():
+        decos = re.findall(r"^@server\.tool\((.*)\)\s*$", mcp_src.read_text(), flags=re.M)
+        k["mcp_tools"] = num(len(decos))
+        k["mcp_tools_readonly"] = num(sum(d.strip() == "annotations=READ" for d in decos))
+
+    # ---- live Claude second opinions on the deployed stack (docs/traces/LIVE.md is exported from the same file)
+    lv = ROOT / "docs" / "traces" / "hancock-real-flood-live.jsonl"
+    if lv.exists():
+        traces = [json.loads(line) for line in lv.read_text().splitlines() if line.strip()]
+        calls = confirmed = held = 0
+        for t in traces:
+            for s_ in t.get("steps", []):
+                if s_.get("tool") == "verify_with_vlm" and s_.get("kind") != "decision":
+                    calls += 1
+                    g = next((x for x in t["steps"] if x.get("tool") == "compare_cv_vlm"), {})
+                    acc = (g.get("guard") or {}).get("accepted")
+                    confirmed += acc is True
+                    held += acc is False
+        sources.append("docs/traces/hancock-real-flood-live.jsonl")
+        k["live_cycles"] = num(len(traces))
+        k["live_opinions"] = num(calls)
+        k["live_confirmed"] = num(confirmed)
+        k["live_held"] = num(held)
+        k["live_run_id"] = traces[0].get("scenario_run_id", "n/a") if traces else "n/a"
     k["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M UTC")
     return k, items, sources
 
