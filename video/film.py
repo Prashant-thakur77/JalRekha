@@ -412,6 +412,7 @@ Style: Cap,Host Grotesk,62,&H00FFFFFF,&H00FFFFFF,&H66000000,&H80000000,-1,0,0,0,
 Style: Label,Fragment Mono,22,&H00F3F2EE,&H00F3F2EE,&H00121211,&HB4121211,0,0,0,0,100,100,1.5,0,3,10,0,7,48,48,40,1
 Style: Chip,Fragment Mono,22,&H003DFFC6,&H003DFFC6,&H00121211,&HB4121211,0,0,0,0,100,100,2,0,3,10,0,9,48,48,40,1
 Style: Tag,Fragment Mono,20,&H00121211,&H00121211,&H003DFFC6,&H003DFFC6,0,0,0,0,100,100,1,0,3,8,0,9,48,48,96,1
+Style: LabelSmall,Fragment Mono,11,&H00D9D8D2,&H00D9D8D2,&H00121211,&H99121211,0,0,0,0,100,100,0.8,0,3,4,0,7,22,22,18,1
 Style: CapFace,Host Grotesk,58,&H00FFFFFF,&H00FFFFFF,&H66000000,&H80000000,-1,0,0,0,100,100,0,0,1,3,2,2,120,120,30,1
 Style: Name,Host Grotesk,54,&H00F3F2EE,&H00F3F2EE,&H00121211,&H80121211,0,0,0,0,100,100,0,0,1,0,2,1,90,90,250,1
 Style: Ph,Host Grotesk,54,&H00F3F2EE,&H00F3F2EE,&H00121211,&H00121211,0,0,0,0,100,100,0,0,1,0,0,5,200,200,0,1
@@ -431,7 +432,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
             ev.append(f"Dialogue: 2,{ass_time(a)},{ass_time(b)},Chip,,0,0,0,,{chapter_n} · {chapter.upper()}")
         if s.get("label"):
             lab = s["label"] + (f" · {s.get('credit') or footage_credit(s['src'])}" if s["kind"] == "footage" else "")
-            ev.append(f"Dialogue: 2,{ass_time(a)},{ass_time(b)},Label,,0,0,0,,{esc(lab)}")
+            ev.append(f"Dialogue: 2,{ass_time(a)},{ass_time(b)},{'LabelSmall' if s.get('small') else 'Label'},,0,0,0,,{esc(lab)}")
         if s.get("speed", 1) > 1.25:
             ev.append(f"Dialogue: 2,{ass_time(a)},{ass_time(b)},Tag,,0,0,0,,SPED UP ×{s['speed']:.1f}")
         if s["name"] == "face1" and s.get("face"):

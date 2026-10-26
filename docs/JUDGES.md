@@ -1,9 +1,9 @@
 # Judges' guide: every track, with proof
 
-Numbers generated 2026-10-26 09:56 UTC by `scripts/make_headline.py` from the result files; `make check-numbers` fails if this
+Numbers generated 2026-10-26 15:40 UTC by `scripts/make_headline.py` from the result files; `make check-numbers` fails if this
 page and the JSON disagree. Every row points to something you can open, run or query yourself.
 
-**Live app:** https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com · **Code:** this repository · **Report:** [docs/REPORT.pdf](REPORT.pdf) · **Film:** link in the README
+**Live app:** https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com · **Code:** this repository · **Report:** [docs/REPORT.pdf](REPORT.pdf) · **Film:** https://youtu.be/eVobF8Eg-b4
 
 ## Five minutes, end to end
 

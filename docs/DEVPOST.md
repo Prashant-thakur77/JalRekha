@@ -1,5 +1,8 @@
 # Devpost text: NadiSaathi
 
+
+Demo video: https://youtu.be/eVobF8Eg-b4 · Live app: https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com · Code: https://github.com/Prashant-thakur77/JalRekha
+
 ## Tagline
 
 A camera reads the river in metres; an agent warns the next country downstream.

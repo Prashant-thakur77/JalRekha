@@ -1,6 +1,6 @@
 # OpenCV 5 on AWS Graviton: benchmark and COOL status
 
-Numbers generated 2026-10-26 09:56 UTC from `bench/results/*.json`.
+Numbers generated 2026-10-26 15:40 UTC from `bench/results/*.json`.
 
 The core workload is the JalRekha measurement on a 5-frame camera burst: quality gate, ORB registration, burst alignment, gauge strip, three waterline estimators (Scharr edges, DIS optical flow, Lab colour step), fusion, DIS surface motion, YuNet face/plate redaction and the overlay. It is what every agent cycle runs (`backend/src/jalrekha/vision/pipeline.py`).
 

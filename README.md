@@ -13,10 +13,11 @@
 [![pytest](https://img.shields.io/badge/pytest-164%20passed-brightgreen)](#built-and-tested)
 [![vitest](https://img.shields.io/badge/vitest-57%20passed-brightgreen)](#built-and-tested)
 [![Live demo](https://img.shields.io/badge/live%20demo-AWS%20us--east--1-2EA44F)](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com)
+[![Demo video](https://img.shields.io/badge/demo%20video-YouTube-FF0000?logo=youtube&logoColor=white)](https://youtu.be/eVobF8Eg-b4)
 
-![NadiSaathi home page: the Koshi reaches Bihar hours after Nepal sees it rise](docs/screenshots/readme/hero.jpg)
+[![Watch the 4:37 demo: a camera reads the river, an agent warns downstream](docs/screenshots/readme/video-thumbnail.png)](https://youtu.be/eVobF8Eg-b4)
 
-### [Live demo](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com) · Video: link added at submission · [Report PDF](docs/REPORT.pdf) · [Judges' guide: proof for every track](docs/JUDGES.md)
+### [Live demo](https://gaq7chhmb2.execute-api.us-east-1.amazonaws.com) · [Video (4:37)](https://youtu.be/eVobF8Eg-b4) · [Report PDF](docs/REPORT.pdf) · [Judges' guide: proof for every track](docs/JUDGES.md)
 
 </div>
 
@@ -197,7 +198,7 @@ Every page in light and dark at 1440 and 390 px: `docs/screenshots/ui/`. The int
 
 ## Results
 
-Numbers generated 2026-10-26 09:56 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this page and the JSON disagree.
+Numbers generated 2026-10-26 15:40 UTC by `scripts/make_headline.py` from `eval/results/*.json` and `bench/results/*.json`. `make check-numbers` fails if this page and the JSON disagree.
 
 | What | NadiSaathi | Baseline | Data |
 |---|---|---|---|

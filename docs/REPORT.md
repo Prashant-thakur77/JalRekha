@@ -1,6 +1,6 @@
 # NadiSaathi technical report
 
-OpenCV AI Competition 2026 entry. Numbers generated 2026-10-26 09:56 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
+OpenCV AI Competition 2026 entry. Numbers generated 2026-10-26 15:40 UTC from `eval/results/*.json` and `bench/results/*.json` by `scripts/make_headline.py`; `make check-numbers` verifies this file against them. Every number below says which data it comes from: REAL (USGS cameras or gauges), SYNTHETIC (procedural scenes with exact truth) or SCENARIO (a replay built from synthetic frames).
 
 One sentence: a camera on the Koshi at Chatara, Nepal, reads the river in metres with OpenCV 5 on AWS Graviton; when the water starts to climb, an agent looks more often, checks itself, works out when the wave reaches Birpur in Bihar, and drafts Hindi, Maithili and Nepali alerts that a named person approves with a PIN.
 
